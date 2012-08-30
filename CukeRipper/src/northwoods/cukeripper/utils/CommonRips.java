@@ -1,5 +1,10 @@
 package northwoods.cukeripper.utils;
 
+/**
+ * 
+ * @author Grant James
+ * 
+ */
 public class CommonRips {
 	public static final String BREAKLINE = "\n";
 	public static final String GIVEN = "Given";
