@@ -10,6 +10,7 @@ import northwoods.cukeripper.utils.StepAction;
 import org.junit.Before;
 import org.junit.Test;
 
+
 public class TestStepAction {
 
 	private StepAction stepAction;
@@ -27,6 +28,7 @@ public class TestStepAction {
 				+ TestHelper.getTestScreenMethodNames().get(0);
 		String actual = stepAction.toRuby();
 		assertThat(actual, is(expected));
+		System.out.println(actual);
 	}
 
 }

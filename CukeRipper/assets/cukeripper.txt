@@ -1,0 +1,16 @@
+
+					
+Feature
+ --One: Name
+ --List: Scenario
+			--One: name
+			--List: GWTStatement
+ 
+ 
+ GWTStatement
+--One: statement
+--One: type (gwat)
+--List: StepAction
+------One: CukeScreen using one method
+				--List:Methods
+					--One: name

@@ -15,7 +15,7 @@ public class GWTStatement {
 	private StatementType type;
 
 	public enum StatementType {
-		GIVEN, THEN, WHEN
+		GIVEN, THEN, WHEN, AND
 	}
 
 	public GWTStatement(StatementType _type, String _statement) {

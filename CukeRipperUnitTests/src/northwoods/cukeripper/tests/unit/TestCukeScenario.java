@@ -12,21 +12,25 @@ import static northwoods.cukeripper.utils.CommonRips.TODO;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import northwoods.cukeripper.tests.unit.helpers.TestHelper;
+import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement.StatementType;
-import northwoods.cukeripper.utils.StepBuilder;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestStepBuilder {
+public class TestCukeScenario {
 
-	private StepBuilder stepBuilder;
+	private CukeScenario scenario;
 
 	@Before
 	public void Setup() {
 		TestHelper.initiate();
-		stepBuilder = new StepBuilder();
+		scenario = new CukeScenario("Scenario Foo");
+	}
 
+	@Test
+	public void itHasTheRightName() {
+		assertThat(scenario.getName(), is("Scenario Foo"));
 	}
 
 	@Test
@@ -34,15 +38,15 @@ public class TestStepBuilder {
 		createGivensByStatements();
 
 		String expected = TEST_GIVEN_STATEMENTS[0];
-		stepBuilder.createGivenStatement(TestHelper.getTestGWTStatement(
+		scenario.createStatement(TestHelper.getTestGWTStatement(
 				StatementType.GIVEN,
 				TestHelper.GIVEN_STATEMENT_INDEX_NO_ACTIONS));
-		String actual = stepBuilder.getGivenStatement(0).getStatement();
+		String actual = scenario.getStatement(0).getStatement();
 		assertThat(actual, is(expected));
 	}
 
 	@Test
-	public void itCreatesAGivenStatementRuby_NO_StepActions() {
+	public void itCreatesAGivenStatementRubyWith_NO_StepActions() {
 		createGivensByStatements();
 
 		String actionsString = BREAKLINE + TODO;
@@ -50,14 +54,14 @@ public class TestStepBuilder {
 				+ TEST_GIVEN_STATEMENTS[GIVEN_STATEMENT_INDEX_NO_ACTIONS]
 				+ "$/ " + DO + actionsString + BREAKLINE + END;
 
-		String actual = stepBuilder.getGivenStatement(
-				GIVEN_STATEMENT_INDEX_NO_ACTIONS).getRubyDef();
+		String actual = scenario.getStatement(GIVEN_STATEMENT_INDEX_NO_ACTIONS)
+				.getRubyDef();
 		System.out.println(expected);
 		assertThat(actual, is(expected));
 	}
 
 	@Test
-	public void itCreatesAGivenStatementRuby_One_StepAction() {
+	public void itCreatesAGivenStatementRubyWith_One_StepAction() {
 		createGivensByStatements();
 
 		String actionsString = TestHelper
@@ -65,14 +69,14 @@ public class TestStepBuilder {
 		String expected = GIVEN + " /^"
 				+ TEST_GIVEN_STATEMENTS[GIVEN_STATEMENT_INDEX_ONE_ACTION]
 				+ "$/ " + DO + actionsString + BREAKLINE + END;
-		String actual = stepBuilder.getGivenStatement(
-				GIVEN_STATEMENT_INDEX_ONE_ACTION).getRubyDef();
+		String actual = scenario.getStatement(GIVEN_STATEMENT_INDEX_ONE_ACTION)
+				.getRubyDef();
 		System.out.println(expected);
 		assertThat(actual, is(expected));
 	}
 
 	@Test
-	public void itCreatesAGivenStatementRuby_Multiple_StepAction() {
+	public void itCreatesAGivenStatementRubyWith_Multiple_StepAction() {
 		createGivensByStatements();
 
 		String actionsString = TestHelper
@@ -80,7 +84,7 @@ public class TestStepBuilder {
 		String expected = GIVEN + " /^"
 				+ TEST_GIVEN_STATEMENTS[GIVEN_STATEMENT_INDEX_MULTI_ACTIONS]
 				+ "$/ " + DO + actionsString + BREAKLINE + END;
-		String actual = stepBuilder.getGivenStatement(
+		String actual = scenario.getStatement(
 				GIVEN_STATEMENT_INDEX_MULTI_ACTIONS).getRubyDef();
 		System.out.println(expected);
 		assertThat(actual, is(expected));
@@ -92,13 +96,13 @@ public class TestStepBuilder {
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	private void createGivensByStatements() {
-		stepBuilder.createGivenStatement(TestHelper.getTestGWTStatement(
+		scenario.createStatement(TestHelper.getTestGWTStatement(
 				StatementType.GIVEN,
 				TestHelper.GIVEN_STATEMENT_INDEX_NO_ACTIONS));
-		stepBuilder.createGivenStatement(TestHelper.getTestGWTStatement(
+		scenario.createStatement(TestHelper.getTestGWTStatement(
 				StatementType.GIVEN,
 				TestHelper.GIVEN_STATEMENT_INDEX_ONE_ACTION));
-		stepBuilder.createGivenStatement(TestHelper.getTestGWTStatement(
+		scenario.createStatement(TestHelper.getTestGWTStatement(
 				StatementType.GIVEN,
 				TestHelper.GIVEN_STATEMENT_INDEX_MULTI_ACTIONS));
 	}

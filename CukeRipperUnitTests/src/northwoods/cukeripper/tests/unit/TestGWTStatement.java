@@ -9,6 +9,7 @@ import northwoods.cukeripper.utils.GWTStatement.StatementType;
 import org.junit.Before;
 import org.junit.Test;
 
+
 public class TestGWTStatement {
 	private GWTStatement gwt;
 
@@ -45,6 +46,18 @@ public class TestGWTStatement {
 				TestHelper.TEST_GIVEN_STATEMENTS[0]);
 
 		String expected = "Then";
+		String actual = gwt.getTypePrefix();
+
+		assertThat(actual, is(expected));
+	}
+
+	@Test
+	public void itCreatesTheCorrectTypePrefix_And() {
+
+		gwt = new GWTStatement(StatementType.AND,
+				TestHelper.TEST_GIVEN_STATEMENTS[0]);
+
+		String expected = "And";
 		String actual = gwt.getTypePrefix();
 
 		assertThat(actual, is(expected));

@@ -45,7 +45,7 @@ public class TestHelper {
 		CukeScreen cukeScreen = new CukeScreen(TEST_SCREENNAME);
 		for (int i = 0; i < NUMBER_OF_METHODS; i++) {
 			cukeScreen.addMethod(new ScreenMethod(getTestScreenMethodNames()
-					.get(i)));
+					.get(i), "body"));
 		}
 		return cukeScreen;
 	}
