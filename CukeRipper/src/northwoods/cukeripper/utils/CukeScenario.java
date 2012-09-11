@@ -14,7 +14,11 @@ public class CukeScenario {
 	}
 
 	public GWTStatement getStatement(int i) {
-		return statements.get(i);
+		return getStatements().get(i);
+	}
+
+	public List<GWTStatement> getStatements() {
+		return statements;
 	}
 
 	public void createStatement(GWTStatement statement) {

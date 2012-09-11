@@ -9,4 +9,6 @@ public class CommonRips {
 	public static final String TODO = "#TODO";
 	public static final String ON = "on";
 	public static final String DEF = "def";
+	public static final String FEATURE = "Feature";
+	public static final String SCENARIO = "Scenario";
 }

@@ -70,7 +70,7 @@ public class TestCukeScreen {
 		String expectedRuby = "";
 		expectedRuby += CLASS + " " + NAME;
 		expectedRuby += BREAKLINE;
-		expectedRuby += DEF + " " + METHOD_0_NAME + "?";
+		expectedRuby += DEF + " " + METHOD_0_NAME;
 		expectedRuby += BREAKLINE;
 		expectedRuby += METHOD_0_BODY;
 		expectedRuby += BREAKLINE;

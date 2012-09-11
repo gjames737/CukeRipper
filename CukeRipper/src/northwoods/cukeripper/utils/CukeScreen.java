@@ -46,7 +46,7 @@ public class CukeScreen {
 		} else {
 			for (int i = 0; i < methodList.size(); i++) {
 				ruby += CommonRips.DEF + " ";
-				ruby += methodList.get(i).getName() + "?";
+				ruby += methodList.get(i).getName();
 				ruby += BREAKLINE;
 				ruby += methodList.get(i).getBody();
 				ruby += BREAKLINE;
@@ -56,5 +56,4 @@ public class CukeScreen {
 		ruby += END;
 		return ruby;
 	}
-
 }
