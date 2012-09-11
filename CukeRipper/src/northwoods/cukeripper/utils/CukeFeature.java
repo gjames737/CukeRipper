@@ -2,7 +2,6 @@ package northwoods.cukeripper.utils;
 
 import static northwoods.cukeripper.utils.CommonRips.BREAKLINE;
 import static northwoods.cukeripper.utils.CommonRips.FEATURE;
-import static northwoods.cukeripper.utils.CommonRips.SCENARIO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +32,7 @@ public class CukeFeature {
 		String ruby = FEATURE + ": " + name + BREAKLINE;
 		for (int i = 0; i < scenarios.size(); i++) {
 			CukeScenario cukeScenario = scenarios.get(i);
-			ruby += BREAKLINE + SCENARIO + ": " + cukeScenario.getName()
-					+ BREAKLINE;
-			List<GWTStatement> statements = cukeScenario.getStatements();
-			for (int j = 0; j < statements.size(); j++) {
-				ruby += BREAKLINE + statements.get(j).getStatement();
-			}
+			ruby += BREAKLINE + BREAKLINE + cukeScenario.toRuby();
 		}
 
 		return ruby;

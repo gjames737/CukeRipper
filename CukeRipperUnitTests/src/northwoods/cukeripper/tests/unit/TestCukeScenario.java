@@ -55,7 +55,7 @@ public class TestCukeScenario {
 				+ "$/ " + DO + actionsString + BREAKLINE + END;
 
 		String actual = scenario.getStatement(GIVEN_STATEMENT_INDEX_NO_ACTIONS)
-				.getRubyDef();
+				.toRuby();
 		System.out.println(expected);
 		assertThat(actual, is(expected));
 	}
@@ -70,7 +70,7 @@ public class TestCukeScenario {
 				+ TEST_GIVEN_STATEMENTS[GIVEN_STATEMENT_INDEX_ONE_ACTION]
 				+ "$/ " + DO + actionsString + BREAKLINE + END;
 		String actual = scenario.getStatement(GIVEN_STATEMENT_INDEX_ONE_ACTION)
-				.getRubyDef();
+				.toRuby();
 		System.out.println(expected);
 		assertThat(actual, is(expected));
 	}
@@ -85,7 +85,7 @@ public class TestCukeScenario {
 				+ TEST_GIVEN_STATEMENTS[GIVEN_STATEMENT_INDEX_MULTI_ACTIONS]
 				+ "$/ " + DO + actionsString + BREAKLINE + END;
 		String actual = scenario.getStatement(
-				GIVEN_STATEMENT_INDEX_MULTI_ACTIONS).getRubyDef();
+				GIVEN_STATEMENT_INDEX_MULTI_ACTIONS).toRuby();
 		System.out.println(expected);
 		assertThat(actual, is(expected));
 	}

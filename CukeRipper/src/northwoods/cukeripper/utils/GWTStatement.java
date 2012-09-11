@@ -15,7 +15,7 @@ public class GWTStatement {
 	private StatementType type;
 
 	public enum StatementType {
-		GIVEN, THEN, WHEN, AND
+		GIVEN, THEN, WHEN
 	}
 
 	public GWTStatement(StatementType _type, String _statement) {
@@ -24,11 +24,17 @@ public class GWTStatement {
 		this.actionsList = new ArrayList<StepAction>();
 	}
 
+	public String getFormattedStatement(boolean isAnd) {
+		if (isAnd)
+			return "And " + statement;
+		return getTypePrefix() + " " + statement;
+	}
+
 	public String getStatement() {
 		return statement;
 	}
 
-	public String getRubyDef() {
+	public String toRuby() {
 		return getTypePrefix() + " /^" + statement + "$/ " + DO
 				+ createActionStatement() + END;
 	}
@@ -57,4 +63,9 @@ public class GWTStatement {
 	public void setStepActions(List<StepAction> _actionsList) {
 		this.actionsList = _actionsList;
 	}
+
+	public StatementType getType() {
+		return type;
+	}
+
 }

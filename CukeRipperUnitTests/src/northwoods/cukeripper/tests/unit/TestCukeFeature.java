@@ -1,12 +1,12 @@
 package northwoods.cukeripper.tests.unit;
 
+import static northwoods.cukeripper.tests.unit.helpers.TestScenarios.SCENARIOS;
 import static northwoods.cukeripper.utils.CommonRips.BREAKLINE;
 import static northwoods.cukeripper.utils.CommonRips.FEATURE;
-import static northwoods.cukeripper.utils.CommonRips.SCENARIO;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import northwoods.cukeripper.tests.unit.helpers.TestScenarios;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeScenario;
 
@@ -20,14 +20,15 @@ public class TestCukeFeature {
 	@Before
 	public void Setup() {
 		feature = new CukeFeature("featureName");
+		TestScenarios.initiate();
 	}
 
 	@Test
 	public void itCanAddAScenario() {
-		addScenarios("foos", "bars", "Bizzes");
-		assertThat(theScenarioNameAtIndex(0), is("foos"));
-		assertThat(theScenarioNameAtIndex(1), is("bars"));
-		assertThat(theScenarioNameAtIndex(2), is("Bizzes"));
+		addScenarios();
+		assertThat(theScenarioNameAtIndex(0), is(SCENARIOS[0].getName()));
+		assertThat(theScenarioNameAtIndex(1), is(SCENARIOS[1].getName()));
+		assertThat(theScenarioNameAtIndex(2), is(SCENARIOS[2].getName()));
 	}
 
 	@Test
@@ -39,14 +40,25 @@ public class TestCukeFeature {
 	}
 
 	@Test
-	public void itCreatesTheCorrectRubyWithScenarios() {
-		addScenarios("foos", "bars", "Bizzes");
-		String expectedRubyWithScenarios = getExpectedRubyFeatureWithScenarios();
+	public void itCreatesTheCorrectRubyWithScenarios_Singular() {
+		addScenarios();
+		TestScenarios.createSingularStatements();
+		String expectedRubyWithScenarios = getExpectedRubyFeatureWithScenarios_Singular();
 		System.out.println(expectedRubyWithScenarios);
-		System.out.println("\nActual Ruby\n\n" + theRuby());
+
 		assertThat(theRuby(), is(notNullValue()));
 		assertThat(theRuby(), is(expectedRubyWithScenarios));
-		fail();
+	}
+
+	@Test
+	public void itCreatesTheCorrectRubyWithScenarios_DoubleGWTs() {
+		addScenarios();
+		TestScenarios.createDoubleGWTStatements();
+		String expectedRubyWithScenarios = getExpectedRubyFeatureWithScenarios_DoubleGWTs();
+		System.out.println(theRuby());
+
+		assertThat(theRuby(), is(notNullValue()));
+		assertThat(theRuby(), is(expectedRubyWithScenarios));
 	}
 
 	// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -62,13 +74,27 @@ public class TestCukeFeature {
 		return ruby;
 	}
 
-	private String getExpectedRubyFeatureWithScenarios() {
+	private String getExpectedRubyFeatureWithScenarios_Singular() {
 		String ruby = "";
 		ruby += FEATURE + ": " + feature.getName() + BREAKLINE;
-		ruby += BREAKLINE + SCENARIO + ": " + "foos" + BREAKLINE;
-		ruby += BREAKLINE + SCENARIO + ": " + "bars" + BREAKLINE;
-		ruby += BREAKLINE + SCENARIO + ": " + "Bizzes" + BREAKLINE;
+		for (int i = 0; i < SCENARIOS.length; i++) {
+			ruby += BREAKLINE + BREAKLINE + testScenarioToRuby(i);
+		}
 		return ruby;
+	}
+
+	private String getExpectedRubyFeatureWithScenarios_DoubleGWTs() {
+		String ruby = "";
+		ruby += FEATURE + ": " + feature.getName() + BREAKLINE;
+
+		for (int i = 0; i < SCENARIOS.length; i++) {
+			ruby += BREAKLINE + BREAKLINE + SCENARIOS[i].toRuby();
+		}
+		return ruby;
+	}
+
+	private String testScenarioToRuby(int index) {
+		return SCENARIOS[index].toRuby();
 	}
 
 	private String theScenarioNameAtIndex(int index) {
@@ -79,9 +105,9 @@ public class TestCukeFeature {
 		return feature.getScenarios().get(index);
 	}
 
-	private void addScenarios(String... cukeScenarioNames) {
-		for (String name : cukeScenarioNames) {
-			feature.addScenario(new CukeScenario(name));
+	private void addScenarios() {
+		for (int i = 0; i < SCENARIOS.length; i++) {
+			feature.addScenario(SCENARIOS[i]);
 		}
 	}
 }
