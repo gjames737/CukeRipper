@@ -19,4 +19,17 @@ public class FeatureBuilder {
 		return features;
 	}
 
+	public List<CukeScenario> listAllScenarios() {
+		List<CukeScenario> allScenarios = new ArrayList<CukeScenario>();
+		for (CukeFeature feature : features) {
+			List<CukeScenario> scenarios = feature.getScenarios();
+			for (CukeScenario scen : scenarios) {
+				if (!allScenarios.contains(scen))
+					allScenarios.add(scen);
+			}
+		}
+
+		return allScenarios;
+	}
+
 }
