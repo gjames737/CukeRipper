@@ -101,7 +101,8 @@ public class TestFeatureFileParser {
 			int numOfStatements = theStatements.size();
 
 			for (int j = 0; j < numOfStatements; j++) {
-				GWTStatement actualStatement = theStatements.get(i);
+				System.err.println(i + ", " + j);
+				GWTStatement actualStatement = theStatements.get(j);
 				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(actualStatement.getType(),
