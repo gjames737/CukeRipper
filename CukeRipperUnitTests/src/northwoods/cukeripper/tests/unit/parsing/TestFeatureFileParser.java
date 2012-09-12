@@ -8,9 +8,12 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
+import java.util.List;
 
 import northwoods.cukeripper.tests.unit.helpers.FullTexts;
+import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
+import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.junit.Before;
@@ -45,18 +48,38 @@ public class TestFeatureFileParser {
 
 	@Test
 	public void itCreatesAFeatureFromAFile() {
-		assertThat(featureParser.getFeatureFromFile(featureFiles[0]),
-				is(notNullValue()));
+		assertThat(theFeatureParsed(), is(notNullValue()));
 	}
 
 	@Test
 	public void itCreatesAFeatureFromAFileWithTheCorrectName() {
-		assertThat(featureParser.getFeatureFromFile(featureFiles[0]).getName(),
-				is(FullTexts.FEATURE_0_NAME));
+		assertThat(theFeatureParsed().getName(), is(FullTexts.FEATURE_0_NAME));
+	}
+
+	@Test
+	public void itCreatesAFeatureFromAFileWithTheCorrectNumberOfScenarios() {
+		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		assertThat(theScenarios.size(),
+				is(FullTexts.FEATURE_0_NUMBER_OF_SCENARIOS));
+	}
+
+	@Test
+	public void itCreatesAFeatureFromAFileWithTheCorrectScenarioNames() {
+		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		int size = theScenarios.size();
+		for (int i = 0; i < size; i++) {
+			CukeScenario cukeScenario = theScenarios.get(i);
+			assertThat(cukeScenario.getName(),
+					is(FullTexts.FEATURE_0_SCENARIO_NAMES[i]));
+		}
 	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+	private CukeFeature theFeatureParsed() {
+		return featureParser.getFeatureFromFile(featureFiles[0]);
+	}
 
 	private void setupReader() {
 		when(reader.getAllFeatureFiles()).thenReturn(featureFiles);

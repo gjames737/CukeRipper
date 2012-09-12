@@ -2,6 +2,12 @@ package northwoods.cukeripper.tests.unit.helpers;
 
 public class FullTexts {
 
+	public static final String[] FEATURE_0_SCENARIO_NAMES = new String[] {
+			"Verifying the default add case screen appearance",
+			"Adding new case information",
+			"Adding new case information for Local Case", "Saving a case",
+			"Back button behavior" };
+	public static final int FEATURE_0_NUMBER_OF_SCENARIOS = 5;
 	public static final String FEATURE_0_NAME = "Adding new case items";
 	public static final String FEATURE_0 = "Feature:  Adding new case items"
 			+ "\n\nScenario: Verifying the default add case screen appearance"
