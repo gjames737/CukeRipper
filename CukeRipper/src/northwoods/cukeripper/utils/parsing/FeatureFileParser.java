@@ -34,13 +34,24 @@ public class FeatureFileParser {
 		int numberOfScenarios = indicesOfScenarioTags.size();
 
 		for (int i = 0; i < numberOfScenarios; i++) {
-			String scenarioName = getObjectNameFromContents(
-					indicesOfScenarioTags.get(i), scenarioTag, featureContents);
-			scenarioName = scenarioName.trim();
-			feature.addScenario(new CukeScenario(scenarioName));
+			CukeScenario scenario = parseScenario(featureContents, scenarioTag,
+					indicesOfScenarioTags, i);
+			feature.addScenario(scenario);
 		}
 
 		return feature;
+	}
+
+	private CukeScenario parseScenario(String featureContents,
+			String scenarioTag, List<Integer> indicesOfScenarioTags, int i) {
+		String scenarioName = getObjectNameFromContents(
+				indicesOfScenarioTags.get(i), scenarioTag, featureContents);
+		scenarioName = scenarioName.trim();
+		CukeScenario scenario = new CukeScenario(scenarioName);
+		//
+
+		//
+		return scenario;
 	}
 
 	private List<Integer> indicesOfOccurances(String str, String subStr) {

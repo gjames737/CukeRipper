@@ -1,31 +1,49 @@
 package northwoods.cukeripper.tests.unit.helpers;
 
+import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.GWTStatement.StatementType;
+
 public class FullTexts {
 
-	public static final String[] FEATURE_0_SCENARIO_NAMES = new String[] {
-			"Verifying the default add case screen appearance",
-			"Adding new case information",
-			"Adding new case information for Local Case", "Saving a case",
-			"Back button behavior" };
-	public static final int FEATURE_0_NUMBER_OF_SCENARIOS = 5;
+	public static CukeScenario[] FEATURE_0_SCENARIOS = new CukeScenario[] {
+			new CukeScenario("Verifying the default add case screen appearance"),
+			new CukeScenario("Saving a case") };
+
+	public static void initFeature0Scenarios() {
+		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
+				StatementType.GIVEN, ""));
+		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
+				StatementType.WHEN, ""));
+		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
+				StatementType.THEN, ""));
+		//
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
+				StatementType.GIVEN, ""));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
+				StatementType.GIVEN, ""));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
+				StatementType.GIVEN, ""));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
+				StatementType.WHEN, ""));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
+				StatementType.THEN, ""));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
+				StatementType.THEN, ""));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
+				StatementType.THEN, ""));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
+				StatementType.THEN, ""));
+
+	}
+
+	public static final int FEATURE_0_NUMBER_OF_SCENARIOS = 2;
 	public static final String FEATURE_0_NAME = "Adding new case items";
 	public static final String FEATURE_0 = "Feature:  Adding new case items"
 			+ "\n\nScenario: Verifying the default add case screen appearance"
 			+ "\nGiven I am looking at the cases for an event"
 			+ "\n When I choose to add a new case"
 			+ "\n Then I am presented with the default add new case screen"
-
-			+ "\n\n Scenario:  Adding new case information"
-			+ "\n  Given I am looking at the cases for an event"
-			+ "\n  And I choose to add a new case"
-			+ "\n  When I enter \"123456\" for the State Case Number"
-			+ "\n  Then I am then able to save the new case"
-
-			+ "\n\n Scenario: Adding new case information for Local Case"
-			+ "\nGiven I am looking at the cases for an event"
-			+ "\n	And I choose to add a new case"
-			+ "\n	When I enter \"123456\" for the Local Case Number"
-			+ "\n	Then I am then able to save the new case"
 
 			+ "\n\n Scenario: Saving a case"
 			+ "\n	Given I am looking at the cases for an event"
@@ -35,13 +53,7 @@ public class FullTexts {
 			+ "\n	Then I am not able to save the case"
 			+ "\n	And the tabs are populated"
 			+ "\n	And the case number is displayed in the breadcrumb"
-			+ "\n	And the message 'case saved' is displayed "
-
-			+ "\n\n Scenario: Back button behavior"
-			+ "\n	Given I have a saved case"
-			+ "\n	When I select the back button"
-			+ "\nThen the case screen will be displayed"
-			+ "\n	And the saved case will be displayed";
+			+ "\n	And the message 'case saved' is displayed ";
 	public static final String SCREEN_0 = ""
 			+ "class AddCasePage"
 			+ "\ninclude Gametel"

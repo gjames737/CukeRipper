@@ -39,6 +39,7 @@ public class TestFeatureFileParser {
 		setupReader();
 
 		featureParser = new FeatureFileParser(reader);
+		FullTexts.initFeature0Scenarios();
 	}
 
 	@Test
@@ -70,9 +71,45 @@ public class TestFeatureFileParser {
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
 			assertThat(cukeScenario.getName(),
-					is(FullTexts.FEATURE_0_SCENARIO_NAMES[i]));
+					is(FullTexts.FEATURE_0_SCENARIOS[i].getName()));
 		}
 	}
+
+	// @Test
+	// public void
+	// itCreatesTheCorrectScenariosWithTheCorrectNumberOfGWTStatements() {
+	// List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+	// int size = theScenarios.size();
+	// for (int i = 0; i < size; i++) {
+	// CukeScenario cukeScenario = theScenarios.get(i);
+	// List<GWTStatement> theStatements = cukeScenario.getStatements();
+	// int numOfStatements = theStatements.size();
+	// List<GWTStatement> expectedStatements = FullTexts.FEATURE_0_SCENARIOS[i]
+	// .getStatements();
+	// assertThat(numOfStatements, is(expectedStatements.size()));
+	//
+	// }
+	// }
+	//
+	// @Test
+	// public void
+	// itCreatesTheCorrectScenariosWithTheCorrectGWTStatementsTypes() {
+	// List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+	// int size = theScenarios.size();
+	// for (int i = 0; i < size; i++) {
+	// CukeScenario cukeScenario = theScenarios.get(i);
+	// List<GWTStatement> theStatements = cukeScenario.getStatements();
+	// int numOfStatements = theStatements.size();
+	//
+	// for (int j = 0; j < numOfStatements; j++) {
+	// GWTStatement actualStatement = theStatements.get(i);
+	// GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
+	// .getStatement(j);
+	// assertThat(actualStatement.getType(),
+	// is(expectedStatement.getType()));
+	// }
+	// }
+	// }
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
