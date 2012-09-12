@@ -1,6 +1,7 @@
 package northwoods.cukeripper.tests.unit.parsing;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,6 +41,18 @@ public class TestFeatureFileParser {
 	@Test
 	public void itHasAFileReader() {
 		assertThat(featureParser.getReader(), is(reader));
+	}
+
+	@Test
+	public void itCreatesAFeatureFromAFile() {
+		assertThat(featureParser.getFeatureFromFile(featureFiles[0]),
+				is(notNullValue()));
+	}
+
+	@Test
+	public void itCreatesAFeatureFromAFileWithTheCorrectName() {
+		assertThat(featureParser.getFeatureFromFile(featureFiles[0]).getName(),
+				is(FullTexts.FEATURE_0_NAME));
 	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
