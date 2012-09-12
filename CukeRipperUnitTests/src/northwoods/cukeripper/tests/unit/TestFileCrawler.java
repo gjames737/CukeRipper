@@ -1,7 +1,6 @@
 package northwoods.cukeripper.tests.unit;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -9,6 +8,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
 
+import northwoods.cukeripper.tests.unit.helpers.FullTexts;
 import northwoods.cukeripper.utils.CukeFileReader;
 
 import org.junit.Before;
@@ -24,8 +24,6 @@ public class TestFileCrawler {
 	@Mock
 	private CukeFileReader reader;
 
-	private String absoluteRootPath = File.separator + "root" + File.separator;
-
 	@Before
 	public void Setup() {
 		initMocks(this);
@@ -34,13 +32,21 @@ public class TestFileCrawler {
 	}
 
 	@Test
-	public void itDNBU() {
+	public void itReadsTheFeatureText() {
 		assertThat(reader.readFullFileContents(featureFiles[0]),
-				is(notNullValue()));
-		assertThat(reader.readFullFileContents(featureFiles[0]), is("0"));
-		assertThat(reader.readFullFileContents(featureFiles[1]), is("1"));
-		assertThat(reader.readFullFileContents(featureFiles[2]), is("2"));
+				is(FullTexts.FEATURE_0));
+	}
 
+	@Test
+	public void itReadsTheScreenText() {
+		assertThat(reader.readFullFileContents(screenFiles[0]),
+				is(FullTexts.SCREEN_0));
+	}
+
+	@Test
+	public void itReadsTheStepDefinitionText() {
+		assertThat(reader.readFullFileContents(stepDefinitionFiles[0]),
+				is(FullTexts.STEP_DEF_0));
 	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -52,38 +58,26 @@ public class TestFileCrawler {
 		when(reader.getAllStepDefinitionFiles())
 				.thenReturn(stepDefinitionFiles);
 
-		when(reader.readFullFileContents(featureFiles[0])).thenReturn("0");
-		when(reader.readFullFileContents(featureFiles[1])).thenReturn("1");
-		when(reader.readFullFileContents(featureFiles[2])).thenReturn("2");
+		when(reader.readFullFileContents(featureFiles[0])).thenReturn(
+				FullTexts.FEATURE_0);
 
-		when(reader.readFullFileContents(screenFiles[0])).thenReturn("");
-		when(reader.readFullFileContents(screenFiles[1])).thenReturn("");
-		when(reader.readFullFileContents(screenFiles[2])).thenReturn("");
+		when(reader.readFullFileContents(screenFiles[0])).thenReturn(
+				FullTexts.SCREEN_0);
 
-		when(reader.readFullFileContents(stepDefinitionFiles[0]))
-				.thenReturn("");
-		when(reader.readFullFileContents(stepDefinitionFiles[1]))
-				.thenReturn("");
-		when(reader.readFullFileContents(stepDefinitionFiles[2]))
-				.thenReturn("");
+		when(reader.readFullFileContents(stepDefinitionFiles[0])).thenReturn(
+				FullTexts.STEP_DEF_0);
 
 	}
 
 	private void setUpAllFiles() {
-		featureFiles = new File[3];
+		featureFiles = new File[1];
 		featureFiles[0] = mock(File.class);
-		featureFiles[1] = mock(File.class);
-		featureFiles[2] = mock(File.class);
 
-		screenFiles = new File[3];
+		screenFiles = new File[1];
 		screenFiles[0] = mock(File.class);
-		screenFiles[1] = mock(File.class);
-		screenFiles[2] = mock(File.class);
 
-		stepDefinitionFiles = new File[3];
+		stepDefinitionFiles = new File[1];
 		stepDefinitionFiles[0] = mock(File.class);
-		stepDefinitionFiles[1] = mock(File.class);
-		stepDefinitionFiles[2] = mock(File.class);
 
 	}
 }
