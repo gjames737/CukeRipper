@@ -69,12 +69,13 @@ public class FeatureFileParser {
 		indicesOfStatements.addAll(indicesOfOccurances(fullScenarioString,
 				"And"));
 		Collections.sort(indicesOfStatements);
+		StatementType lastType = StatementType.GIVEN;
 		for (int i : indicesOfStatements) {
 			int snippetLength = "And".length();
 			String snippetOfStatement = fullScenarioString.substring(i, i
 					+ snippetLength);
-			System.out.println(snippetOfStatement);
-			StatementType lastType = StatementType.GIVEN;
+			// System.out.println(snippetOfStatement);
+
 			StatementType thisType = null;
 			if (snippetOfStatement.equals("Giv")) {
 				thisType = StatementType.GIVEN;
@@ -86,7 +87,7 @@ public class FeatureFileParser {
 				thisType = lastType;
 			}
 			lastType = thisType;
-			System.out.println(thisType.name());
+			System.out.println(snippetOfStatement + "  " + thisType.name());
 		}
 		//
 		return scenario;
