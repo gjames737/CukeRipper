@@ -1,4 +1,4 @@
-package northwoods.cukeripper.tests.unit;
+package northwoods.cukeripper.tests.unit.parsing;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class TestFileCrawler {
+public class TestCukeFileReader {
 
 	private File[] featureFiles = null;
 	private File[] screenFiles = null;
@@ -26,6 +26,7 @@ public class TestFileCrawler {
 
 	@Before
 	public void Setup() {
+
 		initMocks(this);
 		setUpAllFiles();
 		setupReader();
