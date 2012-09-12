@@ -9,6 +9,7 @@ import northwoods.cukeripper.utils.CommonRips;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.GWTStatement.StatementType;
 
 public class FeatureFileParser {
@@ -88,6 +89,7 @@ public class FeatureFileParser {
 			}
 			lastType = thisType;
 			System.out.println(snippetOfStatement + "  " + thisType.name());
+			scenario.createStatement(new GWTStatement(thisType, ""));
 		}
 		//
 		return scenario;

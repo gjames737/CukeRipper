@@ -91,25 +91,24 @@ public class TestFeatureFileParser {
 		}
 	}
 
-	// @Test
-	// public void
-	// itCreatesTheCorrectScenariosWithTheCorrectGWTStatementsTypes() {
-	// List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
-	// int size = theScenarios.size();
-	// for (int i = 0; i < size; i++) {
-	// CukeScenario cukeScenario = theScenarios.get(i);
-	// List<GWTStatement> theStatements = cukeScenario.getStatements();
-	// int numOfStatements = theStatements.size();
-	//
-	// for (int j = 0; j < numOfStatements; j++) {
-	// GWTStatement actualStatement = theStatements.get(i);
-	// GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
-	// .getStatement(j);
-	// assertThat(actualStatement.getType(),
-	// is(expectedStatement.getType()));
-	// }
-	// }
-	// }
+	@Test
+	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementsTypes() {
+		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		int size = theScenarios.size();
+		for (int i = 0; i < size; i++) {
+			CukeScenario cukeScenario = theScenarios.get(i);
+			List<GWTStatement> theStatements = cukeScenario.getStatements();
+			int numOfStatements = theStatements.size();
+
+			for (int j = 0; j < numOfStatements; j++) {
+				GWTStatement actualStatement = theStatements.get(i);
+				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
+						.getStatement(j);
+				assertThat(actualStatement.getType(),
+						is(expectedStatement.getType()));
+			}
+		}
+	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
