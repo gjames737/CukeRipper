@@ -55,12 +55,9 @@ public class FeatureFileParser {
 		scenarioName = scenarioName.trim();
 		CukeScenario scenario = new CukeScenario(scenarioName);
 		//
-		System.out.println("~~" + thisCharIndex + "~~");
 		String fullScenarioString = getFullScenarioString(featureContents,
 				indicesOfScenarioTags, index, thisCharIndex);
-		// System.out.println(fullScenarioString);
-		//
-		//
+
 		List<Integer> indicesOfStatements = indicesOfOccurances(
 				fullScenarioString, "Given");
 		indicesOfStatements.addAll(indicesOfOccurances(fullScenarioString,
@@ -70,13 +67,30 @@ public class FeatureFileParser {
 		indicesOfStatements.addAll(indicesOfOccurances(fullScenarioString,
 				"And"));
 		Collections.sort(indicesOfStatements);
-		StatementType lastType = StatementType.GIVEN;
-		for (int i : indicesOfStatements) {
-			int snippetLength = "And".length();
-			String snippetOfStatement = fullScenarioString.substring(i, i
-					+ snippetLength);
-			// System.out.println(snippetOfStatement);
 
+		List<GWTStatement> GWTStatements = getStatementTypes(
+				fullScenarioString, indicesOfStatements);
+
+		for (GWTStatement gs : GWTStatements) {
+			scenario.createStatement(gs);
+		}
+		//
+		//
+		return scenario;
+	}
+
+	private List<GWTStatement> getStatementTypes(String fullScenarioString,
+			List<Integer> indicesOfStatements) {
+		StatementType lastType = StatementType.GIVEN;
+		List<GWTStatement> gwts = new ArrayList<GWTStatement>();
+		for (int i = 0; i < indicesOfStatements.size(); i++) {
+
+			int statementIndex = indicesOfStatements.get(i);
+			int snippetLength = "And".length();
+			String snippetOfStatement = fullScenarioString.substring(
+					statementIndex, statementIndex + snippetLength);
+			int typeLength = 0;
+			boolean isAnd = false;
 			StatementType thisType = null;
 			if (snippetOfStatement.equals("Giv")) {
 				thisType = StatementType.GIVEN;
@@ -85,14 +99,30 @@ public class FeatureFileParser {
 			} else if (snippetOfStatement.equals("The")) {
 				thisType = StatementType.THEN;
 			} else if (snippetOfStatement.equals("And")) {
+				isAnd = true;
 				thisType = lastType;
 			}
+
+			typeLength = isAnd ? "And".length() : thisType.name().length();
+
 			lastType = thisType;
-			System.out.println(snippetOfStatement + "  " + thisType.name());
-			scenario.createStatement(new GWTStatement(thisType, ""));
+
+			//
+			int nextIndexpfStatement = i + 1 < indicesOfStatements.size() ? indicesOfStatements
+					.get(i + 1) : fullScenarioString.length() - 1;
+
+			int indexStartStatement = statementIndex + typeLength;
+			int indexStopStatement = nextIndexpfStatement;
+			String statement = fullScenarioString.substring(
+					indexStartStatement, indexStopStatement);
+			//
+			statement = statement.trim();
+			statement = statement.replace("\n", "");
+			// System.err.println(thisType.name() + "[  " + statement + " ]");
+			gwts.add(new GWTStatement(thisType, statement));
+
 		}
-		//
-		return scenario;
+		return gwts;
 	}
 
 	private String getFullScenarioString(String featureContents,

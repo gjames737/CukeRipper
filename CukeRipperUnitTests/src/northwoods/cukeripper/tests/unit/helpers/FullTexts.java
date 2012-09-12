@@ -11,29 +11,35 @@ public class FullTexts {
 			new CukeScenario("Saving a case") };
 
 	public static void initFeature0Scenarios() {
+		FEATURE_0_SCENARIOS = new CukeScenario[] {
+				new CukeScenario(
+						"Verifying the default add case screen appearance"),
+				new CukeScenario("Saving a case") };
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
-				StatementType.GIVEN, ""));
+				StatementType.GIVEN, "I am looking at the cases for an event"));
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
-				StatementType.WHEN, ""));
+				StatementType.WHEN, "I choose to add a new case"));
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
-				StatementType.THEN, ""));
+				StatementType.THEN,
+				"I am presented with the default add new case screen"));
 		//
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.GIVEN, ""));
+				StatementType.GIVEN, "I am looking at the cases for an event"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.GIVEN, ""));
+				StatementType.GIVEN, "I choose to add a new case"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.GIVEN, ""));
+				StatementType.GIVEN, "I have filled in required case details"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.WHEN, ""));
+				StatementType.WHEN, "I choose to save the case"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.THEN, ""));
+				StatementType.THEN, "I am not able to save the case"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.THEN, ""));
+				StatementType.THEN, "the tabs are populated"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.THEN, ""));
+				StatementType.THEN,
+				"the case number is displayed in the breadcrumb"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.THEN, ""));
+				StatementType.THEN, "the message 'case saved' is displayed"));
 
 	}
 

@@ -92,7 +92,7 @@ public class TestFeatureFileParser {
 	}
 
 	@Test
-	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementsTypes() {
+	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementTypes() {
 		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
@@ -101,12 +101,30 @@ public class TestFeatureFileParser {
 			int numOfStatements = theStatements.size();
 
 			for (int j = 0; j < numOfStatements; j++) {
-				System.err.println(i + ", " + j);
 				GWTStatement actualStatement = theStatements.get(j);
 				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(actualStatement.getType(),
 						is(expectedStatement.getType()));
+			}
+		}
+	}
+
+	@Test
+	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatements() {
+		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		int size = theScenarios.size();
+		for (int i = 0; i < size; i++) {
+			CukeScenario cukeScenario = theScenarios.get(i);
+			List<GWTStatement> theStatements = cukeScenario.getStatements();
+			int numOfStatements = theStatements.size();
+
+			for (int j = 0; j < numOfStatements; j++) {
+				GWTStatement actualStatement = theStatements.get(j);
+				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
+						.getStatement(j);
+				assertThat(actualStatement.getStatement(),
+						is(expectedStatement.getStatement()));
 			}
 		}
 	}
