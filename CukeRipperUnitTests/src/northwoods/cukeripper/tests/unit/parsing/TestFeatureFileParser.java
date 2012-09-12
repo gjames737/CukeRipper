@@ -14,6 +14,7 @@ import northwoods.cukeripper.tests.unit.helpers.FullTexts;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.junit.Before;
@@ -75,22 +76,21 @@ public class TestFeatureFileParser {
 		}
 	}
 
-	// @Test
-	// public void
-	// itCreatesTheCorrectScenariosWithTheCorrectNumberOfGWTStatements() {
-	// List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
-	// int size = theScenarios.size();
-	// for (int i = 0; i < size; i++) {
-	// CukeScenario cukeScenario = theScenarios.get(i);
-	// List<GWTStatement> theStatements = cukeScenario.getStatements();
-	// int numOfStatements = theStatements.size();
-	// List<GWTStatement> expectedStatements = FullTexts.FEATURE_0_SCENARIOS[i]
-	// .getStatements();
-	// assertThat(numOfStatements, is(expectedStatements.size()));
-	//
-	// }
-	// }
-	//
+	@Test
+	public void itCreatesTheCorrectScenariosWithTheCorrectNumberOfGWTStatements() {
+		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		int size = theScenarios.size();
+		for (int i = 0; i < size; i++) {
+			CukeScenario cukeScenario = theScenarios.get(i);
+			List<GWTStatement> theStatements = cukeScenario.getStatements();
+			int numOfStatements = theStatements.size();
+			List<GWTStatement> expectedStatements = FullTexts.FEATURE_0_SCENARIOS[i]
+					.getStatements();
+			assertThat(numOfStatements, is(expectedStatements.size()));
+
+		}
+	}
+
 	// @Test
 	// public void
 	// itCreatesTheCorrectScenariosWithTheCorrectGWTStatementsTypes() {

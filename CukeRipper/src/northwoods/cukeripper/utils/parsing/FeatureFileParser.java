@@ -43,12 +43,23 @@ public class FeatureFileParser {
 	}
 
 	private CukeScenario parseScenario(String featureContents,
-			String scenarioTag, List<Integer> indicesOfScenarioTags, int i) {
-		String scenarioName = getObjectNameFromContents(
-				indicesOfScenarioTags.get(i), scenarioTag, featureContents);
+			String scenarioTag, List<Integer> indicesOfScenarioTags, int index) {
+
+		int thisCharIndex = indicesOfScenarioTags.get(index);
+
+		String scenarioName = getObjectNameFromContents(thisCharIndex,
+				scenarioTag, featureContents);
 		scenarioName = scenarioName.trim();
 		CukeScenario scenario = new CukeScenario(scenarioName);
 		//
+		System.out.println("~~" + thisCharIndex + "~~");
+		if (index + 1 == indicesOfScenarioTags.size()) {
+			System.out.println(featureContents.substring(thisCharIndex));
+		} else {
+			int nextCharIndex = indicesOfScenarioTags.get(index + 1);
+			System.out.println(featureContents.substring(thisCharIndex,
+					nextCharIndex));
+		}
 
 		//
 		return scenario;
