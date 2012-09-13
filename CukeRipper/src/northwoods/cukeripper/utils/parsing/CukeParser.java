@@ -16,30 +16,6 @@ import northwoods.cukeripper.utils.GWTStatement.StatementType;
 
 public class CukeParser {
 
-	CukeScenario parseScenario(String featureContents, String scenarioTag,
-			List<Integer> indicesOfScenarioTags, int index) {
-
-		int thisCharIndex = indicesOfScenarioTags.get(index);
-
-		String scenarioName = getObjectNameFromContents(thisCharIndex,
-				scenarioTag, featureContents);
-		scenarioName = scenarioName.trim();
-		CukeScenario scenario = new CukeScenario(scenarioName);
-		//
-		String fullScenarioString = getFullScenarioString(featureContents,
-				indicesOfScenarioTags, index, thisCharIndex);
-
-		List<Integer> indicesOfStatements = getIndicesOfAllStatementsInScenario(fullScenarioString);
-
-		List<GWTStatement> GWTStatements = getStatementTypes(
-				fullScenarioString, indicesOfStatements);
-
-		for (GWTStatement gs : GWTStatements) {
-			scenario.createStatement(gs);
-		}
-		return scenario;
-	}
-
 	private List<Integer> getIndicesOfAllStatementsInScenario(
 			String fullScenarioString) {
 		List<Integer> indicesOfStatements = indicesOfOccurances(
@@ -151,46 +127,6 @@ public class CukeParser {
 		return fullScenarioString;
 	}
 
-	List<Integer> indicesOfOccurances(String str, String subStr) {
-		int lastIndex = 0;
-		List<Integer> indices = new ArrayList<Integer>();
-		while (lastIndex != -1) {
-			lastIndex = str.indexOf(subStr, lastIndex);
-			if (lastIndex != -1) {
-				indices.add(lastIndex);
-				lastIndex += subStr.length();
-			}
-		}
-
-		return indices;
-	}
-
-	String getObjectNameFromContents(int offset, String tag,
-			String stringContents) {
-
-		int indexOfNameStart = offset + tag.length();
-		int indexOfNextEndOfLineChar = indexOfNameStart
-				+ stringContents.substring(indexOfNameStart).indexOf("\n");
-		String featureName = stringContents.substring(indexOfNameStart,
-				indexOfNextEndOfLineChar);
-		featureName = featureName.trim();
-		return featureName;
-	}
-
-	List<GWTStatement> parseStatementsFromStepFile(String fullContents) {
-		List<GWTStatement> statements = new ArrayList<GWTStatement>();
-
-		List<Integer> indicesOfSlashPt = indicesOfOccurances(fullContents,
-				SLASH_POINT);
-
-		List<Integer> indicesOfDollarSlash = indicesOfOccurances(fullContents,
-				DOLLAR_SLASH);
-
-		extractTypeAndStatementsToList(fullContents, statements,
-				indicesOfSlashPt, indicesOfDollarSlash);
-		return statements;
-	}
-
 	private void extractTypeAndStatementsToList(String fullContents,
 			List<GWTStatement> outStatements, List<Integer> indicesOfSlashPt,
 			List<Integer> indicesOfDollarSlash) {
@@ -233,6 +169,70 @@ public class CukeParser {
 		int indexStart = indexEnd - backTrackLength;
 		String substringOfType = fullContents.substring(indexStart, indexEnd);
 		return substringOfType;
+	}
+
+	CukeScenario parseScenario(String featureContents, String scenarioTag,
+			List<Integer> indicesOfScenarioTags, int index) {
+
+		int thisCharIndex = indicesOfScenarioTags.get(index);
+
+		String scenarioName = getObjectNameFromContents(thisCharIndex,
+				scenarioTag, featureContents);
+		scenarioName = scenarioName.trim();
+		CukeScenario scenario = new CukeScenario(scenarioName);
+		//
+		String fullScenarioString = getFullScenarioString(featureContents,
+				indicesOfScenarioTags, index, thisCharIndex);
+
+		List<Integer> indicesOfStatements = getIndicesOfAllStatementsInScenario(fullScenarioString);
+
+		List<GWTStatement> GWTStatements = getStatementTypes(
+				fullScenarioString, indicesOfStatements);
+
+		for (GWTStatement gs : GWTStatements) {
+			scenario.createStatement(gs);
+		}
+		return scenario;
+	}
+
+	List<Integer> indicesOfOccurances(String str, String subStr) {
+		int lastIndex = 0;
+		List<Integer> indices = new ArrayList<Integer>();
+		while (lastIndex != -1) {
+			lastIndex = str.indexOf(subStr, lastIndex);
+			if (lastIndex != -1) {
+				indices.add(lastIndex);
+				lastIndex += subStr.length();
+			}
+		}
+
+		return indices;
+	}
+
+	String getObjectNameFromContents(int offset, String tag,
+			String stringContents) {
+
+		int indexOfNameStart = offset + tag.length();
+		int indexOfNextEndOfLineChar = indexOfNameStart
+				+ stringContents.substring(indexOfNameStart).indexOf("\n");
+		String featureName = stringContents.substring(indexOfNameStart,
+				indexOfNextEndOfLineChar);
+		featureName = featureName.trim();
+		return featureName;
+	}
+
+	List<GWTStatement> parseStatementsFromStepFile(String fullContents) {
+		List<GWTStatement> statements = new ArrayList<GWTStatement>();
+
+		List<Integer> indicesOfSlashPt = indicesOfOccurances(fullContents,
+				SLASH_POINT);
+
+		List<Integer> indicesOfDollarSlash = indicesOfOccurances(fullContents,
+				DOLLAR_SLASH);
+
+		extractTypeAndStatementsToList(fullContents, statements,
+				indicesOfSlashPt, indicesOfDollarSlash);
+		return statements;
 	}
 
 }
