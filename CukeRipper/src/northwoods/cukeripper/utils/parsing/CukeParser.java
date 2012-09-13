@@ -186,6 +186,14 @@ public class CukeParser {
 		List<Integer> indicesOfDollarSlash = indicesOfOccurances(fullContents,
 				DOLLAR_SLASH);
 
+		extractTypeAndStatementsToList(fullContents, statements,
+				indicesOfSlashPt, indicesOfDollarSlash);
+		return statements;
+	}
+
+	private void extractTypeAndStatementsToList(String fullContents,
+			List<GWTStatement> outStatements, List<Integer> indicesOfSlashPt,
+			List<Integer> indicesOfDollarSlash) {
 		int numberOfStepDefs = indicesOfSlashPt.size();
 		for (int i = 0; i < numberOfStepDefs; i++) {
 
@@ -201,9 +209,8 @@ public class CukeParser {
 			String statementString = fullContents.substring(beginIndextatement,
 					endIndexStatement);
 
-			statements.add(new GWTStatement(type, statementString));
+			outStatements.add(new GWTStatement(type, statementString));
 		}
-		return statements;
 	}
 
 	private StatementType determineStatementTypeFromSubstring(
