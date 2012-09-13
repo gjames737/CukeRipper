@@ -1,8 +1,11 @@
 package northwoods.cukeripper.tests.unit.helpers;
 
 import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.GWTStatement.StatementType;
+import northwoods.cukeripper.utils.ScreenMethod;
+import northwoods.cukeripper.utils.StepAction;
 
 public class FullTexts {
 
@@ -90,108 +93,37 @@ public class FullTexts {
 			+ "\n\n  def able_to_select_a_case_head?"
 			+ "\n    enabled? 'case_case_head_spin'" + "\n  end" + "\n	end";
 
+	public static GWTStatement[] STEP_DEF_0_STATEMENTS;
+
+	public static void initStepDef0() {
+
+		GWTStatement g_statement = new GWTStatement(StatementType.GIVEN,
+				"The given statement");
+		GWTStatement w_statement = new GWTStatement(StatementType.WHEN,
+				"The when statement");
+		GWTStatement t_statement = new GWTStatement(StatementType.THEN,
+				"The then statement");
+
+		CukeScreen screen1 = new CukeScreen("screen1");
+		screen1.addMethod(new ScreenMethod("method0", ""));
+		CukeScreen screen2 = new CukeScreen("screen2");
+		screen1.addMethod(new ScreenMethod("method0", ""));
+		screen1.addMethod(new ScreenMethod("method1", ""));
+
+		g_statement.addStepAction(new StepAction(screen1, 0));
+		g_statement.addStepAction(new StepAction(screen2, 1));
+
+		STEP_DEF_0_STATEMENTS = new GWTStatement[] { g_statement, w_statement,
+				t_statement };
+
+	}
+
 	public static final String STEP_DEF_0 = ""
-			+ "Given /^I am looking at the cases for an event$/ do"
-			+ "\n  on(LoginPage).login_successfully"
-			+ "\n on(EventTypesPage).first_event"
-			+ "\n end"
-
-			+ "\n\n When /^I choose to add a new case$/ do"
-			+ "\n on(CasesPage).add_case"
-			+ "\n end"
-
-			+ "\n\n Then /^I am presented with the default add new case screen$/ do"
-			+ "\n on(AddCasePage) do |screen|"
-			+ "\n screen.should be_active"
-
-			+ "\n\n     screen.should_not be_able_to_delete"
-			+ "\n screen.should_not be_able_to_save"
-
-			+ "\n\n screen.case_worker.should eq('Co Pilot')"
-			+ "\n  screen.should_not be_able_to_select_a_case_worker"
-
-			+ "\n\n  screen.program_type.should eq('Cucumber')"
-			+ "\n   screen.should_not be_able_to_select_a_program_type"
-
-			+ "\n\n  screen.case_head.should match 'Select Case Head\\s*'"
-			+ "\n  screen.should be_able_to_select_a_case_head"
-
-			+ "\n\n   screen.should_not have_text 'Members'"
-			+ "\n   screen.should_not have_text 'Narratives'"
-			+ "\n  end"
-
-			+ "\n\n end"
-
-			+ "\n\n When /^I enter \"(.*?)\" for the State Case Number$/ do |state_case_number|"
-			+ "\n   on(AddCasePage).state_case_number = state_case_number"
-			+ "\n end"
-
-			+ "\n\n Then /^I am then able to save the new case$/ do"
-			+ "\n   on(AddCasePage) do |screen|"
-			+ "\n    screen.should be_able_to_save"
-			+ "\n    screen.should_not be_able_to_delete"
-
-			+ "\n\n   screen.should_not be_able_to_select_a_case_worker"
-			+ "\n    screen.should_not be_able_to_select_a_program_type"
-
-			+ "\n\n   screen.should be_able_to_select_a_case_head"
-			+ "\n  end"
-			+ "\n end"
-
-			+ "\n\n Given /^I have a saved case$/ do"
-			+ "\n  on(LoginPage).login_successfully"
-			+ "\n  on(EventTypesPage).first_event"
-			+ "\n   on(CasesPage).add_case"
-			+ "\n  @case_number = \"Northwoods98765\""
-			+ "\n  on(AddCasePage).local_case_number = @case_number"
-			+ "\n  on(AddCasePage).save"
-			+ "\n end"
-
-			+ "\n\n When /^I select the back button$/ do"
-			+ "\n   on(AddCasePage).back"
-			+ "\n end"
-
-			+ "\n\n Then /^the case screen will be displayed$/ do"
-			+ "\n  #on(AddCasePage) do |screen|"
-			+ "\n   #  screen.should have_text @case_number"
-			+ "\n   #  screen.should have_text \"Cucumber (Case1)\""
-			+ "\n   # screen.should_not have_text \"Narratives\""
-			+ "\n   #end"
-			+ "\n end"
-
-			+ "\n\n Then /^the saved case will be displayed$/ do"
-			+ "\n  pending # express the regexp above with the code you wish you had"
-			+ "\n end"
-
-			+ "\n\n When /^I enter \"(.*?)\" for the Local Case Number$/ do |case_number|"
-			+ "\n   on(AddCasePage).local_case_number = case_number" + "\n end"
-
-			+ "\n\n Given /^I have filled in required case details$/ do"
-			+ "\n   @state_case_number = \"StateCaseNumber123456\""
-			+ "\n   on(AddCasePage).state_case_number = @state_case_number"
-			+ "\n end"
-
-			+ "\n\n When /^I choose to save the case$/ do"
-			+ "\n  on(AddCasePage).save" + "\n end"
-
-			+ "\n\n Then /^I am not able to save the case$/ do"
-			+ "\n   on(AddCasePage) do |screen|"
-			+ "\n    screen.should_not be_able_to_save"
-			+ "\n    screen.should be_able_to_delete" + "\n   end" + "\n end"
-
-			+ "\n\n Then /^the tabs are populated$/ do"
-			+ "\n  on(AddCasePage) do |screen|"
-			+ "\n 	screen.should have_text 'Members'"
-			+ "\n    screen.should have_text 'Narratives'"
-			+ "\n 	screen.should have_text 'Case Details'" + "\n   end"
-			+ "\n end"
-
-			+ "\n\n Then /^the case number is displayed in the breadcrumb$/ do"
-			+ "\n   on(AddCasePage).should have_text @state_case_number"
-			+ "\n end"
-
-			+ "\n\n Then /^the message 'case saved' is displayed$/ do"
-			+ "\n  pending"
-			+ "\n  #on(AddCasePage).should have_text 'Case saved'" + "\n end";
+			+ "Given /^The given statement$/ do" + "\n  on(screen1).method0"
+			+ "\n on(screen2).method0" + "\n end"
+			+ "\nWhen /^The when statement$/ do" + "\n  on(screen1).method0"
+			+ "\n on(screen2).method1" + "\n end"
+			+ "\nThen /^The then statement$/ do" + "\n  on(screen1).method0"
+			+ "\n on(screen2).method0" + "\n end";
 
 }
