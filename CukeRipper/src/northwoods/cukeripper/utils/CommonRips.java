@@ -11,4 +11,8 @@ public class CommonRips {
 	public static final String DEF = "def";
 	public static final String FEATURE = "Feature";
 	public static final String SCENARIO = "Scenario";
+	public static final CharSequence WHEN = "When";
+	public static final CharSequence THEN = "Then";
+	public static final String SLASH_POINT = "/^";
+	public static final String DOLLAR_SLASH = "$/";
 }

@@ -1,5 +1,6 @@
 package northwoods.cukeripper.tests.unit.parsing;
 
+import static northwoods.cukeripper.tests.unit.helpers.FullTexts.STEP_DEF_0_STATEMENTS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -8,9 +9,11 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
+import java.util.List;
 
 import northwoods.cukeripper.tests.unit.helpers.FullTexts;
 import northwoods.cukeripper.utils.CukeFileReader;
+import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.parsing.StepFileParser;
 
 import org.junit.Before;
@@ -46,18 +49,46 @@ public class TestStepFileParser {
 
 	@Test
 	public void itCreatesAListOfGWTStatementsFromFile_NotNull() {
-		assertThat(stepParser.getGWTStatementsFromFile(stepDefinitionFiles[0]),
-				is(notNullValue()));
+		assertThat(theGWTs(), is(notNullValue()));
 	}
 
-	// @Test
-	// public void itCreatesAListOfGWTStatementsFromFile_CorrectQuantity() {
-	// assertThat(stepParser.getGWTStatementsFromFile(stepDefinitionFiles[0]),
-	// is(notNullValue()));
-	// }
+	@Test
+	public void itCreatesAListOfGWTStatementsFromFile_CorrectQuantity() {
+		List<GWTStatement> theGWTs = theGWTs();
+		assertThat(theGWTs.size(), is(STEP_DEF_0_STATEMENTS.length));
+	}
+
+	@Test
+	public void itCreatesAListOfGWTStatementsFromFile_CorrectTypes() {
+		List<GWTStatement> theGWTs = theGWTs();
+
+		assertThat(theGWTs.get(0).getType(),
+				is(STEP_DEF_0_STATEMENTS[0].getType()));
+		assertThat(theGWTs.get(1).getType(),
+				is(STEP_DEF_0_STATEMENTS[1].getType()));
+		assertThat(theGWTs.get(2).getType(),
+				is(STEP_DEF_0_STATEMENTS[2].getType()));
+
+	}
+
+	@Test
+	public void itCreatesAListOfGWTStatementsFromFile_CorrectStatements() {
+		List<GWTStatement> theGWTs = theGWTs();
+
+		assertThat(theGWTs.get(0).getStatement(),
+				is(STEP_DEF_0_STATEMENTS[0].getStatement()));
+		assertThat(theGWTs.get(1).getStatement(),
+				is(STEP_DEF_0_STATEMENTS[1].getStatement()));
+		assertThat(theGWTs.get(2).getStatement(),
+				is(STEP_DEF_0_STATEMENTS[2].getStatement()));
+
+	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	private List<GWTStatement> theGWTs() {
+		return stepParser.getGWTStatementsFromFile(stepDefinitionFiles[0]);
+	}
 
 	private void setupReader() {
 		when(reader.getAllFeatureFiles()).thenReturn(featureFiles);

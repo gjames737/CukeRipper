@@ -1,7 +1,6 @@
 package northwoods.cukeripper.utils.parsing;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFileReader;
@@ -22,8 +21,14 @@ public class StepFileParser {
 	}
 
 	public List<GWTStatement> getGWTStatementsFromFile(File file) {
-		List<GWTStatement> statements = new ArrayList<GWTStatement>();
+		String fullContents = getStepFileContents(file);
+		List<GWTStatement> statements = parser
+				.parseStatementsFromStepFile(fullContents);
 
 		return statements;
+	}
+
+	private String getStepFileContents(File file) {
+		return reader.readFullFileContents(file);
 	}
 }

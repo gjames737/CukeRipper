@@ -1,5 +1,11 @@
 package northwoods.cukeripper.utils.parsing;
 
+import static northwoods.cukeripper.utils.CommonRips.DOLLAR_SLASH;
+import static northwoods.cukeripper.utils.CommonRips.GIVEN;
+import static northwoods.cukeripper.utils.CommonRips.SLASH_POINT;
+import static northwoods.cukeripper.utils.CommonRips.THEN;
+import static northwoods.cukeripper.utils.CommonRips.WHEN;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -170,4 +176,56 @@ public class CukeParser {
 		featureName = featureName.trim();
 		return featureName;
 	}
+
+	List<GWTStatement> parseStatementsFromStepFile(String fullContents) {
+		List<GWTStatement> statements = new ArrayList<GWTStatement>();
+
+		List<Integer> indicesOfSlashPt = indicesOfOccurances(fullContents,
+				SLASH_POINT);
+
+		List<Integer> indicesOfDollarSlash = indicesOfOccurances(fullContents,
+				DOLLAR_SLASH);
+
+		int numberOfStepDefs = indicesOfSlashPt.size();
+		for (int i = 0; i < numberOfStepDefs; i++) {
+
+			String substringOfType = getSubStringForStepDefAtStatementIndex(
+					fullContents, indicesOfSlashPt.get(i));
+
+			StatementType type = determineStatementTypeFromSubstring(substringOfType);
+
+			int lengthOfSlashPt = SLASH_POINT.length();
+			int beginIndextatement = indicesOfSlashPt.get(i) + lengthOfSlashPt;
+			int endIndexStatement = indicesOfDollarSlash.get(i);
+
+			String statementString = fullContents.substring(beginIndextatement,
+					endIndexStatement);
+
+			statements.add(new GWTStatement(type, statementString));
+		}
+		return statements;
+	}
+
+	private StatementType determineStatementTypeFromSubstring(
+			String substringOfType) {
+		StatementType type = null;
+		if (substringOfType.contains(GIVEN)) {
+			type = StatementType.GIVEN;
+		} else if (substringOfType.contains(WHEN)) {
+			type = StatementType.WHEN;
+		} else if (substringOfType.contains(THEN)) {
+			type = StatementType.THEN;
+		}
+		return type;
+	}
+
+	private String getSubStringForStepDefAtStatementIndex(String fullContents,
+			int indexEnd) {
+		int maxBackTrack = 20;
+		int backTrackLength = indexEnd < maxBackTrack ? indexEnd : maxBackTrack;
+		int indexStart = indexEnd - backTrackLength;
+		String substringOfType = fullContents.substring(indexStart, indexEnd);
+		return substringOfType;
+	}
+
 }
