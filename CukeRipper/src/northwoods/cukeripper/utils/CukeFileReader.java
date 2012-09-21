@@ -20,9 +20,9 @@ public class CukeFileReader {
 		loadAllFilesFromDirectory(rootOfAllFiles);
 	}
 
-	public String readFullFileContents(File f) {
+	public String readFullFileContents(File file) {
 		try {
-			return readFile(f.getAbsolutePath());
+			return readFile(file.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -30,17 +30,7 @@ public class CukeFileReader {
 	}
 
 	public File[] getAllFeatureFiles() {
-
-		List<File> fileList = new ArrayList<File>();
-		for (File file : allFiles) {
-			if (isFeatureFile(file))
-				fileList.add(file);
-		}
-		File[] featureFiles = new File[fileList.size()];
-		for (int i = 0; i < fileList.size(); i++) {
-			featureFiles[i] = fileList.get(i);
-		}
-		return featureFiles;
+		return getAllFilesWithExtension(".feature");
 	}
 
 	public File[] getAllScreenFiles() {
@@ -48,14 +38,50 @@ public class CukeFileReader {
 	}
 
 	public File[] getAllStepDefinitionFiles() {
-		throw new RuntimeException("Not yet implemented");
+		File[] possibleSetpFiles = getAllFilesWithExtension(".rb");
+		List<File> realStepFilesList = new ArrayList<File>();
+
+		for (int i = 0; i < possibleSetpFiles.length; i++) {
+			File file = possibleSetpFiles[i];
+			if (isARealStepFile(file))
+				realStepFilesList.add(file);
+		}
+
+		File[] realStepFiles = new File[realStepFilesList.size()];
+		for (int i = 0; i < realStepFilesList.size(); i++) {
+			realStepFiles[i] = realStepFilesList.get(i);
+		}
+
+		return realStepFiles;
 	}
 
-	private boolean isFeatureFile(File file) {
+	private boolean isARealStepFile(File file) {
+		String contents = readFullFileContents(file);
+		boolean isRealStepFileBool = !contents.contains(CommonRips.CLASS)
+				&& contents.contains(CommonRips.DOLLAR_SLASH)
+				&& contents.contains(CommonRips.SLASH_POINT);
+		return isRealStepFileBool;
+	}
+
+	private boolean isFileWithExtension(File file, String extension) {
 		boolean isFeatureFile = !file.isDirectory()
-				&& file.getName().contains(".feature");
+				&& file.getName().contains(extension);
 
 		return isFeatureFile;
+	}
+
+	private File[] getAllFilesWithExtension(String extension) {
+		List<File> fileList = new ArrayList<File>();
+		for (File file : allFiles) {
+
+			if (isFileWithExtension(file, extension))
+				fileList.add(file);
+		}
+		File[] featureFiles = new File[fileList.size()];
+		for (int i = 0; i < fileList.size(); i++) {
+			featureFiles[i] = fileList.get(i);
+		}
+		return featureFiles;
 	}
 
 	private void loadAllFilesFromDirectory(File rootFile) {

@@ -68,4 +68,8 @@ public class GWTStatement {
 		return type;
 	}
 
+	public List<StepAction> getAllActions() {
+		return actionsList;
+	}
+
 }
