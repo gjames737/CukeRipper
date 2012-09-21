@@ -7,6 +7,7 @@ import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.StepAction;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 import northwoods.cukeripper.utils.parsing.StepFileParser;
 
@@ -47,7 +48,12 @@ public class SparkView {
 			for (GWTStatement gwtStatement : statements) {
 				System.out.println("        " + "[" + gwtStatement.getType()
 						+ "] " + gwtStatement.getStatement());
-
+				List<StepAction> actions = gwtStatement.getAllActions();
+				if (actions.isEmpty())
+					System.out.println("           no actions found");
+				for (StepAction stepAction : actions) {
+					System.out.println("           " + stepAction.toRuby());
+				}
 			}
 		}
 

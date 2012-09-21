@@ -84,6 +84,19 @@ public class TestStepFileParser {
 
 	}
 
+	@Test
+	public void itCreatesAListOfGWTStatementsFromFile_CorrectNumberOfStepActions() {
+		List<GWTStatement> theGWTs = theGWTs();
+
+		assertThat(theGWTs.get(0).getAllActions().size(),
+				is(STEP_DEF_0_STATEMENTS[0].getAllActions().size()));
+		assertThat(theGWTs.get(1).getAllActions().size(),
+				is(STEP_DEF_0_STATEMENTS[1].getAllActions().size()));
+		assertThat(theGWTs.get(2).getAllActions().size(),
+				is(STEP_DEF_0_STATEMENTS[2].getAllActions().size()));
+
+	}
+
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	private List<GWTStatement> theGWTs() {
