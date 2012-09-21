@@ -39,7 +39,7 @@ public class TestStepFileParser {
 		setupReader();
 
 		stepParser = new StepFileParser(reader);
-		FullTexts.initStepDef0();
+		FullTexts.initStepDefs();
 	}
 
 	@Test
@@ -68,6 +68,8 @@ public class TestStepFileParser {
 				is(STEP_DEF_0_STATEMENTS[1].getType()));
 		assertThat(theGWTs.get(2).getType(),
 				is(STEP_DEF_0_STATEMENTS[2].getType()));
+		assertThat(theGWTs.get(3).getType(),
+				is(STEP_DEF_0_STATEMENTS[3].getType()));
 
 	}
 
@@ -81,6 +83,8 @@ public class TestStepFileParser {
 				is(STEP_DEF_0_STATEMENTS[1].getStatement()));
 		assertThat(theGWTs.get(2).getStatement(),
 				is(STEP_DEF_0_STATEMENTS[2].getStatement()));
+		assertThat(theGWTs.get(3).getStatement(),
+				is(STEP_DEF_0_STATEMENTS[3].getStatement()));
 
 	}
 
@@ -94,6 +98,8 @@ public class TestStepFileParser {
 				is(STEP_DEF_0_STATEMENTS[1].getAllActions().size()));
 		assertThat(theGWTs.get(2).getAllActions().size(),
 				is(STEP_DEF_0_STATEMENTS[2].getAllActions().size()));
+		assertThat(theGWTs.get(3).getAllActions().size(),
+				is(STEP_DEF_0_STATEMENTS[3].getAllActions().size()));
 
 	}
 
@@ -127,8 +133,9 @@ public class TestStepFileParser {
 		screenFiles = new File[1];
 		screenFiles[0] = mock(File.class);
 
-		stepDefinitionFiles = new File[1];
+		stepDefinitionFiles = new File[2];
 		stepDefinitionFiles[0] = mock(File.class);
+		stepDefinitionFiles[1] = mock(File.class);
 
 	}
 }

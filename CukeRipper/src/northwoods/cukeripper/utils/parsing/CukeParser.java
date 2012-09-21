@@ -45,6 +45,10 @@ public class CukeParser {
 	List<Integer> indicesOfOccurances(String haystack, String subStr) {
 		int lastIndex = 0;
 		List<Integer> indices = new ArrayList<Integer>();
+		if (haystack == null) {
+			System.err.println("haystack is null");
+		}
+
 		while (lastIndex != -1) {
 			lastIndex = haystack.indexOf(subStr, lastIndex);
 			if (lastIndex != -1) {
@@ -234,8 +238,94 @@ public class CukeParser {
 		String statementsParagraph = fullContents.substring(
 				startStatementSearchBound, endStatementSearchBound);
 
+		if (isASpanishStatementsParagraph(statementsParagraph)) {
+			// System.err.println("{{{{{{{{{{{{{{{{{{{{");
+			// System.err.println(statementsParagraph);
+			// System.err.println("}}}}}}}}}}}}}}}}}}}}");
+			statementsParagraph = convertSpanishStatementsParagraphToEnglish(statementsParagraph);
+			// System.err.println("%%%%%%%%%%%%%%%%%%%%");
+			// System.err.println(statementsParagraph);
+			// System.err.println("%%%%%%%%%%%%%%%%%%%%");
+		}
 		stepActionsInStatement = getStatementsFromStatementsParagraph(statementsParagraph);
 		return stepActionsInStatement;
+	}
+
+	private String convertSpanishStatementsParagraphToEnglish(
+			String statementsParagraph) {
+		List<Integer> bar_indices = indicesOfOccurances(statementsParagraph,
+				"|");
+
+		String screenSubstitute = statementsParagraph.substring(
+				bar_indices.get(0) + 1, bar_indices.get(1));
+
+		// int indexOfOn = getIndexOfFirstInstanceBefore(bar_indices.get(0),
+		// "on(");
+		// int indexOfSecondEnd = getIndexOfEndOfSpanishStatement(
+		// statementsParagraph.substring(bar_indices.get(0)),
+		// bar_indices.get(0));
+
+		// String thisStatement = statementsParagraph.substring(indexOfOn,
+		// indexOfSecondEnd);
+
+		// System.err.println("~1 " + statementsParagraph);
+		// System.err.println("___________________________");
+
+		String thisStatementsScreenname = getScreenNameFromStatementText(statementsParagraph);
+
+		// System.err.println("~2 " + screenSubstitute);
+		// System.err.println("~3 " + thisStatementsScreenname);
+
+		String englishParagraph = "";
+		String removal = CommonRips.DO + CommonRips.ON + "("
+				+ thisStatementsScreenname + ")" + CommonRips.DO + "|"
+				+ screenSubstitute + "|";
+		// System.err.println("~4 " + removal);
+		englishParagraph = statementsParagraph.replaceAll("\\s+", "");
+		// System.err.println("~5 " + englishParagraph);
+		englishParagraph = englishParagraph.replace("\n", "");
+		// System.err.println("~6 " + englishParagraph);
+		englishParagraph = englishParagraph.replace(removal, "");
+		// System.err.println("~7 " + englishParagraph);
+
+		englishParagraph = englishParagraph.replace(screenSubstitute,
+				CommonRips.ON + "(" + thisStatementsScreenname + ")");
+		// System.err.println("~8 " + englishParagraph);
+		return englishParagraph;
+	}
+
+	private String getScreenNameFromStatementText(String thisStatement) {
+		List<Integer> indicesOfParamsLeft = indicesOfOccurances(thisStatement,
+				"(");
+		List<Integer> indicesOfParamsRight = indicesOfOccurances(thisStatement,
+				")");
+
+		int beginIndex = indicesOfParamsLeft.get(0) + 1;
+		int endIndex = indicesOfParamsRight.get(0);
+		String screenName = thisStatement.substring(beginIndex, endIndex);
+		return screenName;
+	}
+
+	// private int getIndexOfEndOfSpanishStatement(String statementAndTheRest,
+	// int offset) {
+	// int indexOfSecondEnd = offset;
+	// int indexOfFirstEnd = statementAndTheRest.indexOf(CommonRips.END);
+	// indexOfSecondEnd += indexOfFirstEnd;
+	// String theRest = statementAndTheRest.substring(indexOfFirstEnd);
+	// indexOfSecondEnd += theRest.indexOf(CommonRips.END);
+	//
+	// return indexOfSecondEnd;
+	// }
+
+	// private int getIndexOfFirstInstanceBefore(Integer integer, String string)
+	// {
+	// // TODO Auto-generated method stub
+	// return 0;
+	// }
+
+	private boolean isASpanishStatementsParagraph(String statementsParagraph) {
+		boolean isSpanish = numberOfOccurences(statementsParagraph, "|") == 2;
+		return isSpanish;
 	}
 
 	private List<StepAction> getStatementsFromStatementsParagraph(
@@ -243,6 +333,10 @@ public class CukeParser {
 		List<StepAction> allActionsForStep = new ArrayList<StepAction>();
 
 		String on_subStr = CommonRips.ON + "(";
+		if (statementsParagraph == null) {
+			System.err.println("statementsParagraph is null");
+		}
+
 		List<Integer> indicesOfOn = indicesOfOccurances(statementsParagraph,
 				on_subStr);
 		for (int index : indicesOfOn) {
@@ -285,6 +379,22 @@ public class CukeParser {
 		int indexStart = indexEnd - backTrackLength;
 		String substringOfType = fullContents.substring(indexStart, indexEnd);
 		return substringOfType;
+	}
+
+	private static int numberOfOccurences(String str, String findStr) {
+		int lastIndex = 0;
+		int count = 0;
+
+		while (lastIndex != -1) {
+
+			lastIndex = str.indexOf(findStr, lastIndex);
+
+			if (lastIndex != -1) {
+				count++;
+				lastIndex += findStr.length();
+			}
+		}
+		return count;
 	}
 
 }

@@ -8,6 +8,7 @@ import northwoods.cukeripper.utils.ScreenMethod;
 import northwoods.cukeripper.utils.StepAction;
 
 public class FullTexts {
+	public static GWTStatement[] STEP_DEF_0_STATEMENTS;
 
 	public static CukeScenario[] FEATURE_0_SCENARIOS = new CukeScenario[] {
 			new CukeScenario("Verifying the default add case screen appearance"),
@@ -93,9 +94,7 @@ public class FullTexts {
 			+ "\n\n  def able_to_select_a_case_head?"
 			+ "\n    enabled? 'case_case_head_spin'" + "\n  end" + "\n	end";
 
-	public static GWTStatement[] STEP_DEF_0_STATEMENTS;
-
-	public static void initStepDef0() {
+	public static void initStepDefs() {
 
 		GWTStatement g_statement = new GWTStatement(StatementType.GIVEN,
 				"The given statement");
@@ -103,6 +102,8 @@ public class FullTexts {
 				"The when statement");
 		GWTStatement t_statement = new GWTStatement(StatementType.THEN,
 				"The then statement");
+		GWTStatement g_statement_spanish = new GWTStatement(
+				StatementType.GIVEN, "The given statement spanish");
 
 		CukeScreen screen1 = new CukeScreen("screen1");
 		screen1.addMethod(new ScreenMethod("method0", ""));
@@ -119,17 +120,28 @@ public class FullTexts {
 		t_statement.addStepAction(new StepAction(screen1.getName(), 0));
 		t_statement.addStepAction(new StepAction(screen2.getName(), 0));
 
+		g_statement_spanish.addStepAction(new StepAction(screen1.getName(), 0));
+		g_statement_spanish.addStepAction(new StepAction(screen1.getName(), 0));
+
 		STEP_DEF_0_STATEMENTS = new GWTStatement[] { g_statement, w_statement,
-				t_statement };
+				t_statement, g_statement_spanish };
 
 	}
 
 	public static final String STEP_DEF_0 = ""
-			+ "Given /^The given statement$/ do" + "\n  on(screen1).method0"
-			+ "\n on(screen2).method0" + "\n end"
-			+ "\nWhen /^The when statement$/ do" + "\n  on(screen1).method0"
-			+ "\n on(screen1).method0" + "\n end"
-			+ "\nThen /^The then statement$/ do" + "\n  on(screen1).method0"
-			+ "\n on(screen2).method0" + "\n end";
+			+ "Given /^The given statement$/ do"
+			+ "\n  on(screen1).method0"
+			+ "\n on(screen2).method0"
+			+ "\n end"
+			+ "\nWhen /^The when statement$/ do"
+			+ "\n  on(screen1).method0"
+			+ "\n on(screen1).method0"
+			+ "\n end"
+			+ "\nThen /^The then statement$/ do"
+			+ "\n  on(screen1).method0"
+			+ "\n on(screen2).method0"
+			+ "\n end"
+			+ "Given /^The given statement spanish$/ do\n on(screen1) do |scrn|"
+			+ "  scrn.method0" + "  \n scrn.method0" + "       \nend     \nend";
 
 }
