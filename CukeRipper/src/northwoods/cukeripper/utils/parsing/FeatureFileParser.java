@@ -25,6 +25,7 @@ public class FeatureFileParser {
 	public CukeFeature getFeatureFromFile(File file) {
 
 		String featureContents = reader.readFullFileContents(file);
+		featureContents = cleanFileContents(featureContents);
 		String featureName = parser.getObjectNameFromContents(0,
 				CommonRips.FEATURE + ":", featureContents);
 		CukeFeature feature = new CukeFeature(featureName);
@@ -41,6 +42,15 @@ public class FeatureFileParser {
 		}
 
 		return feature;
+	}
+
+	private String cleanFileContents(String stringContents) {
+		String firstChar = stringContents.substring(0, 1);
+		while (firstChar.equals("\n") || firstChar.equals(" ")) {
+			stringContents = stringContents.substring(1);
+			firstChar = stringContents.substring(0, 1);
+		}
+		return stringContents;
 	}
 
 }

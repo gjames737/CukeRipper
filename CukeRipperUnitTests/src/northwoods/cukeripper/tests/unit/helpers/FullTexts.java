@@ -48,7 +48,7 @@ public class FullTexts {
 
 	public static final int FEATURE_0_NUMBER_OF_SCENARIOS = 2;
 	public static final String FEATURE_0_NAME = "Adding new case items";
-	public static final String FEATURE_0 = "Feature:  Adding new case items"
+	public static final String FEATURE_0 = "\n\n\nFeature:         Adding new case items"
 			+ "\n\nScenario: Verifying the default add case screen appearance"
 			+ "\nGiven I am looking at the cases for an event"
 			+ "\n When I choose to add a new case"
