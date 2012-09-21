@@ -113,6 +113,12 @@ public class FullTexts {
 		g_statement.addStepAction(new StepAction(screen1, 0));
 		g_statement.addStepAction(new StepAction(screen2, 1));
 
+		w_statement.addStepAction(new StepAction(screen1, 0));
+		w_statement.addStepAction(new StepAction(screen1, 0));
+
+		t_statement.addStepAction(new StepAction(screen1, 0));
+		t_statement.addStepAction(new StepAction(screen2, 0));
+
 		STEP_DEF_0_STATEMENTS = new GWTStatement[] { g_statement, w_statement,
 				t_statement };
 
@@ -122,7 +128,7 @@ public class FullTexts {
 			+ "Given /^The given statement$/ do" + "\n  on(screen1).method0"
 			+ "\n on(screen2).method0" + "\n end"
 			+ "\nWhen /^The when statement$/ do" + "\n  on(screen1).method0"
-			+ "\n on(screen2).method1" + "\n end"
+			+ "\n on(screen1).method0" + "\n end"
 			+ "\nThen /^The then statement$/ do" + "\n  on(screen1).method0"
 			+ "\n on(screen2).method0" + "\n end";
 
