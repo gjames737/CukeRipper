@@ -14,7 +14,6 @@ import northwoods.cukeripper.utils.CommonRips;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.GWTStatement.StatementType;
-import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.StepAction;
 
 public class CukeParser {
@@ -254,18 +253,10 @@ public class CukeParser {
 			int endScreenNameIndex = startScreenNameIndex
 					+ screenNameIsInThisString.indexOf(")");
 
-			//
-
 			String screenName = statementsParagraph.substring(
 					startScreenNameIndex, endScreenNameIndex);
 
-			int screenIndex = LoadedCukes.addScreen(screenName);
-			System.err.println(LoadedCukes.getScreens().size());
-			System.err.println(LoadedCukes.getScreens().get(screenIndex)
-					.getName());
-
-			StepAction thisAction = new StepAction(LoadedCukes.getScreens()
-					.get(screenIndex).getName(), -1);
+			StepAction thisAction = new StepAction(screenName, -1);
 
 			allActionsForStep.add(thisAction);
 

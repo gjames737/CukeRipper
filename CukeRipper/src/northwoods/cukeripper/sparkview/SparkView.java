@@ -52,7 +52,8 @@ public class SparkView {
 				if (actions.isEmpty())
 					System.out.println("           no actions found");
 				for (StepAction stepAction : actions) {
-					System.out.println("           " + stepAction.toRuby());
+					System.out
+							.println("           Ruby:" + stepAction.toRuby());
 				}
 			}
 		}
