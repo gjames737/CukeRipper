@@ -110,14 +110,14 @@ public class FullTexts {
 		screen1.addMethod(new ScreenMethod("method0", ""));
 		screen1.addMethod(new ScreenMethod("method1", ""));
 
-		g_statement.addStepAction(new StepAction(screen1, 0));
-		g_statement.addStepAction(new StepAction(screen2, 1));
+		g_statement.addStepAction(new StepAction(screen1.getName(), 0));
+		g_statement.addStepAction(new StepAction(screen2.getName(), 1));
 
-		w_statement.addStepAction(new StepAction(screen1, 0));
-		w_statement.addStepAction(new StepAction(screen1, 0));
+		w_statement.addStepAction(new StepAction(screen1.getName(), 0));
+		w_statement.addStepAction(new StepAction(screen1.getName(), 0));
 
-		t_statement.addStepAction(new StepAction(screen1, 0));
-		t_statement.addStepAction(new StepAction(screen2, 0));
+		t_statement.addStepAction(new StepAction(screen1.getName(), 0));
+		t_statement.addStepAction(new StepAction(screen2.getName(), 0));
 
 		STEP_DEF_0_STATEMENTS = new GWTStatement[] { g_statement, w_statement,
 				t_statement };

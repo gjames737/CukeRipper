@@ -68,9 +68,9 @@ public class TestGWTStatement {
 		gwt = new GWTStatement(StatementType.THEN,
 				TestHelper.TEST_GIVEN_STATEMENTS[0]);
 		List<StepAction> actions = new ArrayList<StepAction>();
-		actions.add(new StepAction(screen, 0));
-		actions.add(new StepAction(screen, 0));
-		actions.add(new StepAction(screen, 0));
+		actions.add(new StepAction(screen.getName(), 0));
+		actions.add(new StepAction(screen.getName(), 0));
+		actions.add(new StepAction(screen.getName(), 0));
 
 		theStepActionsAre(actions.get(0), actions.get(1), actions.get(2));
 

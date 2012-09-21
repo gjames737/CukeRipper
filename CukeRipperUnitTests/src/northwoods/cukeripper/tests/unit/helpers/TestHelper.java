@@ -66,13 +66,13 @@ public class TestHelper {
 		case GIVEN_STATEMENT_INDEX_NO_ACTIONS:
 			break;
 		case GIVEN_STATEMENT_INDEX_ONE_ACTION:
-			actionsList.add(new StepAction(getTestScreen(), 0));
+			actionsList.add(new StepAction(getTestScreen().getName(), 0));
 			break;
 		case GIVEN_STATEMENT_INDEX_MULTI_ACTIONS:
 		default:
-			actionsList.add(new StepAction(getTestScreen(), 0));
-			actionsList.add(new StepAction(getTestScreen(), 1));
-			actionsList.add(new StepAction(getTestScreen(), 2));
+			actionsList.add(new StepAction(getTestScreen().getName(), 0));
+			actionsList.add(new StepAction(getTestScreen().getName(), 1));
+			actionsList.add(new StepAction(getTestScreen().getName(), 2));
 			break;
 		}
 

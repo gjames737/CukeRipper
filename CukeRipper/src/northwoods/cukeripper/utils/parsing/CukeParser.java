@@ -265,7 +265,8 @@ public class CukeParser {
 					.getName());
 
 			StepAction thisAction = new StepAction(LoadedCukes.getScreens()
-					.get(screenIndex), -1);
+					.get(screenIndex).getName(), -1);
+
 			allActionsForStep.add(thisAction);
 
 		}
