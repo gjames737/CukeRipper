@@ -26,12 +26,15 @@ public class CukeOutlinePresenter {
 	}
 
 	private void refresh() {
-		this.reader = new CukeFileReader(this.view.getCurrentFileRoot());
+		String currentFileRootPath = this.view.getCurrentFileRootPath();
+		this.reader = new CukeFileReader(currentFileRootPath);
 		this.featureParser = new FeatureFileParser(reader);
+		view.refresh();
 	}
 
 	public File[] getfeatureFiles() {
-		return reader.getAllFeatureFiles();
+		File[] allFeatureFiles = reader.getAllFeatureFiles();
+		return allFeatureFiles;
 	}
 
 	public FeatureFileParser getFeatureParser() {
@@ -79,4 +82,5 @@ public class CukeOutlinePresenter {
 	public void handleRefreshEvent() {
 		refresh();
 	}
+
 }

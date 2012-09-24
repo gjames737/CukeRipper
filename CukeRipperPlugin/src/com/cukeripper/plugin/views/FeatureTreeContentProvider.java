@@ -74,4 +74,9 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 		return false;
 	}
 
+	private void refresh() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

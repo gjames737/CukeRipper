@@ -23,8 +23,10 @@ public class CukeFileReader {
 
 	public void reloadRoot() {
 		allFiles = new ArrayList<File>();
-		loadAllFilesFromDirectory(rootOfAllFiles);
-		resetFeatureBuilder();
+		if (rootOfAllFiles.exists() && rootOfAllFiles.isDirectory()) {
+			loadAllFilesFromDirectory(rootOfAllFiles);
+			resetFeatureBuilder();
+		}
 	}
 
 	private void resetFeatureBuilder() {
@@ -139,14 +141,4 @@ public class CukeFileReader {
 		}
 	}
 
-	// public File getFileWithFeature(String feature) {
-	// List<CukeFeature> features = LoadedCukes.getFeatureBuilder()
-	// .getFeatures();
-	// for (CukeFeature cukeFeature : features) {
-	// if (cukeFeature.getName().equals(features)) {
-	// return allFiles.get()
-	// }
-	// }
-	// return null;
-	// }
 }

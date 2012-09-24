@@ -11,6 +11,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -18,13 +19,15 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
 public class CukeOutlineView extends ViewPart {
-
+	// http://www.eclipse.org/swt/widgets/
 	private static final String ROOT_FILE = "C:" + File.separator + "TFSBuild"
 			+ File.separator + "CoPilot" + File.separator + "Trunk"
 			+ File.separator + "CoPilotCukes";
 	private TreeViewer treeViewer;
 	private FeatureTreeContentProvider provider;
 	private CukeOutlinePresenter presenter;
+	private Text rootText;
+	private Composite parent;
 
 	public CukeOutlineView() {
 		presenter = new CukeOutlinePresenter(this);
@@ -35,7 +38,8 @@ public class CukeOutlineView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		setupLayout(parent);
 		setupRefreshButton(parent);
-
+		rootText = new Text(parent, SWT.SINGLE);
+		rootText.setText("");
 		setupFeatureTree(parent);
 
 		presenter.makeActions();
@@ -45,10 +49,11 @@ public class CukeOutlineView extends ViewPart {
 	private void setupRefreshButton(Composite parent) {
 		Button refreshButton = new Button(parent, SWT.PUSH);
 		refreshButton.setText("Refresh");
-		refreshButton.addListener(SWT.PUSH,
+		refreshButton.addListener(SWT.Selection,
 				new org.eclipse.swt.widgets.Listener() {
 					@Override
 					public void handleEvent(Event event) {
+						// showMessage("!");
 						presenter.handleRefreshEvent();
 					}
 				});
@@ -66,6 +71,7 @@ public class CukeOutlineView extends ViewPart {
 		treeViewer = new TreeViewer(parent);
 		treeViewer.setContentProvider(provider);
 		treeViewer.setInput(getViewSite());
+		this.parent = parent;
 	}
 
 	@Override
@@ -100,8 +106,19 @@ public class CukeOutlineView extends ViewPart {
 		}
 	}
 
-	public String getCurrentFileRoot() {
-		// return ROOT_FILE;
-		return "";
+	public String getCurrentFileRootPath() {
+		if (rootText != null)
+			return rootText.getText();
+		else
+			return "";
+	}
+
+	public void refresh() {
+		if (treeViewer != null) {
+			provider = new FeatureTreeContentProvider(
+					presenter.getfeatureFiles(), presenter.getFeatureParser());
+			treeViewer.setContentProvider(provider);
+
+		}
 	}
 }
