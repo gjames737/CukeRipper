@@ -6,6 +6,7 @@ import java.util.List;
 public class LoadedCukes {
 
 	private static List<CukeScreen> screens = new ArrayList<CukeScreen>();
+	private static FeatureBuilder featureBuilder = null;
 
 	public static List<CukeScreen> getScreens() {
 		return screens;
@@ -33,5 +34,18 @@ public class LoadedCukes {
 			}
 		}
 		return -1;
+	}
+
+	public static void setFeatureBuilder(FeatureBuilder _featureBuilder) {
+		if (LoadedCukes.featureBuilder == null)
+			resetFeatureBuilder(_featureBuilder);
+	}
+
+	public static void resetFeatureBuilder(FeatureBuilder _featureBuilder) {
+		featureBuilder = _featureBuilder;
+	}
+
+	public static FeatureBuilder getFeatureBuilder() {
+		return featureBuilder;
 	}
 }

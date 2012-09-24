@@ -94,10 +94,10 @@ public class TestFeatureTreeContentProvider {
 		setupTestCukeScenarios();
 		testFeatures = new CukeFeature[2];
 
-		for (int i = 0; i < testFeatures.length; i++) {
-			testFeatures[i] = new CukeFeature(FEATURE_NAMES[i]);
-			testFeatures[i].addScenario(cukeScenarios[0]);
-		}
+		testFeatures[0] = new CukeFeature(FEATURE_NAMES[0], TEST_FEATURE_FILE_0);
+		testFeatures[0].addScenario(cukeScenarios[0]);
+		testFeatures[1] = new CukeFeature(FEATURE_NAMES[1], TEST_FEATURE_FILE_1);
+		testFeatures[1].addScenario(cukeScenarios[0]);
 
 	}
 

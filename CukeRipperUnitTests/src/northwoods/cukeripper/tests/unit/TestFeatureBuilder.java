@@ -77,7 +77,7 @@ public class TestFeatureBuilder {
 
 	private void makeFeaturesWithNames(String... names) {
 		for (String name : names) {
-			featureBuilder.makeNewFeature(name);
+			featureBuilder.makeNewFeature(name, null);
 		}
 
 	}

@@ -19,7 +19,7 @@ public class TestCukeFeature {
 
 	@Before
 	public void Setup() {
-		feature = new CukeFeature("featureName");
+		feature = new CukeFeature("featureName", null);
 		TestScenarios.initiate();
 	}
 

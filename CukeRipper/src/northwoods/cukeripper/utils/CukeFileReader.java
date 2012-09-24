@@ -9,6 +9,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import northwoods.cukeripper.utils.parsing.FeatureFileParser;
+
 public class CukeFileReader {
 
 	private File rootOfAllFiles;
@@ -16,8 +18,33 @@ public class CukeFileReader {
 
 	public CukeFileReader(String root) {
 		this.rootOfAllFiles = new File(root);
+		reloadRoot();
+	}
+
+	public void reloadRoot() {
 		allFiles = new ArrayList<File>();
 		loadAllFilesFromDirectory(rootOfAllFiles);
+		resetFeatureBuilder();
+	}
+
+	private void resetFeatureBuilder() {
+		if (LoadedCukes.getFeatureBuilder() == null) {
+			loadFeatureBuilder();
+		}
+	}
+
+	public void loadFeatureBuilder() {
+		FeatureBuilder featureBuilder = new FeatureBuilder();
+
+		File[] featureFiles = getAllFeatureFiles();
+		FeatureFileParser parser = new FeatureFileParser(this);
+		for (int i = 0; i < featureFiles.length; i++) {
+			CukeFeature parsedfeature = parser
+					.getFeatureFromFile(featureFiles[i]);
+			featureBuilder.addParsedFeature(parsedfeature);
+		}
+		LoadedCukes.resetFeatureBuilder(featureBuilder);
+
 	}
 
 	public String readFullFileContents(File file) {
@@ -110,4 +137,15 @@ public class CukeFileReader {
 			stream.close();
 		}
 	}
+
+	// public File getFileWithFeature(String feature) {
+	// List<CukeFeature> features = LoadedCukes.getFeatureBuilder()
+	// .getFeatures();
+	// for (CukeFeature cukeFeature : features) {
+	// if (cukeFeature.getName().equals(features)) {
+	// return allFiles.get()
+	// }
+	// }
+	// return null;
+	// }
 }

@@ -1,5 +1,6 @@
 package northwoods.cukeripper.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,8 @@ public class FeatureBuilder {
 		features = new ArrayList<CukeFeature>();
 	}
 
-	public void makeNewFeature(String featureName) {
-		features.add(new CukeFeature(featureName));
+	public void makeNewFeature(String featureName, File f) {
+		features.add(new CukeFeature(featureName, f));
 	}
 
 	public List<CukeFeature> getFeatures() {
@@ -30,6 +31,10 @@ public class FeatureBuilder {
 		}
 
 		return allScenarios;
+	}
+
+	public void addParsedFeature(CukeFeature parsedfeature) {
+		features.add(parsedfeature);
 	}
 
 }
