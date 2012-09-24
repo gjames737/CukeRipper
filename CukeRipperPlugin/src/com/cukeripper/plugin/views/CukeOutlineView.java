@@ -1,63 +1,22 @@
 package com.cukeripper.plugin.views;
 
-import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 public class CukeOutlineView extends ViewPart {
 
 	private TreeViewer treeViewer;
-	private IContentProvider provider;
-
-	class CukeOutlineContentProvider implements ITreeContentProvider {
-
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Object getParent(Object element) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-	}
+	private FeatureTreeContentProvider provider;
 
 	@Override
 	public void createPartControl(Composite parent) {
-		provider = new CukeOutlineContentProvider();
+		// provider = new FeatureTreeContentProvider(new File[] {});
+		//
+		// treeViewer = new TreeViewer(parent);
+		// treeViewer.setContentProvider(provider);
 
-		treeViewer = new TreeViewer(parent);
-		treeViewer.setContentProvider(provider);
+		// treeViewer.setInput(input)
 	}
 
 	@Override

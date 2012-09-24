@@ -37,4 +37,9 @@ public class CukeFeature {
 
 		return ruby;
 	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }
