@@ -26,7 +26,7 @@ public class SparkView {
 		featureParser = new FeatureFileParser(reader);
 		stepParser = new StepFileParser(reader);
 
-		// showFeatures();
+		showFeatures();
 
 		showStepDefs();
 
