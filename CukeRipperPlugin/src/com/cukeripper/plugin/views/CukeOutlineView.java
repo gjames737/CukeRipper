@@ -8,15 +8,20 @@ public class CukeOutlineView extends ViewPart {
 
 	private TreeViewer treeViewer;
 	private FeatureTreeContentProvider provider;
+	private CukeOutlinePresenter presenter;
+
+	public CukeOutlineView() {
+		presenter = new CukeOutlinePresenter();
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-		// provider = new FeatureTreeContentProvider(new File[] {});
-		//
-		// treeViewer = new TreeViewer(parent);
-		// treeViewer.setContentProvider(provider);
+		provider = new FeatureTreeContentProvider(presenter.getfeatureFiles(),
+				presenter.getFeatureParser());
+		treeViewer = new TreeViewer(parent);
+		treeViewer.setContentProvider(provider);
+		treeViewer.setInput(getViewSite());
 
-		// treeViewer.setInput(input)
 	}
 
 	@Override
