@@ -6,7 +6,11 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -29,15 +33,39 @@ public class CukeOutlineView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		// Layout layout = new CukeOutlineLayout();
-		// parent.setLayout(layout);
+		setupLayout(parent);
+		setupRefreshButton(parent);
+
+		setupFeatureTree(parent);
+
+		presenter.makeActions();
+
+	}
+
+	private void setupRefreshButton(Composite parent) {
+		Button refreshButton = new Button(parent, SWT.PUSH);
+		refreshButton.setText("Refresh");
+		refreshButton.addListener(SWT.PUSH,
+				new org.eclipse.swt.widgets.Listener() {
+					@Override
+					public void handleEvent(Event event) {
+						presenter.handleRefreshEvent();
+					}
+				});
+	}
+
+	private void setupLayout(Composite parent) {
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 1;
+		parent.setLayout(layout);
+	}
+
+	private void setupFeatureTree(Composite parent) {
 		provider = new FeatureTreeContentProvider(presenter.getfeatureFiles(),
 				presenter.getFeatureParser());
 		treeViewer = new TreeViewer(parent);
 		treeViewer.setContentProvider(provider);
 		treeViewer.setInput(getViewSite());
-		presenter.makeActions();
-
 	}
 
 	@Override
@@ -73,6 +101,7 @@ public class CukeOutlineView extends ViewPart {
 	}
 
 	public String getCurrentFileRoot() {
-		return ROOT_FILE;
+		// return ROOT_FILE;
+		return "";
 	}
 }

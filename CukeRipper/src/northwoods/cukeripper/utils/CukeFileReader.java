@@ -114,12 +114,13 @@ public class CukeFileReader {
 	private void loadAllFilesFromDirectory(File rootFile) {
 
 		File[] files = rootFile.listFiles();
-
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].isDirectory()) {
-				loadAllFilesFromDirectory(files[i]);
-			} else {
-				allFiles.add(files[i]);
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					loadAllFilesFromDirectory(files[i]);
+				} else {
+					allFiles.add(files[i]);
+				}
 			}
 		}
 

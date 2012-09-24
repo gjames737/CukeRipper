@@ -22,6 +22,10 @@ public class CukeOutlinePresenter {
 
 	public CukeOutlinePresenter(CukeOutlineView _view) {
 		this.view = _view;
+		refresh();
+	}
+
+	private void refresh() {
 		this.reader = new CukeFileReader(this.view.getCurrentFileRoot());
 		this.featureParser = new FeatureFileParser(reader);
 	}
@@ -70,5 +74,9 @@ public class CukeOutlinePresenter {
 						doubleClickAction.run();
 					}
 				});
+	}
+
+	public void handleRefreshEvent() {
+		refresh();
 	}
 }
