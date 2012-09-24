@@ -11,14 +11,15 @@ public class FullTexts {
 	public static GWTStatement[] STEP_DEF_0_STATEMENTS;
 
 	public static CukeScenario[] FEATURE_0_SCENARIOS = new CukeScenario[] {
-			new CukeScenario("Verifying the default add case screen appearance"),
-			new CukeScenario("Saving a case") };
+			new CukeScenario(
+					"Verifying the default add case screen appearance", null),
+			new CukeScenario("Saving a case", null) };
 
 	public static void initFeature0Scenarios() {
 		FEATURE_0_SCENARIOS = new CukeScenario[] {
 				new CukeScenario(
-						"Verifying the default add case screen appearance"),
-				new CukeScenario("Saving a case") };
+						"Verifying the default add case screen appearance",
+						null), new CukeScenario("Saving a case", null) };
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
 				StatementType.GIVEN, "I am looking at the cases for an event"));
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(

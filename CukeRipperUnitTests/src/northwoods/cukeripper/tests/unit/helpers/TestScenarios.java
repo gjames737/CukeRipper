@@ -6,8 +6,8 @@ import northwoods.cukeripper.utils.GWTStatement.StatementType;
 public class TestScenarios {
 
 	public static final CukeScenario[] SCENARIOS = new CukeScenario[] {
-			new CukeScenario("s0"), new CukeScenario("s1"),
-			new CukeScenario("s2") };
+			new CukeScenario("s0", null), new CukeScenario("s1", null),
+			new CukeScenario("s2", null) };
 
 	public static void initiate() {
 		TestHelper.initiate();

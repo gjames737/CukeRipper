@@ -6,6 +6,7 @@ import static northwoods.cukeripper.utils.CommonRips.SLASH_POINT;
 import static northwoods.cukeripper.utils.CommonRips.THEN;
 import static northwoods.cukeripper.utils.CommonRips.WHEN;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,15 +19,15 @@ import northwoods.cukeripper.utils.StepAction;
 
 public class CukeParser {
 
-	CukeScenario parseScenario(String featureContents, String scenarioTag,
-			List<Integer> indicesOfScenarioTags, int index) {
+	CukeScenario parseScenario(File f, String featureContents,
+			String scenarioTag, List<Integer> indicesOfScenarioTags, int index) {
 
 		int thisCharIndex = indicesOfScenarioTags.get(index);
 
 		String scenarioName = getObjectNameFromContents(thisCharIndex,
 				scenarioTag, featureContents);
 		scenarioName = scenarioName.trim();
-		CukeScenario scenario = new CukeScenario(scenarioName);
+		CukeScenario scenario = new CukeScenario(scenarioName, f);
 		//
 		String fullScenarioString = getFullScenarioString(featureContents,
 				indicesOfScenarioTags, index, thisCharIndex);

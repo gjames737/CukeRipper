@@ -36,7 +36,7 @@ public class FeatureFileParser {
 		int numberOfScenarios = indicesOfScenarioTags.size();
 
 		for (int i = 0; i < numberOfScenarios; i++) {
-			CukeScenario scenario = parser.parseScenario(featureContents,
+			CukeScenario scenario = parser.parseScenario(file, featureContents,
 					scenarioTag, indicesOfScenarioTags, i);
 			feature.addScenario(scenario);
 		}

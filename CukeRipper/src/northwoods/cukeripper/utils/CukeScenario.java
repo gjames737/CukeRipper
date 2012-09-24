@@ -2,6 +2,7 @@ package northwoods.cukeripper.utils;
 
 import static northwoods.cukeripper.utils.CommonRips.BREAKLINE;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +12,11 @@ public class CukeScenario {
 
 	private List<GWTStatement> statements;
 	private String name;
+	private File file;
 
-	public CukeScenario(String name) {
+	public CukeScenario(String name, File f) {
 		this.name = name;
+		this.file = f;
 		statements = new ArrayList<GWTStatement>();
 	}
 
@@ -44,5 +47,14 @@ public class CukeScenario {
 			lastType = thisType;
 		}
 		return ruby;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	public File getFile() {
+		return file;
 	}
 }

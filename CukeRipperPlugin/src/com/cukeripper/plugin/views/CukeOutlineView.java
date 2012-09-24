@@ -15,6 +15,9 @@ import org.eclipse.ui.part.ViewPart;
 
 public class CukeOutlineView extends ViewPart {
 
+	private static final String ROOT_FILE = "C:" + File.separator + "TFSBuild"
+			+ File.separator + "CoPilot" + File.separator + "Trunk"
+			+ File.separator + "CoPilotCukes";
 	private TreeViewer treeViewer;
 	private FeatureTreeContentProvider provider;
 	private CukeOutlinePresenter presenter;
@@ -26,6 +29,8 @@ public class CukeOutlineView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		// Layout layout = new CukeOutlineLayout();
+		// parent.setLayout(layout);
 		provider = new FeatureTreeContentProvider(presenter.getfeatureFiles(),
 				presenter.getFeatureParser());
 		treeViewer = new TreeViewer(parent);
@@ -65,5 +70,9 @@ public class CukeOutlineView extends ViewPart {
 		} else {
 			// Do something if the file does not exist
 		}
+	}
+
+	public String getCurrentFileRoot() {
+		return ROOT_FILE;
 	}
 }

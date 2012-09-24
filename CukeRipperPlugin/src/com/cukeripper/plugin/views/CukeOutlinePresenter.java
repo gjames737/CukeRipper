@@ -4,6 +4,7 @@ import java.io.File;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
+import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.eclipse.jface.action.Action;
@@ -14,9 +15,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 public class CukeOutlinePresenter {
 
-	private static final String ROOT_OF_FILES = "C:" + File.separator
-			+ "TFSBuild" + File.separator + "CoPilot" + File.separator
-			+ "Trunk" + File.separator + "CoPilotCukes";
 	private CukeFileReader reader;
 	private FeatureFileParser featureParser;
 	private Action doubleClickAction;
@@ -24,7 +22,7 @@ public class CukeOutlinePresenter {
 
 	public CukeOutlinePresenter(CukeOutlineView _view) {
 		this.view = _view;
-		this.reader = new CukeFileReader(ROOT_OF_FILES);
+		this.reader = new CukeFileReader(this.view.getCurrentFileRoot());
 		this.featureParser = new FeatureFileParser(reader);
 	}
 
@@ -50,6 +48,12 @@ public class CukeOutlinePresenter {
 					File featureFile = feature.getFile();
 
 					view.openEditorOnFile(featureFile);
+				} else if (obj instanceof CukeScenario) {
+					CukeScenario scenario = (CukeScenario) obj;
+
+					File scenarioFile = scenario.getFile();
+
+					view.openEditorOnFile(scenarioFile);
 				} else {
 					view.showMessage("Double-click detected on "
 							+ obj.toString());
@@ -66,6 +70,5 @@ public class CukeOutlinePresenter {
 						doubleClickAction.run();
 					}
 				});
-
 	}
 }

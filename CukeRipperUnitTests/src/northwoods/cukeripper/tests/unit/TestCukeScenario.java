@@ -25,7 +25,7 @@ public class TestCukeScenario {
 	@Before
 	public void Setup() {
 		TestHelper.initiate();
-		scenario = new CukeScenario("Scenario Foo");
+		scenario = new CukeScenario("Scenario Foo", null);
 	}
 
 	@Test
@@ -88,6 +88,11 @@ public class TestCukeScenario {
 				GIVEN_STATEMENT_INDEX_MULTI_ACTIONS).toRuby();
 		System.out.println(expected);
 		assertThat(actual, is(expected));
+	}
+
+	@Test
+	public void itToStringsCorrectly() {
+		assertThat(scenario.toString(), is(scenario.getName()));
 	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

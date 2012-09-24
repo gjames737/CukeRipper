@@ -54,7 +54,9 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		// TODO Auto-generated method stub
+		if (parentElement instanceof CukeFeature) {
+			return ((CukeFeature) parentElement).getScenarios().toArray();
+		}
 		return null;
 	}
 
@@ -66,7 +68,9 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(Object element) {
-		// TODO Auto-generated method stub
+		if (element instanceof CukeFeature) {
+			return ((CukeFeature) element).getScenarios().size() > 0;
+		}
 		return false;
 	}
 

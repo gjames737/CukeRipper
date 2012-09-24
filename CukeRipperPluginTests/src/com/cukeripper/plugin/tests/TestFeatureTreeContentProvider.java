@@ -53,13 +53,37 @@ public class TestFeatureTreeContentProvider {
 
 	@Test
 	public void itGetsTheCorrectElements() {
-		Object[] actualFeatures = feature_treeContentProvider
-				.getElements(TEST_FEATURE_FILE_0.getAbsolutePath());
+		Object[] actualFeatures = feature_treeContentProvider.getElements(null);
 
 		assertThat(actualFeatures.length, is(testFeatures.length));
 
 		for (int i = 0; i < testFeatures.length; i++) {
 			assertThat((CukeFeature) actualFeatures[i], is(testFeatures[i]));
+		}
+
+	}
+
+	@Test
+	public void itHasChildElementsForFeatures() {
+		Object[] actualChildren = feature_treeContentProvider
+				.getChildren(testFeatures[0]);
+
+		for (int i = 0; i < testFeatures.length; i++) {
+			assertThat(
+					feature_treeContentProvider.hasChildren(testFeatures[i]),
+					is(true));
+		}
+
+	}
+
+	@Test
+	public void itGetsTheCorrectChildElementsForFeatures() {
+		Object[] actualChildren = feature_treeContentProvider
+				.getChildren(testFeatures[0]);
+
+		for (int i = 0; i < testFeatures[0].getScenarios().size(); i++) {
+			assertThat((CukeScenario) actualChildren[i], is(testFeatures[0]
+					.getScenarios().get(i)));
 		}
 
 	}
@@ -104,7 +128,8 @@ public class TestFeatureTreeContentProvider {
 	private void setupTestCukeScenarios() {
 		setupStatements();
 		cukeScenarios = new CukeScenario[1];
-		cukeScenarios[0] = new CukeScenario(SCENARIO_NAMES[0]);
+		cukeScenarios[0] = new CukeScenario(SCENARIO_NAMES[0],
+				TEST_FEATURE_FILE_0);
 		cukeScenarios[0].createStatement(g_statement);
 		cukeScenarios[0].createStatement(t_statement);
 		cukeScenarios[0].createStatement(w_statement);
