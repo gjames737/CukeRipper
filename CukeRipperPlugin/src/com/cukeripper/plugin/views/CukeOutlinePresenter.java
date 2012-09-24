@@ -4,6 +4,7 @@ import java.io.File;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
+import northwoods.cukeripper.utils.CukeFileReader.ICukeFileReaderListener;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
@@ -13,7 +14,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-public class CukeOutlinePresenter {
+public class CukeOutlinePresenter implements ICukeFileReaderListener {
 
 	private CukeFileReader reader;
 	private FeatureFileParser featureParser;
@@ -27,9 +28,9 @@ public class CukeOutlinePresenter {
 
 	private void refresh() {
 		String currentFileRootPath = this.view.getCurrentFileRootPath();
-		this.reader = new CukeFileReader(currentFileRootPath);
+		this.reader = new CukeFileReader(this, currentFileRootPath);
 		this.featureParser = new FeatureFileParser(reader);
-		view.refresh();
+
 	}
 
 	public File[] getfeatureFiles() {
@@ -81,6 +82,11 @@ public class CukeOutlinePresenter {
 
 	public void handleRefreshEvent() {
 		refresh();
+	}
+
+	@Override
+	public void onLoadComplete() {
+		view.refresh();
 	}
 
 }

@@ -7,7 +7,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -60,9 +60,11 @@ public class CukeOutlineView extends ViewPart {
 	}
 
 	private void setupLayout(Composite parent) {
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 1;
-		parent.setLayout(layout);
+		// GridLayout layout = new GridLayout();
+		// layout.numColumns = 1;
+		// parent.setLayout(layout);
+		RowLayout rowLayout = new RowLayout();
+		parent.setLayout(rowLayout);
 	}
 
 	private void setupFeatureTree(Composite parent) {
