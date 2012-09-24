@@ -12,7 +12,7 @@
             name="Cuke Ripper Outline"
             icon="icons/cuke_ripper_icon.gif"
             category="com.cukeripper.plugin"
-            class="com.cukeripper.plugin.views.SampleView"
+            class="com.cukeripper.plugin.views.CukeOutlineView"
             id="com.cukeripper.plugin.views.SampleView">
       </view>
    </extension>
