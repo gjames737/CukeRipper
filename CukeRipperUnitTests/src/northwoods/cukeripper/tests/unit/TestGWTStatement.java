@@ -1,8 +1,11 @@
 package northwoods.cukeripper.tests.unit;
 
+import static northwoods.cukeripper.tests.unit.helpers.TestHelper.featureFile;
+import static northwoods.cukeripper.tests.unit.helpers.TestHelper.stepFile;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +27,20 @@ public class TestGWTStatement {
 	@Before
 	public void Setup() {
 		TestHelper.initiate();
-		gwt = new GWTStatement(StatementType.GIVEN,
+
+		gwt = new GWTStatement(stepFile(), featureFile(), StatementType.GIVEN,
 				TestHelper.TEST_GIVEN_STATEMENTS[0]);
 		screenMethod = new ScreenMethod("method_name", "#todo method body");
 		screen = new CukeScreen("screen_1");
 		screen.addMethod(screenMethod);
+	}
+
+	@Test
+	public void itHasAFileWhenGivenAFile() {
+		File expected = new File("dsadsa\\asd34asd\\2dsda.f");
+		File actual = gwt.getStepFile();
+
+		assertThat(actual, is(expected));
 	}
 
 	@Test
@@ -41,7 +53,7 @@ public class TestGWTStatement {
 
 	@Test
 	public void itCreatesTheCorrectTypePrefix_When() {
-		gwt = new GWTStatement(StatementType.WHEN,
+		gwt = new GWTStatement(stepFile(), featureFile(), StatementType.WHEN,
 				TestHelper.TEST_GIVEN_STATEMENTS[0]);
 
 		String expected = "When";
@@ -53,7 +65,7 @@ public class TestGWTStatement {
 	@Test
 	public void itCreatesTheCorrectTypePrefix_Then() {
 
-		gwt = new GWTStatement(StatementType.THEN,
+		gwt = new GWTStatement(stepFile(), featureFile(), StatementType.THEN,
 				TestHelper.TEST_GIVEN_STATEMENTS[0]);
 
 		String expected = "Then";
@@ -65,7 +77,7 @@ public class TestGWTStatement {
 	@Test
 	public void itToStrings() {
 
-		gwt = new GWTStatement(StatementType.THEN,
+		gwt = new GWTStatement(stepFile(), featureFile(), StatementType.THEN,
 				TestHelper.TEST_GIVEN_STATEMENTS[0]);
 
 		String expected = gwt.getStatement();
@@ -77,7 +89,7 @@ public class TestGWTStatement {
 	@Test
 	public void itGivesAListofStepActions() {
 
-		gwt = new GWTStatement(StatementType.THEN,
+		gwt = new GWTStatement(stepFile(), featureFile(), StatementType.THEN,
 				TestHelper.TEST_GIVEN_STATEMENTS[0]);
 		List<StepAction> actions = new ArrayList<StepAction>();
 		actions.add(new StepAction(screen.getName(), 0));

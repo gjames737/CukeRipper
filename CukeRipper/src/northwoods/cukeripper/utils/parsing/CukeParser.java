@@ -19,7 +19,7 @@ import northwoods.cukeripper.utils.StepAction;
 
 public class CukeParser {
 
-	CukeScenario parseScenario(File f, String featureContents,
+	CukeScenario parseScenario(File file, String featureContents,
 			String scenarioTag, List<Integer> indicesOfScenarioTags, int index) {
 
 		int thisCharIndex = indicesOfScenarioTags.get(index);
@@ -27,14 +27,14 @@ public class CukeParser {
 		String scenarioName = getObjectNameFromContents(thisCharIndex,
 				scenarioTag, featureContents);
 		scenarioName = scenarioName.trim();
-		CukeScenario scenario = new CukeScenario(scenarioName, f);
+		CukeScenario scenario = new CukeScenario(scenarioName, file);
 		//
 		String fullScenarioString = getFullScenarioString(featureContents,
 				indicesOfScenarioTags, index, thisCharIndex);
 
 		List<Integer> indicesOfStatements = getIndicesOfAllStatementsInScenario(fullScenarioString);
 
-		List<GWTStatement> GWTStatements = getStatementTypes(
+		List<GWTStatement> GWTStatements = getStatementTypes(file,
 				fullScenarioString, indicesOfStatements);
 
 		for (GWTStatement gs : GWTStatements) {
@@ -73,7 +73,8 @@ public class CukeParser {
 		return featureName;
 	}
 
-	List<GWTStatement> parseStatementsFromStepFile(String fullContents) {
+	List<GWTStatement> parseStatementsFromStepFile(File file,
+			String fullContents) {
 		List<GWTStatement> statements = new ArrayList<GWTStatement>();
 
 		List<Integer> indicesOfSlashPt = indicesOfOccurances(fullContents,
@@ -82,7 +83,7 @@ public class CukeParser {
 		List<Integer> indicesOfDollarSlash = indicesOfOccurances(fullContents,
 				DOLLAR_SLASH);
 
-		extractTypeAndStatementsToList(fullContents, statements,
+		extractTypeAndStatementsToList(file, fullContents, statements,
 				indicesOfSlashPt, indicesOfDollarSlash);
 		return statements;
 	}
@@ -101,8 +102,8 @@ public class CukeParser {
 		return indicesOfStatements;
 	}
 
-	private List<GWTStatement> getStatementTypes(String fullScenarioString,
-			List<Integer> indicesOfStatements) {
+	private List<GWTStatement> getStatementTypes(File file,
+			String fullScenarioString, List<Integer> indicesOfStatements) {
 		StatementType lastType = StatementType.GIVEN;
 		List<GWTStatement> gwts = new ArrayList<GWTStatement>();
 		for (int i = 0; i < indicesOfStatements.size(); i++) {
@@ -119,10 +120,22 @@ public class CukeParser {
 					indicesOfStatements, i, statementIndex, thisType, isAnd);
 
 			// System.err.println(thisType.name() + "[  " + statement + " ]");
-			gwts.add(new GWTStatement(thisType, statement));
+
+			File stepFile = isFeatureFile(file) ? null : file;
+			File featureFile = isFeatureFile(file) ? file : null;
+
+			gwts.add(new GWTStatement(stepFile, featureFile, thisType,
+					statement));
 			lastType = thisType;
 		}
 		return gwts;
+	}
+
+	private boolean isFeatureFile(File file) {
+		if (file == null)
+			return false;
+		return file.getName().toLowerCase()
+				.contains("." + CommonRips.FEATURE.toLowerCase());
 	}
 
 	private String cleanStatementString(String statement) {
@@ -198,7 +211,7 @@ public class CukeParser {
 		return fullScenarioString;
 	}
 
-	private void extractTypeAndStatementsToList(String fullContents,
+	private void extractTypeAndStatementsToList(File file, String fullContents,
 			List<GWTStatement> outStatements, List<Integer> indicesOfSlashPt,
 			List<Integer> indicesOfDollarSlash) {
 		int numberOfStepDefs = indicesOfSlashPt.size();
@@ -215,8 +228,10 @@ public class CukeParser {
 
 			String statementString = fullContents.substring(beginIndextatement,
 					endIndexStatement);
-
-			GWTStatement gwtStatement = new GWTStatement(type, statementString);
+			File stepFile = isFeatureFile(file) ? null : file;
+			File featureFile = isFeatureFile(file) ? file : null;
+			GWTStatement gwtStatement = new GWTStatement(stepFile, featureFile,
+					type, statementString);
 
 			// Add StepActios
 			List<StepAction> stepActionsInStatement = parseOutStepActionsForStatement(

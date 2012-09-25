@@ -22,8 +22,8 @@ public class StepFileParser {
 
 	public List<GWTStatement> getGWTStatementsFromFile(File file) {
 		String fullContents = getStepFileContents(file);
-		List<GWTStatement> statements = parser
-				.parseStatementsFromStepFile(fullContents);
+		List<GWTStatement> statements = parser.parseStatementsFromStepFile(
+				file, fullContents);
 
 		return statements;
 	}

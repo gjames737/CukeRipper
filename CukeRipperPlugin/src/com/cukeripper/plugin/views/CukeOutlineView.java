@@ -31,8 +31,6 @@ public class CukeOutlineView extends ViewPart {
 	private CukeOutlinePresenter presenter;
 	private Text txtRootFile;
 
-	// private Composite parentComposite;
-
 	public CukeOutlineView() {
 		presenter = new CukeOutlinePresenter(this);
 

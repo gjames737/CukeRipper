@@ -1,5 +1,7 @@
 package northwoods.cukeripper.tests.unit.helpers;
 
+import static northwoods.cukeripper.tests.unit.helpers.TestHelper.featureFile;
+import static northwoods.cukeripper.tests.unit.helpers.TestHelper.stepFile;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;
@@ -16,35 +18,44 @@ public class FullTexts {
 			new CukeScenario("Saving a case", null) };
 
 	public static void initFeature0Scenarios() {
+		TestHelper.initiate();
 		FEATURE_0_SCENARIOS = new CukeScenario[] {
 				new CukeScenario(
 						"Verifying the default add case screen appearance",
 						null), new CukeScenario("Saving a case", null) };
-		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
-				StatementType.GIVEN, "I am looking at the cases for an event"));
-		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
-				StatementType.WHEN, "I choose to add a new case"));
-		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(
-				StatementType.THEN,
+		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.GIVEN,
+				"I am looking at the cases for an event"));
+		FEATURE_0_SCENARIOS[0]
+				.createStatement(new GWTStatement(stepFile(), featureFile(),
+						StatementType.WHEN, "I choose to add a new case"));
+		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.THEN,
 				"I am presented with the default add new case screen"));
 		//
-		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.GIVEN, "I am looking at the cases for an event"));
-		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.GIVEN, "I choose to add a new case"));
-		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.GIVEN, "I have filled in required case details"));
-		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.WHEN, "I choose to save the case"));
-		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.THEN, "I am not able to save the case"));
-		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.THEN, "the tabs are populated"));
-		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.THEN,
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.GIVEN,
+				"I am looking at the cases for an event"));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.GIVEN,
+				"I choose to add a new case"));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.GIVEN,
+				"I have filled in required case details"));
+		FEATURE_0_SCENARIOS[1]
+				.createStatement(new GWTStatement(stepFile(), featureFile(),
+						StatementType.WHEN, "I choose to save the case"));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.THEN,
+				"I am not able to save the case"));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.THEN, "the tabs are populated"));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.THEN,
 				"the case number is displayed in the breadcrumb"));
-		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(
-				StatementType.THEN, "the message 'case saved' is displayed"));
+		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.THEN,
+				"the message 'case saved' is displayed"));
 
 	}
 
@@ -96,15 +107,16 @@ public class FullTexts {
 			+ "\n    enabled? 'case_case_head_spin'" + "\n  end" + "\n	end";
 
 	public static void initStepDefs() {
-
-		GWTStatement g_statement = new GWTStatement(StatementType.GIVEN,
-				"The given statement");
-		GWTStatement w_statement = new GWTStatement(StatementType.WHEN,
-				"The when statement");
-		GWTStatement t_statement = new GWTStatement(StatementType.THEN,
-				"The then statement");
-		GWTStatement g_statement_spanish = new GWTStatement(
-				StatementType.GIVEN, "The given statement spanish");
+		TestHelper.initiate();
+		GWTStatement g_statement = new GWTStatement(stepFile(), featureFile(),
+				StatementType.GIVEN, "The given statement");
+		GWTStatement w_statement = new GWTStatement(stepFile(), featureFile(),
+				StatementType.WHEN, "The when statement");
+		GWTStatement t_statement = new GWTStatement(stepFile(), featureFile(),
+				StatementType.THEN, "The then statement");
+		GWTStatement g_statement_spanish = new GWTStatement(stepFile(),
+				featureFile(), StatementType.GIVEN,
+				"The given statement spanish");
 
 		CukeScreen screen1 = new CukeScreen("screen1");
 		screen1.addMethod(new ScreenMethod("method0", ""));

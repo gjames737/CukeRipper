@@ -1,5 +1,9 @@
 package northwoods.cukeripper.tests.unit.helpers;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +15,9 @@ import northwoods.cukeripper.utils.ScreenMethod;
 import northwoods.cukeripper.utils.StepAction;
 
 public class TestHelper {
+	private static File featureFile;
+	private static File stepFile;
+
 	public static final String[] TEST_GIVEN_STATEMENTS = new String[] {
 			"It is something 0", "It is something 1", "It is something 2" };
 	public static final String[] TEST_WHEN_STATEMENTS = new String[] {
@@ -39,6 +46,10 @@ public class TestHelper {
 			TestHelper.createGWTStatements();
 			isInitiated = true;
 		}
+		featureFile = mock(File.class);
+		when(featureFile.getName()).thenReturn("asds.feature");
+		stepFile = mock(File.class);
+		when(stepFile.getName()).thenReturn("adsdsa.rb");
 	}
 
 	public static CukeScreen getTestScreen() {
@@ -106,25 +117,33 @@ public class TestHelper {
 		List<StepAction> actionsList;
 		for (int i = 0; i < TEST_GIVEN_STATEMENTS.length; i++) {
 			actionsList = getTestActionsList(i);
-			GWTStatement statement = new GWTStatement(StatementType.GIVEN,
-					TEST_GIVEN_STATEMENTS[i]);
+			GWTStatement statement = new GWTStatement(stepFile, featureFile,
+					StatementType.GIVEN, TEST_GIVEN_STATEMENTS[i]);
 			statement.setStepActions(actionsList);
 			givenStatements.add(statement);
 		}
 		for (int i = 0; i < TEST_WHEN_STATEMENTS.length; i++) {
 			actionsList = getTestActionsList(i);
-			GWTStatement statement = new GWTStatement(StatementType.WHEN,
-					TEST_WHEN_STATEMENTS[i]);
+			GWTStatement statement = new GWTStatement(stepFile, featureFile,
+					StatementType.WHEN, TEST_WHEN_STATEMENTS[i]);
 			statement.setStepActions(actionsList);
 			whenStatements.add(statement);
 		}
 		for (int i = 0; i < TEST_WHEN_STATEMENTS.length; i++) {
 			actionsList = getTestActionsList(i);
-			GWTStatement statement = new GWTStatement(StatementType.THEN,
-					TEST_WHEN_STATEMENTS[i]);
+			GWTStatement statement = new GWTStatement(stepFile, featureFile,
+					StatementType.THEN, TEST_WHEN_STATEMENTS[i]);
 			statement.setStepActions(actionsList);
 			thenStatements.add(statement);
 		}
 		return givenStatements;
+	}
+
+	public static File featureFile() {
+		return featureFile;
+	}
+
+	public static File stepFile() {
+		return stepFile;
 	}
 }

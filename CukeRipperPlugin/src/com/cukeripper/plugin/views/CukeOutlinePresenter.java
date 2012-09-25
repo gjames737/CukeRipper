@@ -5,6 +5,7 @@ import java.io.File;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.eclipse.jface.action.Action;
@@ -61,6 +62,12 @@ public class CukeOutlinePresenter {
 					File scenarioFile = scenario.getFile();
 
 					view.openEditorOnFile(scenarioFile);
+				} else if (obj instanceof GWTStatement) {
+					GWTStatement statment = (GWTStatement) obj;
+
+					File statmentFile = statment.getStepFile();
+
+					view.openEditorOnFile(statmentFile);
 				} else {
 					view.showMessage("Double-click detected on "
 							+ obj.toString());

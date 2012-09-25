@@ -163,5 +163,9 @@ public class TestFeatureFileParser {
 		stepDefinitionFiles = new File[1];
 		stepDefinitionFiles[0] = mock(File.class);
 
+		when(featureFiles[0].getName()).thenReturn("foo.feature");
+		when(screenFiles[0].getName()).thenReturn("foo.rb");
+		when(stepDefinitionFiles[0].getName()).thenReturn("foo.rb");
+
 	}
 }

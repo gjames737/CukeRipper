@@ -5,6 +5,7 @@ import static northwoods.cukeripper.utils.CommonRips.DO;
 import static northwoods.cukeripper.utils.CommonRips.END;
 import static northwoods.cukeripper.utils.CommonRips.TODO;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +14,20 @@ public class GWTStatement {
 	private String statement;
 	private List<StepAction> actionsList;
 	private StatementType type;
+	private File step_file;
+	private File feature_file;
 
 	public enum StatementType {
 		GIVEN, THEN, WHEN
 	}
 
-	public GWTStatement(StatementType _type, String _statement) {
+	public GWTStatement(File _step_file, File _feature_file,
+			StatementType _type, String _statement) {
 		this.type = _type;
 		this.statement = _statement;
 		this.actionsList = new ArrayList<StepAction>();
+		this.step_file = _step_file;
+		this.feature_file = _feature_file;
 	}
 
 	public String getFormattedStatement(boolean isAnd) {
@@ -75,6 +81,14 @@ public class GWTStatement {
 
 	public List<StepAction> getAllActions() {
 		return actionsList;
+	}
+
+	public File getStepFile() {
+		return step_file;
+	}
+
+	public File getFeatureFile() {
+		return feature_file;
 	}
 
 }
