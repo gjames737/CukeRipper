@@ -1,4 +1,4 @@
-package cukeripperplugin;
+package com.cukeripper.plugin;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
