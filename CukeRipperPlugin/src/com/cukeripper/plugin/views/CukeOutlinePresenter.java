@@ -44,37 +44,41 @@ public class CukeOutlinePresenter {
 
 	void makeActions() {
 		doubleClickAction = new Action() {
-
 			public void run() {
-				ISelection selection = view.getFeatureTree().getSelection();
-				Object obj = ((IStructuredSelection) selection)
-						.getFirstElement();
-				if (obj instanceof CukeFeature) {
-					// view.showMessage("It's a cuke!");
-					CukeFeature feature = (CukeFeature) obj;
-
-					File featureFile = feature.getFile();
-
-					view.openEditorOnFile(featureFile);
-				} else if (obj instanceof CukeScenario) {
-					CukeScenario scenario = (CukeScenario) obj;
-
-					File scenarioFile = scenario.getFile();
-
-					view.openEditorOnFile(scenarioFile);
-				} else if (obj instanceof GWTStatement) {
-					GWTStatement statment = (GWTStatement) obj;
-
-					File statmentFile = statment.getStepFile();
-
-					view.openEditorOnFile(statmentFile);
-				} else {
-					view.showMessage("Double-click detected on "
-							+ obj.toString());
-				}
+				handleTreeItemDoubleClick();
 			}
+
 		};
 		hookClickActions();
+	}
+
+	private void handleTreeItemDoubleClick() {
+		ISelection selection = view.getFeatureTree().getSelection();
+		Object obj = ((IStructuredSelection) selection).getFirstElement();
+		if (obj instanceof CukeFeature) {
+			handleFeatureDoubleClick((CukeFeature) obj);
+		} else if (obj instanceof CukeScenario) {
+			handleScenarioDoubleClick((CukeScenario) obj);
+		} else if (obj instanceof GWTStatement) {
+			handleStatementDoubleClick((GWTStatement) obj);
+		} else {
+			view.showMessage("Double-click detected on " + obj.toString());
+		}
+	}
+
+	private void handleFeatureDoubleClick(CukeFeature feature) {
+		File featureFile = feature.getFile();
+		view.openEditorOnFile(featureFile);
+	}
+
+	private void handleScenarioDoubleClick(CukeScenario scenario) {
+		File scenarioFile = scenario.getFile();
+		view.openEditorOnFile(scenarioFile);
+	}
+
+	private void handleStatementDoubleClick(GWTStatement statment) {
+		File statmentFile = statment.getStepFile();
+		view.openEditorOnFile(statmentFile);
 	}
 
 	private void hookClickActions() {
