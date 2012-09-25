@@ -1,4 +1,5 @@
 To install:
+Download the CukeRipperSite.zip
 Extract to a known folder
 In Eclipse go to Help>Install New Software>Add>Local...>
 Select the root folder
