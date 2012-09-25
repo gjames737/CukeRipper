@@ -40,7 +40,7 @@ public class TestFeatureFileParser {
 		setupReader();
 
 		featureParser = new FeatureFileParser(reader);
-		FullTexts.initFeature0Scenarios();
+		FullTexts.initFeatureScenarios();
 	}
 
 	@Test
@@ -50,24 +50,24 @@ public class TestFeatureFileParser {
 
 	@Test
 	public void itCreatesAFeatureFromAFile() {
-		assertThat(theFeatureParsed(), is(notNullValue()));
+		assertThat(theFeatureParsed(0), is(notNullValue()));
 	}
 
 	@Test
 	public void itCreatesAFeatureFromAFileWithTheCorrectName() {
-		assertThat(theFeatureParsed().getName(), is(FullTexts.FEATURE_0_NAME));
+		assertThat(theFeatureParsed(0).getName(), is(FullTexts.FEATURE_0_NAME));
 	}
 
 	@Test
 	public void itCreatesAFeatureFromAFileWithTheCorrectNumberOfScenarios() {
-		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
 		assertThat(theScenarios.size(),
 				is(FullTexts.FEATURE_0_NUMBER_OF_SCENARIOS));
 	}
 
 	@Test
 	public void itCreatesAFeatureFromAFileWithTheCorrectScenarioNames() {
-		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
@@ -78,7 +78,7 @@ public class TestFeatureFileParser {
 
 	@Test
 	public void itCreatesTheCorrectScenariosWithTheCorrectNumberOfGWTStatements() {
-		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
@@ -93,7 +93,7 @@ public class TestFeatureFileParser {
 
 	@Test
 	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementTypes() {
-		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
@@ -111,8 +111,8 @@ public class TestFeatureFileParser {
 	}
 
 	@Test
-	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatements() {
-		List<CukeScenario> theScenarios = theFeatureParsed().getScenarios();
+	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatements0() {
+		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
@@ -129,11 +129,57 @@ public class TestFeatureFileParser {
 		}
 	}
 
+	@Test
+	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatements1() {
+		List<CukeScenario> theScenarios = theFeatureParsed(1).getScenarios();
+		int size = theScenarios.size();
+		for (int i = 0; i < size; i++) {
+			CukeScenario cukeScenario = theScenarios.get(i);
+			List<GWTStatement> theStatements = cukeScenario.getStatements();
+			int numOfStatements = theStatements.size();
+
+			for (int j = 0; j < numOfStatements; j++) {
+				GWTStatement actualStatement = theStatements.get(j);
+				GWTStatement expectedStatement = FullTexts.FEATURE_1_SCENARIOS[i]
+						.getStatement(j);
+				assertThat(actualStatement.getStatement(),
+						is(expectedStatement.getStatement()));
+			}
+		}
+	}
+
+	@Test
+	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatementsWithTheCorrectFeatureAndStepFile() {
+		List<CukeScenario> theScenarios = theFeatureParsed(1).getScenarios();
+		int size = theScenarios.size();
+		for (int i = 0; i < size; i++) {
+			CukeScenario cukeScenario = theScenarios.get(i);
+			List<GWTStatement> theStatements = cukeScenario.getStatements();
+			int numOfStatements = theStatements.size();
+
+			for (int j = 0; j < numOfStatements; j++) {
+				GWTStatement actualStatement = theStatements.get(j);
+				GWTStatement expectedStatement = FullTexts.FEATURE_1_SCENARIOS[i]
+						.getStatement(j);
+				assertThat(
+						actualStatement.getFeatureFile().getAbsolutePath(),
+						is(expectedStatement.getFeatureFile().getAbsolutePath()));
+				if (actualStatement.getStepFile() == null) {
+					System.err.println("it is null for "
+							+ actualStatement.slashToSlashStatement());
+				}
+				assertThat(actualStatement.getStepFile(), is(notNullValue()));
+				assertThat(actualStatement.getStepFile().getAbsolutePath(),
+						is(expectedStatement.getStepFile().getAbsolutePath()));
+			}
+		}
+	}
+
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-	private CukeFeature theFeatureParsed() {
-		return featureParser.getFeatureFromFile(featureFiles[0]);
+	private CukeFeature theFeatureParsed(int index) {
+		return featureParser.getFeatureFromFile(featureFiles[index]);
 	}
 
 	private void setupReader() {
@@ -144,6 +190,8 @@ public class TestFeatureFileParser {
 
 		when(reader.readFullFileContents(featureFiles[0])).thenReturn(
 				FullTexts.FEATURE_0);
+		when(reader.readFullFileContents(featureFiles[1])).thenReturn(
+				FullTexts.FEATURE_1);
 
 		when(reader.readFullFileContents(screenFiles[0])).thenReturn(
 				FullTexts.SCREEN_0);
@@ -154,8 +202,9 @@ public class TestFeatureFileParser {
 	}
 
 	private void setUpAllFiles() {
-		featureFiles = new File[1];
+		featureFiles = new File[2];
 		featureFiles[0] = mock(File.class);
+		featureFiles[1] = mock(File.class);
 
 		screenFiles = new File[1];
 		screenFiles[0] = mock(File.class);
@@ -163,7 +212,8 @@ public class TestFeatureFileParser {
 		stepDefinitionFiles = new File[1];
 		stepDefinitionFiles[0] = mock(File.class);
 
-		when(featureFiles[0].getName()).thenReturn("foo.feature");
+		when(featureFiles[0].getName()).thenReturn("foo0.feature");
+		when(featureFiles[1].getName()).thenReturn("foo1.feature");
 		when(screenFiles[0].getName()).thenReturn("foo.rb");
 		when(stepDefinitionFiles[0].getName()).thenReturn("foo.rb");
 

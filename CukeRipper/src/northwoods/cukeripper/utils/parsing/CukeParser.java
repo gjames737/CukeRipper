@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import northwoods.cukeripper.utils.CommonRips;
+import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.GWTStatement.StatementType;
@@ -411,6 +412,24 @@ public class CukeParser {
 			}
 		}
 		return count;
+
 	}
 
+	public File findStepFileForStatement(CukeFileReader reader,
+			GWTStatement gwtStatement) {
+		File[] stepFiles = reader.getAllStepDefinitionFiles();
+		String theStepString = gwtStatement.slashToSlashStatement();
+		for (int i = 0; i < stepFiles.length; i++) {
+			String contents = reader.readFullFileContents(stepFiles[i]);
+
+			if (contents.contains(theStepString)) {
+				System.out.println("Found step file for: "
+						+ gwtStatement.slashToSlashStatement());
+				return stepFiles[i];
+			}
+		}
+		System.err.println("null on: " + gwtStatement.getStatement());
+		System.err.println("null on: " + gwtStatement.slashToSlashStatement());
+		return null;
+	}
 }

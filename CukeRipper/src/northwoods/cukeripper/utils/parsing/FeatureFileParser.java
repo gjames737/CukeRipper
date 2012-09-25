@@ -7,6 +7,7 @@ import northwoods.cukeripper.utils.CommonRips;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.GWTStatement;
 
 public class FeatureFileParser {
 
@@ -41,6 +42,26 @@ public class FeatureFileParser {
 		for (int i = 0; i < numberOfScenarios; i++) {
 			CukeScenario scenario = parser.parseScenario(file, featureContents,
 					scenarioTag, indicesOfScenarioTags, i);
+
+			GWTStatement[] statements = scenario.getStatementsArray();
+			for (int j = 0; j < statements.length; j++) {
+				GWTStatement gwtStatement = statements[j];
+				if (gwtStatement.getStepFile() == null) {
+					System.out.println(gwtStatement.slashToSlashStatement());
+					File stepFile = parser.findStepFileForStatement(reader,
+							gwtStatement);
+					if (stepFile == null) {
+						System.err.println("it is null here");
+					}
+					if (scenario.getStatements().get(j).equals(gwtStatement)) {
+						System.out.println("they do equal");
+					}
+					scenario.getStatements().get(j).setStepFile(stepFile);
+				} else {
+					System.err.println("it already has a step file ["
+							+ gwtStatement.slashToSlashStatement() + "]");
+				}
+			}
 			feature.addScenario(scenario);
 		}
 

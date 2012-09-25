@@ -12,12 +12,10 @@ import northwoods.cukeripper.utils.StepAction;
 public class FullTexts {
 	public static GWTStatement[] STEP_DEF_0_STATEMENTS;
 
-	public static CukeScenario[] FEATURE_0_SCENARIOS = new CukeScenario[] {
-			new CukeScenario(
-					"Verifying the default add case screen appearance", null),
-			new CukeScenario("Saving a case", null) };
+	public static CukeScenario[] FEATURE_0_SCENARIOS;
+	public static CukeScenario[] FEATURE_1_SCENARIOS;
 
-	public static void initFeature0Scenarios() {
+	public static void initFeatureScenarios() {
 		TestHelper.initiate();
 		FEATURE_0_SCENARIOS = new CukeScenario[] {
 				new CukeScenario(
@@ -57,6 +55,15 @@ public class FullTexts {
 				featureFile(), StatementType.THEN,
 				"the message 'case saved' is displayed"));
 
+		//
+		FEATURE_1_SCENARIOS = new CukeScenario[] { new CukeScenario(
+				"blah blah", null) };
+		FEATURE_1_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.GIVEN, "The given statement"));
+		FEATURE_1_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.WHEN, "The when statement"));
+		FEATURE_1_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
+				featureFile(), StatementType.THEN, "The then statement"));
 	}
 
 	public static final int FEATURE_0_NUMBER_OF_SCENARIOS = 2;
@@ -156,5 +163,10 @@ public class FullTexts {
 			+ "\n end"
 			+ "Given /^The given statement spanish$/ do\n on(screen1) do |scrn|"
 			+ "  scrn.method0" + "  \n scrn.method0" + "       \nend     \nend";
+
+	public static final String FEATURE_1 = "@wip   \n\n\n Feature:     foo zi bar"
+			+ "\n\nScenario: blah blah"
+			+ "\nGiven The given statement"
+			+ "\n When The when statement" + "\n Then The then statement";
 
 }

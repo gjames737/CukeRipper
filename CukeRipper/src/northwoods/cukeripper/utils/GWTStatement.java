@@ -46,8 +46,9 @@ public class GWTStatement {
 	}
 
 	public String toRuby() {
-		return getTypePrefix() + " /^" + statement + "$/ " + DO
-				+ createActionStatement() + END;
+		return getTypePrefix() + " " + CommonRips.SLASH_POINT + statement
+				+ CommonRips.DOLLAR_SLASH + " " + DO + createActionStatement()
+				+ END;
 	}
 
 	public String getTypePrefix() {
@@ -89,6 +90,14 @@ public class GWTStatement {
 
 	public File getFeatureFile() {
 		return feature_file;
+	}
+
+	public void setStepFile(File stepFile) {
+		this.step_file = stepFile;
+	}
+
+	public String slashToSlashStatement() {
+		return CommonRips.SLASH_POINT + statement + CommonRips.DOLLAR_SLASH;
 	}
 
 }
