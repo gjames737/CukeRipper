@@ -27,7 +27,7 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>ripper_src</name>
+			<name>src_cukeripper_utils</name>
 			<type>2</type>
 			<location>E:/GitHub/CukeRipper/CukeRipper/src</location>
 		</link>
