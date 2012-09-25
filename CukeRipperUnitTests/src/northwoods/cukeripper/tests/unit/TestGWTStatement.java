@@ -3,6 +3,8 @@ package northwoods.cukeripper.tests.unit;
 import static northwoods.cukeripper.tests.unit.helpers.TestHelper.featureFile;
 import static northwoods.cukeripper.tests.unit.helpers.TestHelper.stepFile;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -36,11 +38,41 @@ public class TestGWTStatement {
 	}
 
 	@Test
-	public void itHasAFileWhenGivenAFile() {
-		File expected = new File("dsadsa\\asd34asd\\2dsda.f");
-		File actual = gwt.getStepFile();
+	public void itDoesntHaveAFilesWhenGivenNone() {
+		GWTStatement gwt_statement = new GWTStatement(null, null,
+				StatementType.GIVEN, "the statement string");
+		assertThat(gwt_statement.getStepFile(), is(nullValue()));
+		assertThat(gwt_statement.getFeatureFile(), is(nullValue()));
+	}
 
-		assertThat(actual, is(expected));
+	@Test
+	public void itHasAStepFileWhenGivenButNotAFeatureFile() {
+		File step_file = new File("step_file.rb");
+		GWTStatement gwt_statement = new GWTStatement(step_file, null,
+				StatementType.GIVEN, "the statement string");
+		assertThat(gwt_statement.getStepFile(), is(step_file));
+		assertThat(gwt_statement.getFeatureFile(), is(nullValue()));
+	}
+
+	@Test
+	public void itHasAFeatureFileWhenGivenButNotAstepFile() {
+		File feature_file = new File("foo.feature");
+		GWTStatement gwt_statement = new GWTStatement(null, feature_file,
+				StatementType.GIVEN, "the statement string");
+		assertThat(gwt_statement.getStepFile(), is(nullValue()));
+		assertThat(gwt_statement.getFeatureFile(), is(feature_file));
+	}
+
+	@Test
+	public void itHasABothFilesWhenGiven() {
+		File step_file = new File("step_file.rb");
+		File feature_file = new File("foo.feature");
+		GWTStatement gwt_statement = new GWTStatement(step_file, feature_file,
+				StatementType.GIVEN, "the statement string");
+		assertThat(gwt_statement.getStepFile(), is(notNullValue()));
+		assertThat(gwt_statement.getFeatureFile(), is(notNullValue()));
+		assertThat(gwt_statement.getStepFile(), is(step_file));
+		assertThat(gwt_statement.getFeatureFile(), is(feature_file));
 	}
 
 	@Test

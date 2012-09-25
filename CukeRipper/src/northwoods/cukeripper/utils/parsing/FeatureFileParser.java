@@ -26,8 +26,11 @@ public class FeatureFileParser {
 
 		String featureContents = reader.readFullFileContents(file);
 		featureContents = cleanFileContents(featureContents);
-		String featureName = parser.getObjectNameFromContents(0,
-				CommonRips.FEATURE + ":", featureContents);
+		int indexOfStartOfFeaure = featureContents.indexOf(CommonRips.FEATURE
+				+ ":");
+		String featureName = parser
+				.getObjectNameFromContents(indexOfStartOfFeaure,
+						CommonRips.FEATURE + ":", featureContents);
 		CukeFeature feature = new CukeFeature(featureName, file);
 
 		String scenarioTag = CommonRips.SCENARIO + ":";

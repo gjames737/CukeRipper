@@ -26,6 +26,8 @@ public class TestFeatureTreeContentProvider {
 	private static final String[] SCENARIO_NAMES = new String[] { "scenario_0" };
 	private static File TEST_FEATURE_FILE_0;
 	private static File TEST_FEATURE_FILE_1;
+	private static File TEST_STEP_FILE_0;
+
 	private FeatureFileParser featureFileParser;
 
 	private CukeFeature[] testFeatures;
@@ -120,13 +122,21 @@ public class TestFeatureTreeContentProvider {
 	private void setupTestFeatureFiles() {
 		TEST_FEATURE_FILE_0 = mock(File.class);
 		TEST_FEATURE_FILE_1 = mock(File.class);
+		TEST_STEP_FILE_0 = mock(File.class);
 		when(TEST_FEATURE_FILE_0.getAbsolutePath()).thenReturn(
 				"test" + File.separator + "path" + File.separator + "fileName_"
 						+ 0 + ".feature");
+		when(TEST_FEATURE_FILE_0.getName()).thenReturn(
+				"fileName_" + 0 + ".feature");
 		when(TEST_FEATURE_FILE_1.getAbsolutePath()).thenReturn(
 				"test" + File.separator + "path" + File.separator + "fileName_"
 						+ 1 + ".feature");
-
+		when(TEST_FEATURE_FILE_1.getName()).thenReturn(
+				"fileName_" + 1 + ".feature");
+		when(TEST_STEP_FILE_0.getAbsolutePath()).thenReturn(
+				"test" + File.separator + "path" + File.separator + "step_file"
+						+ 1 + ".rb");
+		when(TEST_STEP_FILE_0.getName()).thenReturn("step_file" + 1 + ".rb");
 	}
 
 	private void setupParser() {
@@ -161,9 +171,12 @@ public class TestFeatureTreeContentProvider {
 
 	private void setupStatements() {
 		setupStepActions();
-		g_statement = new GWTStatement(StatementType.GIVEN, "this is the given");
-		w_statement = new GWTStatement(StatementType.WHEN, "this is the when");
-		t_statement = new GWTStatement(StatementType.THEN, "this is the then");
+		g_statement = new GWTStatement(TEST_STEP_FILE_0, TEST_FEATURE_FILE_0,
+				StatementType.GIVEN, "this is the given");
+		w_statement = new GWTStatement(TEST_STEP_FILE_0, TEST_FEATURE_FILE_0,
+				StatementType.WHEN, "this is the when");
+		t_statement = new GWTStatement(TEST_STEP_FILE_0, TEST_FEATURE_FILE_0,
+				StatementType.THEN, "this is the then");
 
 		g_statement.addStepAction(stepActions[0]);
 		g_statement.addStepAction(stepActions[1]);
