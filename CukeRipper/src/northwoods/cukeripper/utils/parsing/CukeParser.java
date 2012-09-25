@@ -428,8 +428,9 @@ public class CukeParser {
 				return stepFiles[i];
 			}
 		}
-		System.err.println("null on: " + gwtStatement.getStatement());
-		System.err.println("null on: " + gwtStatement.slashToSlashStatement());
+		// System.err.println("null on: " + gwtStatement.getStatement());
+		// System.err.println("null on: " +
+		// gwtStatement.slashToSlashStatement());
 		return null;
 	}
 }

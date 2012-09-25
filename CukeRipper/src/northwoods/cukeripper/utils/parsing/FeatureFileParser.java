@@ -11,6 +11,7 @@ import northwoods.cukeripper.utils.GWTStatement;
 
 public class FeatureFileParser {
 
+	private static final String END_OF_CONTENTS_PADDING = "    ";
 	private CukeFileReader reader;
 	private CukeParser parser;
 
@@ -26,7 +27,8 @@ public class FeatureFileParser {
 	public CukeFeature getFeatureFromFile(File file) {
 
 		String featureContents = reader.readFullFileContents(file);
-		featureContents = cleanFileContents(featureContents);
+		featureContents = cleanFileContents(featureContents)
+				+ END_OF_CONTENTS_PADDING;
 		int indexOfStartOfFeaure = featureContents.indexOf(CommonRips.FEATURE
 				+ ":");
 		String featureName = parser
@@ -47,16 +49,14 @@ public class FeatureFileParser {
 			for (int j = 0; j < statements.length; j++) {
 				GWTStatement gwtStatement = statements[j];
 				if (gwtStatement.getStepFile() == null) {
-					System.out.println(gwtStatement.slashToSlashStatement());
+					// System.out.println(gwtStatement.slashToSlashStatement());
 					File stepFile = parser.findStepFileForStatement(reader,
 							gwtStatement);
-					if (stepFile == null) {
-						System.err.println("it is null here");
-					}
-					if (scenario.getStatements().get(j).equals(gwtStatement)) {
-						System.out.println("they do equal");
-					}
-					scenario.getStatements().get(j).setStepFile(stepFile);
+					// if (stepFile == null) {
+					// System.err.println("it is null here");
+					// }
+
+					gwtStatement.setStepFile(stepFile);
 				} else {
 					System.err.println("it already has a step file ["
 							+ gwtStatement.slashToSlashStatement() + "]");
