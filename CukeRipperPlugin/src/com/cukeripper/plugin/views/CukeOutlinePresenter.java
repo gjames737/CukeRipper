@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 
 public class CukeOutlinePresenter {
 
+	private static final String NO_FILE_FOUND = "No file was found. Refresh!";
 	private CukeFileReader reader;
 	private FeatureFileParser featureParser;
 	private Action doubleClickAction;
@@ -78,7 +79,16 @@ public class CukeOutlinePresenter {
 
 	private void handleStatementDoubleClick(GWTStatement statment) {
 		File statmentFile = statment.getStepFile();
-		view.openEditorOnFile(statmentFile);
+		if (statmentFile != null) {
+			view.openEditorOnFile(statmentFile);
+		} else {
+			File featureFile = statment.getFeatureFile();
+			if (featureFile != null) {
+				view.openEditorOnFile(featureFile);
+			} else {
+				view.showMessage(NO_FILE_FOUND);
+			}
+		}
 	}
 
 	private void hookClickActions() {
