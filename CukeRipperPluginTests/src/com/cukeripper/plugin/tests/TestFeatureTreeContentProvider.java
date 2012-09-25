@@ -65,8 +65,16 @@ public class TestFeatureTreeContentProvider {
 
 	@Test
 	public void itHasChildElementsForFeatures() {
-		Object[] actualChildren = feature_treeContentProvider
-				.getChildren(testFeatures[0]);
+
+		for (int i = 0; i < testFeatures.length; i++) {
+			assertThat(feature_treeContentProvider.hasChildren(testFeatures[0]
+					.getScenarios().get(0)), is(true));
+		}
+
+	}
+
+	@Test
+	public void itHasChildElementsForScenario() {
 
 		for (int i = 0; i < testFeatures.length; i++) {
 			assertThat(
@@ -84,6 +92,22 @@ public class TestFeatureTreeContentProvider {
 		for (int i = 0; i < testFeatures[0].getScenarios().size(); i++) {
 			assertThat((CukeScenario) actualChildren[i], is(testFeatures[0]
 					.getScenarios().get(i)));
+		}
+
+	}
+
+	@Test
+	public void itGetsTheCorrectChildElementsForScenarios() {
+		Object[] actualChildren = feature_treeContentProvider
+				.getChildren(testFeatures[0].getScenarios().get(0));
+
+		for (int i = 0; i < testFeatures[0].getScenarios().size(); i++) {
+			GWTStatement actual_statement = (GWTStatement) actualChildren[i];
+			GWTStatement expected_statement = testFeatures[0].getScenarios()
+					.get(i).getStatement(i);
+			assertThat(actual_statement.getStatement(),
+					is(expected_statement.getStatement()));
+			assertThat(actual_statement, is(expected_statement));
 		}
 
 	}

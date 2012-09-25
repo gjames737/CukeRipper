@@ -34,6 +34,11 @@ public class GWTStatement {
 		return statement;
 	}
 
+	@Override
+	public String toString() {
+		return getStatement();
+	}
+
 	public String toRuby() {
 		return getTypePrefix() + " /^" + statement + "$/ " + DO
 				+ createActionStatement() + END;

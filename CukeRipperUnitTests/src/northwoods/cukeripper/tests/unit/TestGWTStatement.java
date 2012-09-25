@@ -63,6 +63,18 @@ public class TestGWTStatement {
 	}
 
 	@Test
+	public void itToStrings() {
+
+		gwt = new GWTStatement(StatementType.THEN,
+				TestHelper.TEST_GIVEN_STATEMENTS[0]);
+
+		String expected = gwt.getStatement();
+		String actual = gwt.toString();
+
+		assertThat(actual, is(expected));
+	}
+
+	@Test
 	public void itGivesAListofStepActions() {
 
 		gwt = new GWTStatement(StatementType.THEN,

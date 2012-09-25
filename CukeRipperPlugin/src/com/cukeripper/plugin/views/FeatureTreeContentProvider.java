@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
+import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -56,6 +58,10 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof CukeFeature) {
 			return ((CukeFeature) parentElement).getScenarios().toArray();
+		} else if (parentElement instanceof CukeScenario) {
+			CukeScenario scenario = (CukeScenario) parentElement;
+			GWTStatement[] list_of_statments = scenario.getStatementsArray();
+			return list_of_statments;
 		}
 		return null;
 	}
@@ -70,13 +76,10 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 	public boolean hasChildren(Object element) {
 		if (element instanceof CukeFeature) {
 			return ((CukeFeature) element).getScenarios().size() > 0;
+		} else if (element instanceof CukeScenario) {
+			return ((CukeScenario) element).getStatements().size() > 0;
 		}
 		return false;
-	}
-
-	private void refresh() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

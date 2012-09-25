@@ -28,6 +28,14 @@ public class CukeScenario {
 		return statements;
 	}
 
+	public GWTStatement[] getStatementsArray() {
+		GWTStatement[] statementsArray = new GWTStatement[statements.size()];
+		for (int i = 0; i < statementsArray.length; i++) {
+			statementsArray[i] = statements.get(i);
+		}
+		return statementsArray;
+	}
+
 	public void createStatement(GWTStatement statement) {
 		statements.add(statement);
 	}

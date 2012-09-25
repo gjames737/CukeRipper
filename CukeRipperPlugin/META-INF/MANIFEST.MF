@@ -10,3 +10,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.core.filesystem,
  org.eclipse.ui.ide
+Bundle-ClassPath: .,
+ swt-grouplayout.jar

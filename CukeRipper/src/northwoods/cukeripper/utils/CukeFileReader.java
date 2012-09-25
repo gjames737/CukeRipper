@@ -15,18 +15,8 @@ public class CukeFileReader {
 
 	private File rootOfAllFiles;
 	private List<File> allFiles;
-	private ICukeFileReaderListener readerListener;
-
-	public interface ICukeFileReaderListener {
-		public void onLoadComplete();
-	}
 
 	public CukeFileReader(String root) {
-		this(null, root);
-	}
-
-	public CukeFileReader(ICukeFileReaderListener listener, String root) {
-		this.readerListener = listener;
 		this.rootOfAllFiles = new File(root);
 		reloadRoot();
 	}
@@ -35,7 +25,7 @@ public class CukeFileReader {
 		allFiles = new ArrayList<File>();
 		if (rootOfAllFiles.exists() && rootOfAllFiles.isDirectory()) {
 			loadAllFilesFromDirectory(rootOfAllFiles);
-			// resetFeatureBuilder();
+			resetFeatureBuilder();
 		}
 	}
 
@@ -124,37 +114,18 @@ public class CukeFileReader {
 	}
 
 	private void loadAllFilesFromDirectory(final File rootFile) {
-		Runnable loadRun = new Runnable() {
-			@Override
-			public void run() {
-				File[] files = rootFile.listFiles();
-				if (files != null) {
-					for (int i = 0; i < files.length; i++) {
-						if (files[i].isDirectory()) {
-							loadAllFilesFromDirectory(files[i]);
-						} else {
-							allFiles.add(files[i]);
-						}
-					}
+
+		File[] files = rootFile.listFiles();
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
+					loadAllFilesFromDirectory(files[i]);
+				} else {
+					allFiles.add(files[i]);
 				}
-
-				onLoadComplete();
 			}
-		};
+		}
 
-		loadRun.run();
-		// Thread t = new Thread(loadRun);
-		// if (readerListener != null) {
-		// t.start();
-		// } else {
-		// loadRun.run();
-		// }
-	}
-
-	private void onLoadComplete() {
-		resetFeatureBuilder();
-		if (readerListener != null)
-			readerListener.onLoadComplete();
 	}
 
 	private static String readFile(String path) throws IOException {
