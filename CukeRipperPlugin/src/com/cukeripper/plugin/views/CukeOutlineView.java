@@ -156,7 +156,7 @@ public class CukeOutlineView extends ViewPart {
 
 	public void refresh() {
 		if (treeViewer != null) {
-			System.err.println(Math.random() + "");
+			// System.err.println(Math.random() + "");
 			provider = new FeatureTreeContentProvider(
 					presenter.getfeatureFiles(), presenter.getFeatureParser());
 			treeViewer.setContentProvider(provider);
