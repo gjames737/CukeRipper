@@ -42,8 +42,53 @@ public class CukeOutlineView extends ViewPart {
 	public void createPartControl(Composite parent) {
 
 		Group group_file_path = new Group(parent, SWT.NONE);
-
 		Group group_outline = new Group(parent, SWT.NONE);
+
+		GroupLayout gl_parent = setupGroup_Parent(parent, group_file_path,
+				group_outline);
+
+		setupTreeViewerOutline(group_outline);
+		setupRootFileInputField(group_file_path);
+		setupRefreshButton(group_file_path);
+
+		parent.setLayout(gl_parent);
+
+		presenter.makeActions();
+
+	}
+
+	private void setupRefreshButton(Group group_file_path) {
+		Button btnRefresh = new Button(group_file_path, SWT.NONE);
+		btnRefresh.setBounds(207, 13, 75, 25);
+		btnRefresh.setText("Refresh");
+		btnRefresh.addListener(SWT.Selection,
+				new org.eclipse.swt.widgets.Listener() {
+					@Override
+					public void handleEvent(Event event) {
+						// showMessage("!");
+						presenter.handleRefreshEvent();
+					}
+				});
+	}
+
+	private void setupRootFileInputField(Group group_file_path) {
+		txtRootFile = new Text(group_file_path, SWT.BORDER);
+		txtRootFile.setBounds(10, 17, 191, 21);
+		txtRootFile.setText(ROOT_FILE);
+	}
+
+	private void setupTreeViewerOutline(Group group_outline) {
+		treeViewer = new TreeViewer(group_outline, SWT.BORDER);
+		provider = new FeatureTreeContentProvider(presenter.getfeatureFiles(),
+				presenter.getFeatureParser());
+		treeViewer.setContentProvider(provider);
+		treeViewer.setInput(getViewSite());
+		Tree tree = treeViewer.getTree();
+		tree.setBounds(10, 10, 272, 367);
+	}
+
+	private GroupLayout setupGroup_Parent(Composite parent,
+			Group group_file_path, Group group_outline) {
 		GroupLayout gl_parent = new GroupLayout(parent);
 		gl_parent.setHorizontalGroup(gl_parent.createParallelGroup(
 				GroupLayout.LEADING).add(
@@ -69,35 +114,7 @@ public class CukeOutlineView extends ViewPart {
 						.addPreferredGap(LayoutStyle.RELATED)
 						.add(group_outline, GroupLayout.DEFAULT_SIZE, 387,
 								Short.MAX_VALUE).addContainerGap()));
-
-		treeViewer = new TreeViewer(group_outline, SWT.BORDER);
-		provider = new FeatureTreeContentProvider(presenter.getfeatureFiles(),
-				presenter.getFeatureParser());
-		treeViewer.setContentProvider(provider);
-		treeViewer.setInput(getViewSite());
-		Tree tree = treeViewer.getTree();
-		tree.setBounds(10, 10, 272, 367);
-
-		txtRootFile = new Text(group_file_path, SWT.BORDER);
-		txtRootFile.setBounds(10, 17, 191, 21);
-		txtRootFile.setText(ROOT_FILE);
-
-		Button btnRefresh = new Button(group_file_path, SWT.NONE);
-		btnRefresh.setBounds(207, 13, 75, 25);
-		btnRefresh.setText("Refresh");
-		btnRefresh.addListener(SWT.Selection,
-				new org.eclipse.swt.widgets.Listener() {
-					@Override
-					public void handleEvent(Event event) {
-						// showMessage("!");
-						presenter.handleRefreshEvent();
-					}
-				});
-
-		parent.setLayout(gl_parent);
-
-		presenter.makeActions();
-
+		return gl_parent;
 	}
 
 	@Override
