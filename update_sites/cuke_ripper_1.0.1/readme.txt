@@ -1,7 +1,7 @@
 To install:
 Download the CukeRipperSite.zip
 Extract to a known folder
-[Note this requires GWT grouplayout support]
+[Note this requires Window Builder GroupLayout support]
 In Eclipse go to Help>Install New Software>Add>Local...>
 Select the root folder
 Give a location name
