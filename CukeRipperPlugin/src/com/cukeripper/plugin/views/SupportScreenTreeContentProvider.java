@@ -3,7 +3,6 @@ package com.cukeripper.plugin.views;
 import java.io.File;
 
 import northwoods.cukeripper.utils.CukeFileReader;
-import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.StepAction;
 import northwoods.cukeripper.utils.parsing.StepFileParser;
 
@@ -38,10 +37,7 @@ public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		if (inputElement instanceof GWTStatement) {
-			GWTStatement statement = (GWTStatement) inputElement;
-			return statement.getAllActions().toArray();
-		}
+
 		return new StepAction[] {};
 	}
 

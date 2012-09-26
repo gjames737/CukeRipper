@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 
 import northwoods.cukeripper.utils.CukeFeature;
+import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.GWTStatement.StatementType;
@@ -19,7 +20,7 @@ public class BaseParseTesting {
 	protected static File TEST_FEATURE_FILE_0;
 	protected static File TEST_FEATURE_FILE_1;
 	protected static File TEST_STEP_FILE_0;
-
+	protected CukeFileReader reader;
 	protected FeatureFileParser featureFileParser;
 
 	protected CukeFeature[] testFeatures;
@@ -30,6 +31,7 @@ public class BaseParseTesting {
 	protected StepAction[] stepActions;
 
 	public void Setup() {
+		setupReader();
 		setupTestFeatureFiles();
 		setupTestCukeFeatures();
 		setupParser();
@@ -37,12 +39,11 @@ public class BaseParseTesting {
 				.thenReturn(testFeatures[0]);
 	}
 
-	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	private void setupReader() {
+		this.reader = mock(CukeFileReader.class);
+	}
 
-	protected void setupTestFeatureFiles() {
+	private void setupTestFeatureFiles() {
 		TEST_FEATURE_FILE_0 = mock(File.class);
 		TEST_FEATURE_FILE_1 = mock(File.class);
 		TEST_STEP_FILE_0 = mock(File.class);
@@ -62,7 +63,7 @@ public class BaseParseTesting {
 		when(TEST_STEP_FILE_0.getName()).thenReturn("step_file" + 1 + ".rb");
 	}
 
-	protected void setupParser() {
+	private void setupParser() {
 		featureFileParser = mock(FeatureFileParser.class);
 
 		when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_0))
@@ -71,7 +72,7 @@ public class BaseParseTesting {
 				.thenReturn(testFeatures[1]);
 	}
 
-	protected void setupTestCukeFeatures() {
+	private void setupTestCukeFeatures() {
 		setupTestCukeScenarios();
 		testFeatures = new CukeFeature[2];
 
@@ -82,7 +83,7 @@ public class BaseParseTesting {
 
 	}
 
-	protected void setupTestCukeScenarios() {
+	private void setupTestCukeScenarios() {
 		setupStatements();
 		cukeScenarios = new CukeScenario[1];
 		cukeScenarios[0] = new CukeScenario(SCENARIO_NAMES[0],
@@ -92,7 +93,7 @@ public class BaseParseTesting {
 		cukeScenarios[0].createStatement(w_statement);
 	}
 
-	protected void setupStatements() {
+	private void setupStatements() {
 		setupStepActions();
 		g_statement = new GWTStatement(TEST_STEP_FILE_0, TEST_FEATURE_FILE_0,
 				StatementType.GIVEN, "this is the given");
@@ -106,7 +107,7 @@ public class BaseParseTesting {
 		g_statement.addStepAction(stepActions[2]);
 	}
 
-	protected void setupStepActions() {
+	private void setupStepActions() {
 		stepActions = new StepAction[3];
 		stepActions[0] = new StepAction("Screen_0", 0);
 		stepActions[1] = new StepAction("Screen_1", 0);

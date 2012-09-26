@@ -19,7 +19,7 @@ public class TestSupportScreenContentProvider extends BaseParseTesting {
 		super.Setup();
 
 		supportScreenTreeContentProvider = new SupportScreenTreeContentProvider(
-				new StepAction[] {});
+				reader);
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
