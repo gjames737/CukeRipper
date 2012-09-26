@@ -1,17 +1,27 @@
 package com.cukeripper.plugin.views;
 
+import java.io.File;
+
+import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.StepAction;
+import northwoods.cukeripper.utils.parsing.StepFileParser;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 
-	private StepAction[] actions;
+	private CukeFileReader reader;
+	private StepFileParser stepFileParser;
+	private File[] allStepFiles;
+	private File[] allScreenFiles;
 
-	public SupportScreenTreeContentProvider(StepAction[] stepActions) {
-		this.actions = stepActions;
+	public SupportScreenTreeContentProvider(CukeFileReader _reader) {
+		this.reader = _reader;
+		this.stepFileParser = new StepFileParser(this.reader);
+		this.allStepFiles = reader.getAllStepDefinitionFiles();
+		this.allScreenFiles = reader.getAllScreenFiles();
 	}
 
 	@Override
