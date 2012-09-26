@@ -73,8 +73,8 @@ public class CukeOutlineView extends ViewPart {
 		composite_1.setLayoutData(gd_composite_1);
 
 		treeViewer = new TreeViewer(composite_1, SWT.BORDER);
-		provider = new FeatureTreeContentProvider(presenter.getfeatureFiles(),
-				presenter.getFeatureParser());
+		provider = presenter.getFeatureTreeContentProvider();
+
 		treeViewer.setContentProvider(provider);
 		treeViewer.setInput(getViewSite());
 		Tree tree = treeViewer.getTree();

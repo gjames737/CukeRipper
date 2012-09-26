@@ -138,4 +138,9 @@ public class CukeOutlinePresenter {
 				.toString());
 
 	}
+
+	public FeatureTreeContentProvider getFeatureTreeContentProvider() {
+		return new FeatureTreeContentProvider(getfeatureFiles(),
+				getFeatureParser());
+	}
 }
