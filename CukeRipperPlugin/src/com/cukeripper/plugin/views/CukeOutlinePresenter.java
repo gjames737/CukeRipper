@@ -1,7 +1,6 @@
 package com.cukeripper.plugin.views;
 
 import java.io.File;
-import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
@@ -66,29 +65,30 @@ public class CukeOutlinePresenter {
 	}
 
 	private void handleTreeItemClick() {
-
 		getCurrentFeatureTreeSelection();
 		Object obj = getCurrentFeatureTreeSelection();
 		if (obj instanceof CukeFeature) {
 			handleFeatureSingleClick((CukeFeature) obj);
+		} else if (obj instanceof CukeScenario) {
+			handleScenarioSingleClick((CukeScenario) obj);
+		} else if (obj instanceof GWTStatement) {
+			handleStatementSingleClick((GWTStatement) obj);
 		}
-
 	}
 
 	private void handleFeatureSingleClick(CukeFeature feature) {
-		String msg = "";
-		List<CukeScenario> scens = feature.getScenarios();
-		for (CukeScenario cukeScenario : scens) {
-			List<GWTStatement> states = cukeScenario.getStatements();
-			for (GWTStatement gwtStatement : states) {
-				msg += "\n " + gwtStatement.slashToSlashStatement();
-				List<StepAction> actions = gwtStatement.getAllActions();
-				for (StepAction stepAction : actions) {
-					msg += "\n " + stepAction.getScreenIndex();
-				}
-			}
-		}
+
 		// view.showMessage(msg + "  " + LoadedCukes.getScreens().size());
+
+	}
+
+	private void handleScenarioSingleClick(CukeScenario obj) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void handleStatementSingleClick(GWTStatement obj) {
+		// TODO Auto-generated method stub
 
 	}
 
