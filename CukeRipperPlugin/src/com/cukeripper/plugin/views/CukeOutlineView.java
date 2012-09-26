@@ -2,8 +2,6 @@ package com.cukeripper.plugin.views;
 
 import java.io.File;
 
-import northwoods.cukeripper.utils.StepAction;
-
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -85,8 +83,8 @@ public class CukeOutlineView extends ViewPart {
 
 		//
 		treeViewer_SupportScreens = new TreeViewer(composite_1, SWT.BORDER);
-		SupportScreenTreeContentProvider supportScreensProvider = new SupportScreenTreeContentProvider(
-				new StepAction[] {});
+		SupportScreenTreeContentProvider supportScreensProvider = presenter
+				.getSupportScreensTreeContentProvider();
 		treeViewer_SupportScreens.setContentProvider(supportScreensProvider);
 		treeViewer_SupportScreens.setInput(getViewSite());
 		Tree tree_supportScreens = treeViewer_SupportScreens.getTree();
@@ -141,10 +139,13 @@ public class CukeOutlineView extends ViewPart {
 
 	public void refresh() {
 		if (treeViewer != null) {
-			// System.err.println(Math.random() + "");
-			FeatureTreeContentProvider provider = new FeatureTreeContentProvider(
-					presenter.getfeatureFiles(), presenter.getFeatureParser());
+			FeatureTreeContentProvider provider = presenter
+					.getFeatureTreeContentProvider();
+			SupportScreenTreeContentProvider supportScreensProvider = presenter
+					.getSupportScreensTreeContentProvider();
 			treeViewer.setContentProvider(provider);
+			treeViewer_SupportScreens
+					.setContentProvider(supportScreensProvider);
 		}
 	}
 

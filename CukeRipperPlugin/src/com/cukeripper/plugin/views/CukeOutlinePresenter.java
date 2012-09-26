@@ -6,6 +6,7 @@ import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.StepAction;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -145,7 +146,6 @@ public class CukeOutlinePresenter {
 	}
 
 	public SupportScreenTreeContentProvider getSupportScreensTreeContentProvider() {
-		// TODO Auto-generated method stub
-		return new SupportScreenTreeContentProvider(null);
+		return new SupportScreenTreeContentProvider(new StepAction[] {});
 	}
 }
