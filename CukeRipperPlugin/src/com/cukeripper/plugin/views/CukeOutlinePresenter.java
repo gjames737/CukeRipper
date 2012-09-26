@@ -143,4 +143,9 @@ public class CukeOutlinePresenter {
 		return new FeatureTreeContentProvider(getfeatureFiles(),
 				getFeatureParser());
 	}
+
+	public SupportScreenTreeContentProvider getSupportScreensTreeContentProvider() {
+		// TODO Auto-generated method stub
+		return new SupportScreenTreeContentProvider(null);
+	}
 }

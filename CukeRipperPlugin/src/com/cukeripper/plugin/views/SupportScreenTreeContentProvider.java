@@ -32,7 +32,7 @@ public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 			GWTStatement statement = (GWTStatement) inputElement;
 			return statement.getAllActions().toArray();
 		}
-		return null;
+		return new StepAction[] {};
 	}
 
 	@Override

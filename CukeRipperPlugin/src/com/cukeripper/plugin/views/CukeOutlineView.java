@@ -2,6 +2,8 @@ package com.cukeripper.plugin.views;
 
 import java.io.File;
 
+import northwoods.cukeripper.utils.StepAction;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -28,7 +30,7 @@ public class CukeOutlineView extends ViewPart {
 			+ File.separator + "CoPilot" + File.separator + "Trunk"
 			+ File.separator + "CoPilotCukes";
 	private TreeViewer treeViewer;
-	private FeatureTreeContentProvider provider;
+	private TreeViewer treeViewer_SupportScreens;
 	private CukeOutlinePresenter presenter;
 	private Text txtRootFile;
 
@@ -68,17 +70,32 @@ public class CukeOutlineView extends ViewPart {
 		composite_1.setLayout(null);
 		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
-		gd_composite_1.widthHint = 414;
-		gd_composite_1.heightHint = 424;
+		gd_composite_1.widthHint = 873;
+		gd_composite_1.heightHint = 200;
 		composite_1.setLayoutData(gd_composite_1);
 
 		treeViewer = new TreeViewer(composite_1, SWT.BORDER);
-		provider = presenter.getFeatureTreeContentProvider();
+		FeatureTreeContentProvider feature_provider = presenter
+				.getFeatureTreeContentProvider();
 
-		treeViewer.setContentProvider(provider);
+		treeViewer.setContentProvider(feature_provider);
 		treeViewer.setInput(getViewSite());
 		Tree tree = treeViewer.getTree();
-		tree.setBounds(0, 0, 414, 424);
+		tree.setBounds(0, 0, 332, 200);
+
+		//
+		treeViewer_SupportScreens = new TreeViewer(composite_1, SWT.BORDER);
+		SupportScreenTreeContentProvider supportScreensProvider = new SupportScreenTreeContentProvider(
+				new StepAction[] {});
+		treeViewer_SupportScreens.setContentProvider(supportScreensProvider);
+		treeViewer_SupportScreens.setInput(getViewSite());
+		Tree tree_supportScreens = treeViewer_SupportScreens.getTree();
+		tree_supportScreens.setBounds(338, 0, 525, 200);
+		GridData gd_tree_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_tree_1.widthHint = 494;
+
+		//
+
 		presenter.makeActions();
 		presenter.loadPluginSettings();
 	}
@@ -125,7 +142,7 @@ public class CukeOutlineView extends ViewPart {
 	public void refresh() {
 		if (treeViewer != null) {
 			// System.err.println(Math.random() + "");
-			provider = new FeatureTreeContentProvider(
+			FeatureTreeContentProvider provider = new FeatureTreeContentProvider(
 					presenter.getfeatureFiles(), presenter.getFeatureParser());
 			treeViewer.setContentProvider(provider);
 		}
