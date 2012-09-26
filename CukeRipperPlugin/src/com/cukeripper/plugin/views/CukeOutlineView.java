@@ -40,19 +40,6 @@ public class CukeOutlineView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 
-		//
-		// // Group group_file_path = new Group(parent, SWT.NONE);
-		// // Group group_outline = new Group(parent, SWT.NONE);
-		// //
-		// // GroupLayout gl_parent = setupGroup_Parent(parent, group_file_path,
-		// // group_outline);
-		// //
-		// // setupTreeViewerOutline(group_outline);
-		// // setupRootFileInputField(group_file_path);
-		// // setupRefreshButton(group_file_path);
-		// //
-		// // parent.setLayout(gl_parent);
-
 		parent.setLayout(new GridLayout(1, false));
 
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -93,68 +80,8 @@ public class CukeOutlineView extends ViewPart {
 		Tree tree = treeViewer.getTree();
 		tree.setBounds(0, 0, 414, 424);
 		presenter.makeActions();
-
+		presenter.loadPluginSettings();
 	}
-
-	// private void setupRefreshButton(Group group_file_path) {
-	// Button btnRefresh = new Button(group_file_path, SWT.NONE);
-	// btnRefresh.setBounds(207, 13, 75, 25);
-	// btnRefresh.setText("Refresh");
-	// btnRefresh.addListener(SWT.Selection,
-	// new org.eclipse.swt.widgets.Listener() {
-	// @Override
-	// public void handleEvent(Event event) {
-	// // showMessage("!");
-	// presenter.handleRefreshEvent();
-	// }
-	// });
-	// }
-
-	// private void setupRootFileInputField(Group group_file_path) {
-	// txtRootFile = new Text(group_file_path, SWT.BORDER);
-	// txtRootFile.setBounds(10, 17, 191, 21);
-	// txtRootFile.setText(ROOT_FILE);
-	// }
-	//
-	// private void setupTreeViewerOutline(Group group_outline) {
-	// treeViewer = new TreeViewer(group_outline, SWT.BORDER);
-	// provider = new FeatureTreeContentProvider(presenter.getfeatureFiles(),
-	// presenter.getFeatureParser());
-	// treeViewer.setContentProvider(provider);
-	// treeViewer.setInput(getViewSite());
-	// Tree tree = treeViewer.getTree();
-	// tree.setBounds(10, 10, 272, 367);
-	// }
-	//
-	// private GroupLayout setupGroup_Parent(Composite parent,
-	// Group group_file_path, Group group_outline) {
-	// GroupLayout gl_parent = new GroupLayout(parent);
-	// gl_parent.setHorizontalGroup(gl_parent.createParallelGroup(
-	// GroupLayout.LEADING).add(
-	// GroupLayout.TRAILING,
-	// gl_parent
-	// .createSequentialGroup()
-	// .addContainerGap()
-	// .add(gl_parent
-	// .createParallelGroup(GroupLayout.TRAILING)
-	// .add(GroupLayout.LEADING, group_outline,
-	// GroupLayout.DEFAULT_SIZE, 292,
-	// Short.MAX_VALUE)
-	// .add(GroupLayout.LEADING, group_file_path,
-	// GroupLayout.DEFAULT_SIZE, 292,
-	// Short.MAX_VALUE)).addContainerGap()));
-	// gl_parent.setVerticalGroup(gl_parent.createParallelGroup(
-	// GroupLayout.LEADING).add(
-	// gl_parent
-	// .createSequentialGroup()
-	// .addContainerGap()
-	// .add(group_file_path, GroupLayout.PREFERRED_SIZE, 48,
-	// GroupLayout.PREFERRED_SIZE)
-	// .addPreferredGap(LayoutStyle.RELATED)
-	// .add(group_outline, GroupLayout.DEFAULT_SIZE, 387,
-	// Short.MAX_VALUE).addContainerGap()));
-	// return gl_parent;
-	// }
 
 	@Override
 	public void setFocus() {
@@ -202,5 +129,9 @@ public class CukeOutlineView extends ViewPart {
 					presenter.getfeatureFiles(), presenter.getFeatureParser());
 			treeViewer.setContentProvider(provider);
 		}
+	}
+
+	public void setCurrentFileRootPath(String string) {
+		txtRootFile.setText(string);
 	}
 }
