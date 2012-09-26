@@ -78,6 +78,8 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 			return ((CukeFeature) element).getScenarios().size() > 0;
 		} else if (element instanceof CukeScenario) {
 			return ((CukeScenario) element).getStatements().size() > 0;
+		} else if (element instanceof GWTStatement) {
+			return ((GWTStatement) element).getAllActions().size() > 0;
 		}
 		return false;
 	}

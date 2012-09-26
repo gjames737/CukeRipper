@@ -1,11 +1,13 @@
 package com.cukeripper.plugin.tests;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeScenario;
@@ -79,9 +81,36 @@ public class TestFeatureTreeContentProvider {
 	public void itHasChildElementsForScenario() {
 
 		for (int i = 0; i < testFeatures.length; i++) {
-			assertThat(
-					feature_treeContentProvider.hasChildren(testFeatures[i]),
-					is(true));
+			List<CukeScenario> scenarios = testFeatures[i].getScenarios();
+			for (CukeScenario cukeScenario : scenarios) {
+				assertThat(
+						feature_treeContentProvider.hasChildren(cukeScenario),
+						is(cukeScenario.getStatements().size() > 0));
+			}
+
+		}
+
+	}
+
+	@Test
+	public void itHasChildElementsForStatements() {
+
+		for (int i = 0; i < testFeatures.length; i++) {
+			List<CukeScenario> scenarios = testFeatures[i].getScenarios();
+			for (CukeScenario cukeScenario : scenarios) {
+				List<GWTStatement> statements = cukeScenario.getStatements();
+				for (GWTStatement gwtStatement : statements) {
+
+					int expextedNumberOfActions = gwtStatement.getAllActions()
+							.size();
+
+					assertThat(
+							feature_treeContentProvider
+									.hasChildren(gwtStatement),
+							is(expextedNumberOfActions > 0));
+				}
+			}
+
 		}
 
 	}
@@ -110,6 +139,25 @@ public class TestFeatureTreeContentProvider {
 			assertThat(actual_statement.getStatement(),
 					is(expected_statement.getStatement()));
 			assertThat(actual_statement, is(expected_statement));
+		}
+
+	}
+
+	@Test
+	public void itGetsTheCorrectChildElementsForStatements() {
+		Object[] actualChildren = feature_treeContentProvider
+				.getChildren(testFeatures[0].getScenarios().get(0)
+						.getStatements().get(0));
+
+		assertThat(actualChildren, is(notNullValue()));
+
+		for (int i = 0; i < testFeatures[0].getScenarios().get(0)
+				.getStatements().get(0).getAllActions().size(); i++) {
+			StepAction actual_action = (StepAction) actualChildren[i];
+			StepAction expected_action = testFeatures[0].getScenarios().get(i)
+					.getStatements().get(0).getAllActions().get(i);
+			assertThat(actual_action, is(notNullValue()));
+			assertThat(actual_action, is(expected_action));
 		}
 
 	}
