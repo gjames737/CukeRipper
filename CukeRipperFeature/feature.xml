@@ -2,18 +2,24 @@
 <feature
       id="CukeRipperFeature"
       label="CukeFeature"
-      version="1.0.0.qualifier">
+      version="1.0.2.qualifier">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description url="https://github.com/gjames737/CukeRipper">
+      CukeRipper helps you write functional tests using the Cucumber framework by searching and organizing your feature, step definition, and screen files.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright url="https://github.com/gjames737/CukeRipper">
+      Copyright Your Mom 2012
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="https://github.com/gjames737/CukeRipper">
+      If you complain, this plug-in can hear you and it will shoot lasers at you and your brain will explode!  Originally it 
+      used red lasers, but an update switched them to green lasers (because there more in line with the them of cucumbers).  
+      So, by accepting this license, you do promise to give the developer(s) of CukeRipper all of your worldly possessions.
+      
+      First you must find... another shrubbery! Then, when you have found the shrubbery, you must place it here, 
+      beside this shrubbery, only slightly higher so you get a two layer effect with a little path running down the 
+      middle.  Then, you must cut down the mightiest tree in the forest... with... a herring!
    </license>
 
    <plugin
