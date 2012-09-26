@@ -63,7 +63,29 @@ public class CukeFileReader {
 	}
 
 	public File[] getAllScreenFiles() {
-		throw new RuntimeException("Not yet implemented");
+		File[] possibleScreenFiles = getAllFilesWithExtension(".rb");
+		List<File> realScreenFilesList = new ArrayList<File>();
+
+		for (int i = 0; i < possibleScreenFiles.length; i++) {
+			File file = possibleScreenFiles[i];
+			if (isARealScreenFile(file))
+				realScreenFilesList.add(file);
+		}
+
+		File[] realScreenFiles = new File[realScreenFilesList.size()];
+		for (int i = 0; i < realScreenFilesList.size(); i++) {
+			realScreenFiles[i] = realScreenFilesList.get(i);
+		}
+
+		return realScreenFiles;
+	}
+
+	private boolean isARealScreenFile(File file) {
+		String contents = readFullFileContents(file);
+		boolean isRealScreenFileBool = contents.contains(CommonRips.CLASS)
+				&& !contents.contains(CommonRips.DOLLAR_SLASH)
+				&& !contents.contains(CommonRips.SLASH_POINT);
+		return isRealScreenFileBool;
 	}
 
 	public File[] getAllStepDefinitionFiles() {

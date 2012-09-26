@@ -1,8 +1,11 @@
 package com.cukeripper.plugin.views;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFileReader;
+import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.StepAction;
 import northwoods.cukeripper.utils.parsing.StepFileParser;
 
@@ -15,12 +18,39 @@ public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 	private StepFileParser stepFileParser;
 	private File[] allStepFiles;
 	private File[] allScreenFiles;
+	private StepAction[] actions;
 
 	public SupportScreenTreeContentProvider(CukeFileReader _reader) {
 		this.reader = _reader;
 		this.stepFileParser = new StepFileParser(this.reader);
 		this.allStepFiles = reader.getAllStepDefinitionFiles();
 		this.allScreenFiles = reader.getAllScreenFiles();
+		loadActions();
+	}
+
+	private void loadActions() {
+		if (allStepFiles == null) {
+			actions = new StepAction[] {};
+			return;
+		}
+		List<StepAction> actions_list = new ArrayList<StepAction>();
+		for (int i = 0; i < allStepFiles.length; i++) {
+			List<GWTStatement> statements_list = stepFileParser
+					.getGWTStatementsFromFile(allStepFiles[i]);
+			for (int j = 0; j < statements_list.size(); j++) {
+				GWTStatement statement = statements_list.get(j);
+				List<StepAction> actions_small_list = statement.getAllActions();
+				for (StepAction stepAction : actions_small_list) {
+					actions_list.add(stepAction);
+				}
+			}
+		}
+
+		actions = new StepAction[actions_list.size()];
+		for (int i = 0; i < actions.length; i++) {
+			actions[i] = actions_list.get(i);
+		}
+
 	}
 
 	@Override
@@ -38,7 +68,7 @@ public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		return new StepAction[] {};
+		return actions;
 	}
 
 	@Override
