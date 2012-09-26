@@ -29,6 +29,14 @@ public class BaseParseTesting {
 	protected GWTStatement w_statement;
 	protected StepAction[] stepActions;
 
+	public void Setup() {
+		setupTestFeatureFiles();
+		setupTestCukeFeatures();
+		setupParser();
+		when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_0))
+				.thenReturn(testFeatures[0]);
+	}
+
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

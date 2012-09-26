@@ -3,7 +3,6 @@ package com.cukeripper.plugin.tests;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.List;
@@ -23,11 +22,7 @@ public class TestFeatureTreeContentProvider extends BaseParseTesting {
 
 	@Before
 	public void Setup() {
-		setupTestFeatureFiles();
-		setupTestCukeFeatures();
-		setupParser();
-		when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_0))
-				.thenReturn(testFeatures[0]);
+		super.Setup();
 
 		feature_treeContentProvider = new FeatureTreeContentProvider(
 				new File[] { TEST_FEATURE_FILE_0, TEST_FEATURE_FILE_1 },
