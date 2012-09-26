@@ -56,4 +56,9 @@ public class CukeScreen {
 		ruby += END;
 		return ruby;
 	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

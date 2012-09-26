@@ -26,4 +26,11 @@ public class StepAction {
 	public int getScreenIndex() {
 		return screenIndex;
 	}
+
+	@Override
+	public String toString() {
+		return "Screen: "
+				+ LoadedCukes.getScreens().get(getScreenIndex()).getName()
+				+ " method:" + methodIndex;
+	}
 }

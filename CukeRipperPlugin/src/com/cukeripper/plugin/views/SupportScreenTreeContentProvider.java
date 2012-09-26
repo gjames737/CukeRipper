@@ -6,6 +6,7 @@ import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.StepAction;
 import northwoods.cukeripper.utils.parsing.StepFileParser;
 
@@ -68,7 +69,7 @@ public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		return actions;
+		return LoadedCukes.getScreens().toArray();
 	}
 
 	@Override
