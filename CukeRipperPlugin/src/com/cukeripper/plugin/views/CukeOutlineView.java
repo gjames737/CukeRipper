@@ -41,18 +41,18 @@ public class CukeOutlineView extends ViewPart {
 	public void createPartControl(Composite parent) {
 
 		parent.setLayout(new GridLayout(1, false));
-
+		//
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new RowLayout(SWT.HORIZONTAL));
 		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
 		gd_composite.widthHint = 414;
 		composite.setLayoutData(gd_composite);
-
+		//
 		txtRootFile = new Text(composite, SWT.BORDER);
 		txtRootFile.setLayoutData(new RowData(197, SWT.DEFAULT));
 		txtRootFile.setText(ROOT_FILE);
-
+		//
 		Button btnRefresh = new Button(composite, SWT.NONE);
 		btnRefresh.setText("Refresh");
 		btnRefresh.addListener(SWT.Selection,
@@ -63,7 +63,7 @@ public class CukeOutlineView extends ViewPart {
 						presenter.handleRefreshEvent();
 					}
 				});
-
+		//
 		Composite composite_1 = new Composite(parent, SWT.NONE);
 		composite_1.setLayout(null);
 		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false,
@@ -71,7 +71,7 @@ public class CukeOutlineView extends ViewPart {
 		gd_composite_1.widthHint = 873;
 		gd_composite_1.heightHint = 200;
 		composite_1.setLayoutData(gd_composite_1);
-
+		//
 		treeViewer = new TreeViewer(composite_1, SWT.BORDER);
 		FeatureTreeContentProvider feature_provider = presenter
 				.getFeatureTreeContentProvider();

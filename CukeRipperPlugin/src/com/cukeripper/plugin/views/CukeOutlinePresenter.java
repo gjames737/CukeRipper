@@ -1,6 +1,7 @@
 package com.cukeripper.plugin.views;
 
 import java.io.File;
+import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
@@ -14,7 +15,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -25,7 +28,8 @@ public class CukeOutlinePresenter {
 	private static final String MY_PLUGIN_ID = "plugin.id.cukeripper.plugin.outline";
 	private CukeFileReader reader;
 	private FeatureFileParser featureParser;
-	private Action doubleClickAction;
+	private Action featureTreeDoubleClickAction;
+
 	private CukeOutlineView view;
 
 	public CukeOutlinePresenter(CukeOutlineView _view) {
@@ -51,18 +55,51 @@ public class CukeOutlinePresenter {
 	}
 
 	void makeActions() {
-		doubleClickAction = new Action() {
+		featureTreeDoubleClickAction = new Action() {
 			public void run() {
 				handleTreeItemDoubleClick();
 			}
 
 		};
+
 		hookClickActions();
 	}
 
-	private void handleTreeItemDoubleClick() {
+	private void handleTreeItemClick() {
+
+		getCurrentFeatureTreeSelection();
+		Object obj = getCurrentFeatureTreeSelection();
+		if (obj instanceof CukeFeature) {
+			handleFeatureSingleClick((CukeFeature) obj);
+		}
+
+	}
+
+	private void handleFeatureSingleClick(CukeFeature feature) {
+		String msg = "";
+		List<CukeScenario> scens = feature.getScenarios();
+		for (CukeScenario cukeScenario : scens) {
+			List<GWTStatement> states = cukeScenario.getStatements();
+			for (GWTStatement gwtStatement : states) {
+				msg += "\n " + gwtStatement.slashToSlashStatement();
+				List<StepAction> actions = gwtStatement.getAllActions();
+				for (StepAction stepAction : actions) {
+					msg += "\n " + stepAction.getScreenIndex();
+				}
+			}
+		}
+		// view.showMessage(msg + "  " + LoadedCukes.getScreens().size());
+
+	}
+
+	private Object getCurrentFeatureTreeSelection() {
 		ISelection selection = view.getFeatureTree().getSelection();
-		Object obj = ((IStructuredSelection) selection).getFirstElement();
+		return ((IStructuredSelection) selection).getFirstElement();
+	}
+
+	private void handleTreeItemDoubleClick() {
+
+		Object obj = getCurrentFeatureTreeSelection();
 		if (obj instanceof CukeFeature) {
 			handleFeatureDoubleClick((CukeFeature) obj);
 		} else if (obj instanceof CukeScenario) {
@@ -102,9 +139,17 @@ public class CukeOutlinePresenter {
 		view.getFeatureTree().addDoubleClickListener(
 				new IDoubleClickListener() {
 					public void doubleClick(DoubleClickEvent event) {
-						doubleClickAction.run();
+						featureTreeDoubleClickAction.run();
 					}
 				});
+		view.getFeatureTree().addSelectionChangedListener(
+				new ISelectionChangedListener() {
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+						handleTreeItemClick();
+					}
+				});
+
 	}
 
 	public void handleRefreshEvent() {
