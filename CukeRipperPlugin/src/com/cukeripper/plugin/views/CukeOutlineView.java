@@ -7,10 +7,10 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -39,21 +39,29 @@ public class CukeOutlineView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-
-		parent.setLayout(new GridLayout(1, false));
+		parent.setLayout(new FormLayout());
 		//
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new RowLayout(SWT.HORIZONTAL));
-		GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-		gd_composite.widthHint = 414;
-		composite.setLayoutData(gd_composite);
+		composite.setLayout(new FormLayout());
+		FormData fd_composite = new FormData();
+		fd_composite.top = new FormAttachment(0, 5);
+		fd_composite.left = new FormAttachment(0, 5);
+		composite.setLayoutData(fd_composite);
 		//
 		txtRootFile = new Text(composite, SWT.BORDER);
-		txtRootFile.setLayoutData(new RowData(197, SWT.DEFAULT));
+		FormData fd_txtRootFile = new FormData();
+		fd_txtRootFile.right = new FormAttachment(0, 977);
+		fd_txtRootFile.top = new FormAttachment(0, 3);
+		fd_txtRootFile.left = new FormAttachment(0, 195);
+		txtRootFile.setLayoutData(fd_txtRootFile);
 		txtRootFile.setText(ROOT_FILE);
 		//
 		Button btnRefresh = new Button(composite, SWT.NONE);
+		FormData fd_btnRefresh = new FormData();
+		fd_btnRefresh.right = new FormAttachment(0, 189);
+		fd_btnRefresh.top = new FormAttachment(0, 1);
+		fd_btnRefresh.left = new FormAttachment(0);
+		btnRefresh.setLayoutData(fd_btnRefresh);
 		btnRefresh.setText("Refresh");
 		btnRefresh.addListener(SWT.Selection,
 				new org.eclipse.swt.widgets.Listener() {
@@ -65,12 +73,14 @@ public class CukeOutlineView extends ViewPart {
 				});
 		//
 		Composite composite_1 = new Composite(parent, SWT.NONE);
-		composite_1.setLayout(null);
-		GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-		gd_composite_1.widthHint = 873;
-		gd_composite_1.heightHint = 200;
-		composite_1.setLayoutData(gd_composite_1);
+		fd_composite.right = new FormAttachment(composite_1, 0, SWT.RIGHT);
+		FormData fd_composite_1 = new FormData();
+		fd_composite_1.right = new FormAttachment(100, -10);
+		fd_composite_1.left = new FormAttachment(0, 5);
+		fd_composite_1.bottom = new FormAttachment(100, -8);
+		fd_composite_1.top = new FormAttachment(0, 41);
+		composite_1.setLayoutData(fd_composite_1);
+		composite_1.setLayout(new FormLayout());
 		//
 		treeViewer = new TreeViewer(composite_1, SWT.BORDER);
 		FeatureTreeContentProvider feature_provider = presenter
@@ -79,7 +89,11 @@ public class CukeOutlineView extends ViewPart {
 		treeViewer.setContentProvider(feature_provider);
 		treeViewer.setInput(getViewSite());
 		Tree tree = treeViewer.getTree();
-		tree.setBounds(0, 0, 332, 200);
+		FormData fd_tree = new FormData();
+		fd_tree.left = new FormAttachment(0);
+		fd_tree.top = new FormAttachment(0);
+		fd_tree.bottom = new FormAttachment(100);
+		tree.setLayoutData(fd_tree);
 
 		//
 		treeViewer_SupportScreens = new TreeViewer(composite_1, SWT.BORDER);
@@ -88,7 +102,13 @@ public class CukeOutlineView extends ViewPart {
 		treeViewer_SupportScreens.setContentProvider(supportScreensProvider);
 		treeViewer_SupportScreens.setInput(getViewSite());
 		Tree tree_supportScreens = treeViewer_SupportScreens.getTree();
-		tree_supportScreens.setBounds(338, 0, 525, 200);
+		fd_tree.right = new FormAttachment(tree_supportScreens, -6);
+		FormData fd_tree_supportScreens = new FormData();
+		fd_tree_supportScreens.top = new FormAttachment(0);
+		fd_tree_supportScreens.bottom = new FormAttachment(100);
+		fd_tree_supportScreens.right = new FormAttachment(0, 977);
+		fd_tree_supportScreens.left = new FormAttachment(0, 451);
+		tree_supportScreens.setLayoutData(fd_tree_supportScreens);
 		GridData gd_tree_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_tree_1.widthHint = 494;
 
@@ -114,6 +134,7 @@ public class CukeOutlineView extends ViewPart {
 	}
 
 	public void openEditorOnFile(File fileToOpen) {
+		System.err.println("######### canWrite: " + fileToOpen.canWrite());
 		if (fileToOpen.exists() && fileToOpen.isFile()) {
 			IFileStore fileStore = EFS.getLocalFileSystem().getStore(
 					fileToOpen.toURI());
@@ -122,6 +143,8 @@ public class CukeOutlineView extends ViewPart {
 
 			try {
 				IDE.openEditorOnFileStore(page, fileStore);
+				page = null;
+				fileStore = null;
 			} catch (PartInitException e) {
 				// Put your exception handler here if you wish to
 			}

@@ -6,6 +6,7 @@ import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -36,6 +37,7 @@ public class CukeOutlinePresenter {
 	}
 
 	private void refresh() {
+		LoadedCukes.getScreens().clear();
 		String currentFileRootPath = this.view.getCurrentFileRootPath();
 		this.reader = new CukeFileReader(currentFileRootPath);
 		this.featureParser = new FeatureFileParser(reader);
