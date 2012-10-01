@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
-public class CukeOutlinePresenter {
+public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	private static final String NO_FILE_FOUND = "No file was found. Refresh!";
 	private static final String KEY_ROOT_PATH_TO_CUKES = "cukeripper.keys.KEY_ROOT_PATH_TO_CUKES";
@@ -39,9 +39,12 @@ public class CukeOutlinePresenter {
 	private void refresh() {
 		LoadedCukes.getScreens().clear();
 		String currentFileRootPath = this.view.getCurrentFileRootPath();
-		this.reader = new CukeFileReader(currentFileRootPath);
-		this.featureParser = new FeatureFileParser(reader);
-
+		try {
+			this.reader = new CukeFileReader(currentFileRootPath);
+			this.featureParser = new FeatureFileParser(reader);
+		} catch (Exception e) {
+			onCukeFileReader(e);
+		}
 		view.refresh();
 	}
 
@@ -187,12 +190,37 @@ public class CukeOutlinePresenter {
 	}
 
 	public FeatureTreeContentProvider getFeatureTreeContentProvider() {
-		return new FeatureTreeContentProvider(getfeatureFiles(),
+		return new FeatureTreeContentProvider(this, getfeatureFiles(),
 				getFeatureParser());
 	}
 
 	public SupportScreenTreeContentProvider getSupportScreensTreeContentProvider() {
-		return new SupportScreenTreeContentProvider(reader);
+		return new SupportScreenTreeContentProvider(this, reader);
 	}
 
+	@Override
+	public void onFeatureParseException(Exception e) {
+		printStackTraceToMessage(e);
+	}
+
+	@Override
+	public void onStepFileParserException(Exception e) {
+		printStackTraceToMessage(e);
+	}
+
+	@Override
+	public void onCukeFileReader(Exception e) {
+		printStackTraceToMessage(e);
+	}
+
+	private void printStackTraceToMessage(Exception e) {
+		StackTraceElement[] trace = e.getStackTrace();
+		String msg = e.getMessage();
+		for (StackTraceElement s : trace) {
+			msg += "\n" + s.getClassName() + "." + s.getMethodName();
+			msg += "  In file [" + s.getFileName() + "] at line "
+					+ s.getLineNumber();
+		}
+		view.showMessage(msg);
+	}
 }

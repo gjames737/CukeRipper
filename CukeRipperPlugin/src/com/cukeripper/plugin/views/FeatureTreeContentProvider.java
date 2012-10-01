@@ -15,9 +15,11 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 
 	private FeatureFileParser featureParser;
 	private File[] featureFiles;
+	private ICukeParsingListener listener;
 
-	public FeatureTreeContentProvider(File[] _featureFiles,
-			FeatureFileParser _featureParser) {
+	public FeatureTreeContentProvider(ICukeParsingListener _listener,
+			File[] _featureFiles, FeatureFileParser _featureParser) {
+		this.listener = _listener;
 		this.featureFiles = _featureFiles;
 		this.featureParser = _featureParser;
 	}
@@ -41,13 +43,21 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 	}
 
 	private CukeFeature[] getFeatures() {
-		List<CukeFeature> featuresList = new ArrayList<CukeFeature>();
-		for (int i = 0; i < featureFiles.length; i++) {
-			featuresList.add(featureParser.getFeatureFromFile(featureFiles[i]));
-		}
-		CukeFeature[] featuresArray = new CukeFeature[featuresList.size()];
-		for (int i = 0; i < featuresArray.length; i++) {
-			featuresArray[i] = featuresList.get(i);
+
+		CukeFeature[] featuresArray = new CukeFeature[] {};
+		try {
+			List<CukeFeature> featuresList = new ArrayList<CukeFeature>();
+			for (int i = 0; i < featureFiles.length; i++) {
+				featuresList.add(featureParser
+						.getFeatureFromFile(featureFiles[i]));
+			}
+			featuresArray = new CukeFeature[featuresList.size()];
+			for (int i = 0; i < featuresArray.length; i++) {
+				featuresArray[i] = featuresList.get(i);
+			}
+
+		} catch (Exception e) {
+			listener.onFeatureParseException(e);
 		}
 
 		return featuresArray;

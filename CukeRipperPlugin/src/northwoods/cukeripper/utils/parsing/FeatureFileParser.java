@@ -11,7 +11,10 @@ import northwoods.cukeripper.utils.GWTStatement;
 
 public class FeatureFileParser {
 
-	private static final String END_OF_CONTENTS_PADDING = "    ";
+	public static final String END_OF_CONTENTS_PADDING = "    ";
+	public static final String CONSOLE_STR_PARSING_FEATURE_FROM_FILE = "Parsing feature from file";
+
+	public static final String CONSOLE_STR_ERROR_CLEANING_CONTENTS = "Error cleaning contents.";
 	private CukeFileReader reader;
 	private CukeParser parser;
 
@@ -25,7 +28,9 @@ public class FeatureFileParser {
 	}
 
 	public CukeFeature getFeatureFromFile(File file) {
-
+		CukeConsole.println(
+				CONSOLE_STR_PARSING_FEATURE_FROM_FILE + " "
+						+ file.getAbsolutePath(), false);
 		String featureContents = reader.readFullFileContents(file);
 		featureContents = cleanFileContents(featureContents)
 				+ END_OF_CONTENTS_PADDING;
@@ -69,12 +74,18 @@ public class FeatureFileParser {
 	}
 
 	private String cleanFileContents(String stringContents) {
-		String firstChar = stringContents.substring(0, 1);
-		while (firstChar.equals("\n") || firstChar.equals(" ")) {
-			stringContents = stringContents.substring(1);
-			firstChar = stringContents.substring(0, 1);
+		try {
+			String firstChar = stringContents.substring(0, 1);
+			while (firstChar.equals("\n") || firstChar.equals(" ")) {
+				stringContents = stringContents.substring(1);
+				firstChar = stringContents.substring(0, 1);
+			}
+			return stringContents;
+		} catch (Exception e) {
+			CukeConsole.println(CONSOLE_STR_ERROR_CLEANING_CONTENTS + ": "
+					+ CommonRips.MSG_NO_PARSABLE_CONTENT, true);
+			e.printStackTrace();
 		}
-		return stringContents;
+		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
-
 }

@@ -15,4 +15,7 @@ public class CommonRips {
 	public static final CharSequence THEN = "Then";
 	public static final String SLASH_POINT = "/^";
 	public static final String DOLLAR_SLASH = "$/";
+	public static final String MSG_NO_PARSABLE_CONTENT = "   --- no parsable content ---   ";
+	public static final String CONSOLE_STR_ERROR_GENERAL_STRING = "An error occured in the string operation";
+	public static final String MSG_NO_STEP_FILE_FOUND_FOR_STATEMENT = "No step file found for statement";
 }

@@ -8,6 +8,7 @@ import northwoods.cukeripper.utils.GWTStatement;
 
 public class StepFileParser {
 
+	public static final String CONSOLE_STR_PARSING_STATEMENTS_FROM_FILE = "Parsing statements from file";
 	private CukeFileReader reader;
 	private CukeParser parser;
 
@@ -21,6 +22,8 @@ public class StepFileParser {
 	}
 
 	public List<GWTStatement> getGWTStatementsFromFile(File file) {
+		CukeConsole.println(CONSOLE_STR_PARSING_STATEMENTS_FROM_FILE + " "
+				+ file.getAbsolutePath(), false);
 		String fullContents = getStepFileContents(file);
 		List<GWTStatement> statements = parser.parseStatementsFromStepFile(
 				file, fullContents);

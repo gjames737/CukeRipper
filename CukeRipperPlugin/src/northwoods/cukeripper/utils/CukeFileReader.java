@@ -9,10 +9,12 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import northwoods.cukeripper.utils.parsing.CukeConsole;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 public class CukeFileReader {
 
+	public static final String CONSOLE_STR_READING_FILE = "Reading";
 	private File rootOfAllFiles;
 	private List<File> allFiles;
 
@@ -50,7 +52,10 @@ public class CukeFileReader {
 	}
 
 	public String readFullFileContents(File file) {
+		CukeConsole.println(
+				CONSOLE_STR_READING_FILE + " " + file.getAbsolutePath(), false);
 		try {
+
 			return readFile(file.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();

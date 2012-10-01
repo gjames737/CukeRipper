@@ -20,8 +20,11 @@ public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 	private File[] allStepFiles;
 	private File[] allScreenFiles;
 	private StepAction[] actions;
+	private ICukeParsingListener listener;
 
-	public SupportScreenTreeContentProvider(CukeFileReader _reader) {
+	public SupportScreenTreeContentProvider(ICukeParsingListener _listener,
+			CukeFileReader _reader) {
+		this.listener = _listener;
 		this.reader = _reader;
 		this.stepFileParser = new StepFileParser(this.reader);
 		this.allStepFiles = reader.getAllStepDefinitionFiles();
@@ -30,26 +33,31 @@ public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 	}
 
 	private void loadActions() {
-		if (allStepFiles == null) {
-			actions = new StepAction[] {};
-			return;
-		}
-		List<StepAction> actions_list = new ArrayList<StepAction>();
-		for (int i = 0; i < allStepFiles.length; i++) {
-			List<GWTStatement> statements_list = stepFileParser
-					.getGWTStatementsFromFile(allStepFiles[i]);
-			for (int j = 0; j < statements_list.size(); j++) {
-				GWTStatement statement = statements_list.get(j);
-				List<StepAction> actions_small_list = statement.getAllActions();
-				for (StepAction stepAction : actions_small_list) {
-					actions_list.add(stepAction);
+		try {
+			if (allStepFiles == null) {
+				actions = new StepAction[] {};
+				return;
+			}
+			List<StepAction> actions_list = new ArrayList<StepAction>();
+			for (int i = 0; i < allStepFiles.length; i++) {
+				List<GWTStatement> statements_list = stepFileParser
+						.getGWTStatementsFromFile(allStepFiles[i]);
+				for (int j = 0; j < statements_list.size(); j++) {
+					GWTStatement statement = statements_list.get(j);
+					List<StepAction> actions_small_list = statement
+							.getAllActions();
+					for (StepAction stepAction : actions_small_list) {
+						actions_list.add(stepAction);
+					}
 				}
 			}
-		}
 
-		actions = new StepAction[actions_list.size()];
-		for (int i = 0; i < actions.length; i++) {
-			actions[i] = actions_list.get(i);
+			actions = new StepAction[actions_list.size()];
+			for (int i = 0; i < actions.length; i++) {
+				actions[i] = actions_list.get(i);
+			}
+		} catch (Exception e) {
+			listener.onStepFileParserException(e);
 		}
 
 	}
