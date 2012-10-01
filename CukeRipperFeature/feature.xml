@@ -2,7 +2,7 @@
 <feature
       id="CukeRipperFeature"
       label="CukeFeature"
-      version="1.0.2.qualifier">
+      version="1.0.3.qualifier">
 
    <description url="https://github.com/gjames737/CukeRipper">
       CukeRipper helps you write functional tests using the Cucumber framework by searching and organizing your feature, step definition, and screen files.
