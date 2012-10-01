@@ -1,4 +1,4 @@
-<h1>Acout</h1>
+<h1>About</h1>
 CukeRipper is an Elcipse Plug-in (3.6 and above) that parses Cucumber functional test files [features, screens, and step definitions] and displays useful views to access and edit those files.
 
 
