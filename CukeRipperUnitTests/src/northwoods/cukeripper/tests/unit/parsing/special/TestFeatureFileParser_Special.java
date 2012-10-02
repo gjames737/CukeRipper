@@ -9,6 +9,7 @@ import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -21,6 +22,7 @@ import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.parsing.CukeParser;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.junit.Before;
@@ -40,7 +42,7 @@ public class TestFeatureFileParser_Special {
 
 	@Before
 	public void Setup() {
-
+		CukeParser.THROW_ERRORS = true;
 		initMocks(this);
 		setUpAllFiles();
 		setupReader();
@@ -136,7 +138,7 @@ public class TestFeatureFileParser_Special {
 
 	@Test
 	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatements1() {
-		List<CukeScenario> theScenarios = theFeatureParsed(1).getScenarios();
+		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
@@ -155,7 +157,7 @@ public class TestFeatureFileParser_Special {
 
 	@Test
 	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatementsWithTheCorrectFeatureAndStepFile() {
-		List<CukeScenario> theScenarios = theFeatureParsed(1).getScenarios();
+		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
@@ -187,8 +189,8 @@ public class TestFeatureFileParser_Special {
 		try {
 			return featureParser.getFeatureFromFile(featureFiles[index]);
 		} catch (Exception e) {
-
 			e.printStackTrace();
+			fail();
 			return null;
 		}
 	}
@@ -210,9 +212,8 @@ public class TestFeatureFileParser_Special {
 	}
 
 	private void setUpAllFiles() {
-		featureFiles = new File[2];
+		featureFiles = new File[1];
 		featureFiles[0] = mock(File.class);
-		featureFiles[1] = mock(File.class);
 
 		screenFiles = new File[1];
 		screenFiles[0] = mock(File.class);
@@ -221,7 +222,7 @@ public class TestFeatureFileParser_Special {
 		stepDefinitionFiles[0] = mock(File.class);
 
 		when(featureFiles[0].getName()).thenReturn("foo0.feature");
-		when(featureFiles[1].getName()).thenReturn("foo1.feature");
+
 		when(screenFiles[0].getName()).thenReturn("foo.rb");
 		when(stepDefinitionFiles[0].getName()).thenReturn("foo.rb");
 

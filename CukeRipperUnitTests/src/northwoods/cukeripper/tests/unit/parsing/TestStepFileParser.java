@@ -4,6 +4,7 @@ import static northwoods.cukeripper.tests.unit.helpers.FullTexts.STEP_DEF_0_STAT
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -14,6 +15,7 @@ import java.util.List;
 import northwoods.cukeripper.tests.unit.helpers.FullTexts;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.parsing.CukeParser;
 import northwoods.cukeripper.utils.parsing.StepFileParser;
 
 import org.junit.Before;
@@ -33,7 +35,7 @@ public class TestStepFileParser {
 
 	@Before
 	public void Setup() {
-
+		CukeParser.THROW_ERRORS = true;
 		initMocks(this);
 		setUpAllFiles();
 		setupReader();
@@ -111,6 +113,7 @@ public class TestStepFileParser {
 		} catch (Exception e) {
 
 			e.printStackTrace();
+			fail();
 			return null;
 		}
 	}

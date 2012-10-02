@@ -10,6 +10,7 @@ import java.io.File;
 
 import northwoods.cukeripper.tests.unit.helpers.FullTexts;
 import northwoods.cukeripper.utils.CukeFileReader;
+import northwoods.cukeripper.utils.parsing.CukeParser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class TestCukeFileReader {
 
 	@Before
 	public void Setup() {
-
+		CukeParser.THROW_ERRORS = true;
 		initMocks(this);
 		setUpAllFiles();
 		setupReader();

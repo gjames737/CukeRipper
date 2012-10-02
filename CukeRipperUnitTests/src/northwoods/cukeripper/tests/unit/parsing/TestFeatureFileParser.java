@@ -3,6 +3,7 @@ package northwoods.cukeripper.tests.unit.parsing;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -15,6 +16,7 @@ import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.parsing.CukeParser;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.junit.Before;
@@ -34,7 +36,7 @@ public class TestFeatureFileParser {
 
 	@Before
 	public void Setup() {
-
+		CukeParser.THROW_ERRORS = true;
 		initMocks(this);
 		setUpAllFiles();
 		setupReader();
@@ -182,8 +184,8 @@ public class TestFeatureFileParser {
 		try {
 			return featureParser.getFeatureFromFile(featureFiles[index]);
 		} catch (Exception e) {
-
 			e.printStackTrace();
+			fail();
 			return null;
 		}
 	}
