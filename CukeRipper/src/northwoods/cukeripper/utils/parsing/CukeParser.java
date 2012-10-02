@@ -649,13 +649,17 @@ public class CukeParser {
 		try {
 			File[] stepFiles = reader.getAllStepDefinitionFiles();
 			String theStepString = gwtStatement.slashToSlashStatement();
+			System.err.println("the step string: "
+					+ gwtStatement.slashToSlashStatement());
 			for (int i = 0; i < stepFiles.length; i++) {
-				String contents = reader.readFullFileContents(stepFiles[i]);
+				File stepFile = stepFiles[i];
+				boolean isInFile = isStatementFoundInStepFile(reader,
+						theStepString, stepFile);
 
-				if (contents.contains(theStepString)) {
+				if (isInFile) {
 					System.out.println("Found step file for: "
 							+ gwtStatement.slashToSlashStatement());
-					return stepFiles[i];
+					return stepFile;
 				}
 			}
 			CukeConsole.println(this.getClass().getCanonicalName(), false);
@@ -675,5 +679,28 @@ public class CukeParser {
 				throw e;
 		}
 		return null;
+	}
+
+	private boolean isStatementFoundInStepFile(CukeFileReader reader,
+			String theStepString, File stepFile) {
+		boolean isInFile = false;
+		String contents = reader.readFullFileContents(stepFile);
+		String cleanContents = cleanOutExtraWordingCodes(contents);
+		printInTildas(cleanContents);
+		isInFile = contents.contains(theStepString);
+		return isInFile;
+	}
+
+	private String cleanOutExtraWordingCodes(String contents) {
+
+		return contents;
+	}
+
+	private void printInTildas(String contents) {
+		System.out
+				.println("#                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(contents);
+		System.out
+				.println("#                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	}
 }

@@ -45,21 +45,23 @@ public class FeatureFileParser {
 		List<Integer> indicesOfScenarioTags = parser.indicesOfOccurances(
 				featureContents, scenarioTag);
 		int numberOfScenarios = indicesOfScenarioTags.size();
-
+		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
 		for (int i = 0; i < numberOfScenarios; i++) {
 			CukeScenario scenario = parser.parseScenario(file, featureContents,
 					scenarioTag, indicesOfScenarioTags, i);
-
+			System.out
+					.println("=================================================");
 			GWTStatement[] statements = scenario.getStatementsArray();
 			for (int j = 0; j < statements.length; j++) {
 				GWTStatement gwtStatement = statements[j];
 				if (gwtStatement.getStepFile() == null) {
-					// System.out.println(gwtStatement.slashToSlashStatement());
+					System.out.println(gwtStatement.slashToSlashStatement());
 					File stepFile = parser.findStepFileForStatement(reader,
 							gwtStatement);
-					// if (stepFile == null) {
-					// System.err.println("it is null here");
-					// }
+					if (stepFile == null) {
+						System.err.println("it is null here");
+					}
 
 					gwtStatement.setStepFile(stepFile);
 				} else {
