@@ -60,7 +60,7 @@ public class CukeScenario {
 
 	@Override
 	public String toString() {
-		return getName();
+		return getLineNumber() + ": " + getName();
 	}
 
 	public File getFile() {

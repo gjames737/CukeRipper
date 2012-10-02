@@ -92,7 +92,9 @@ public class TestCukeScenario {
 
 	@Test
 	public void itToStringsCorrectly() {
-		assertThat(scenario.toString(), is(scenario.getName()));
+		String lineNumberString = scenario.getLineNumber() + ": ";
+		String expected = lineNumberString + scenario.getName();
+		assertThat(scenario.toString(), is(expected));
 	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
