@@ -5,6 +5,7 @@ import java.util.List;
 
 public class CukeConsole {
 
+	public static final String MSG_COULD_NOT_FIND_FILE_FOR_SCREEN = "Could not find file for screen";
 	private static List<String> printStatements = new ArrayList<String>();
 	private static List<ICukeConsoleListener> listeners = new ArrayList<ICukeConsoleListener>();
 

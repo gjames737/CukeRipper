@@ -84,7 +84,7 @@ public class FullTexts {
 			+ "\n	And the case number is displayed in the breadcrumb"
 			+ "\n	And the message 'case saved' is displayed ";
 	public static final String SCREEN_0 = ""
-			+ "class AddCasePage"
+			+ "class screen1"
 			+ "\ninclude Gametel"
 
 			+ "\n\nbutton(:delete, :id => 'delete_case_id')"

@@ -14,7 +14,9 @@ import java.util.List;
 
 import northwoods.cukeripper.tests.unit.helpers.FullTexts;
 import northwoods.cukeripper.utils.CukeFileReader;
+import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.parsing.CukeParser;
 import northwoods.cukeripper.utils.parsing.StepFileParser;
 
@@ -103,6 +105,23 @@ public class TestStepFileParser {
 		assertThat(theGWTs.get(3).getAllActions().size(),
 				is(STEP_DEF_0_STATEMENTS[3].getAllActions().size()));
 
+	}
+
+	@Test
+	public void itCreatesAListOfGWTStatementsAndAttachesScreenFiles() {
+		intiTheGWTs();
+		for (int i = 0; i < LoadedCukes.getScreens().size(); i++) {
+			CukeScreen cukeScreen = LoadedCukes.getScreens().get(i);
+			if (cukeScreen.getName().equals("screen1")) {
+				assertThat(cukeScreen.getScreenFile(), is(notNullValue()));
+				assertThat(cukeScreen.getScreenFile().getName(),
+						is(screenFiles[0].getName()));
+			}
+		}
+	}
+
+	private void intiTheGWTs() {
+		theGWTs();
 	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
