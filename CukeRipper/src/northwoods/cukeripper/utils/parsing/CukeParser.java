@@ -685,22 +685,81 @@ public class CukeParser {
 			String theStepString, File stepFile) {
 		boolean isInFile = false;
 		String contents = reader.readFullFileContents(stepFile);
+		String contentsNoParensNoSpaces = contents.replace("(", "")
+				.replace(")?", "").replace(CommonRips.SLASH_POINT, "")
+				.replace(CommonRips.DOLLAR_SLASH, "").replaceAll("\\s+", "");
 		String cleanContents = cleanOutExtraWordingCodes(contents);
-		printInTildas(cleanContents);
-		isInFile = contents.contains(theStepString);
+		String theStepStringNoSpaces = theStepString.replaceAll("\\s+", "")
+				.replace(CommonRips.SLASH_POINT, "")
+				.replace(CommonRips.DOLLAR_SLASH, "");
+		isInFile = contents.contains(theStepString)
+				|| cleanContents.contains(theStepStringNoSpaces)
+				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces);
+		if (!isInFile) {
+			printWithMarkings(isInFile + "\n" + theStepStringNoSpaces + "\n"
+					+ contentsNoParensNoSpaces, "@");
+		}
 		return isInFile;
 	}
 
 	private String cleanOutExtraWordingCodes(String contents) {
+		String cleaned = contents;
 
-		return contents;
+		try {
+			List<Integer> indicesOfParCloseQ = indicesOfOccurances(cleaned,
+					CommonRips.PAREN_CLOSE_QUESTION);
+			List<Integer> indicesOfParOpen = indicesOfOccurances(cleaned, "(");
+			List<Integer[]> openMappedToCloseQ = new ArrayList<Integer[]>();
+			for (int i = 0; i < indicesOfParCloseQ.size(); i++) {
+
+				Integer icq = indicesOfParCloseQ.get(i);
+				int closestDistance = 100000;
+				int closestPOindexIO = 0;
+				for (int j = 0; j < indicesOfParOpen.size(); j++) {
+					Integer io = indicesOfParOpen.get(j);
+					int distance = icq - io;
+					if (distance > 0 && distance < closestDistance) {
+						closestDistance = distance;
+						closestPOindexIO = io;
+					}
+				}
+				if (icq > 0 && closestPOindexIO > 0 && closestPOindexIO < icq)
+					openMappedToCloseQ.add(new Integer[] { closestPOindexIO,
+							(icq + 2) });
+			}
+
+			for (int i = openMappedToCloseQ.size() - 1; i >= 0; i--) {
+				Integer[] indices = openMappedToCloseQ.get(i);
+				String replacement = "";
+				int length = indices[1] - indices[0];
+				for (int j = 0; j < length; j++) {
+					replacement += " ";
+				}
+				String toReplace = cleaned.substring(indices[0], indices[1]);
+				cleaned = cleaned.replace(toReplace, replacement);
+				cleaned = cleaned.replaceAll("\\s+", "");
+				cleaned = cleaned.replace(CommonRips.SLASH_POINT, "").replace(
+						CommonRips.DOLLAR_SLASH, "");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// printWithMarkings(cleaned, ":");
+
+		return cleaned;
 	}
 
-	private void printInTildas(String contents) {
-		System.out
-				.println("#                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	private void printWithMarkings(String contents, String marking) {
+		String mark = "";
+		for (int i = 0; i < 40; i++) {
+			mark += marking;
+		}
+		mark = "       " + mark;
+		System.out.println(mark);
 		System.out.println(contents);
-		System.out
-				.println("#                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(mark);
 	}
+
 }
