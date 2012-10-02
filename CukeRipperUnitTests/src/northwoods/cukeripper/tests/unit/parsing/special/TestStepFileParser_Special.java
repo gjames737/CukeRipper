@@ -1,6 +1,9 @@
-package northwoods.cukeripper.tests.unit.parsing;
+package northwoods.cukeripper.tests.unit.parsing.special;
 
-import static northwoods.cukeripper.tests.unit.helpers.FullTexts.STEP_DEF_0_STATEMENTS;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.SCREEN_0;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.STEP_DEF_0;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.STEP_DEF_0_STATEMENTS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -11,7 +14,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.io.File;
 import java.util.List;
 
-import northwoods.cukeripper.tests.unit.helpers.FullTexts;
+import northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.parsing.StepFileParser;
@@ -20,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class TestStepFileParser {
+public class TestStepFileParser_Special {
 
 	private File[] featureFiles = null;
 	private File[] screenFiles = null;
@@ -39,7 +42,7 @@ public class TestStepFileParser {
 		setupReader();
 
 		stepParser = new StepFileParser(reader);
-		FullTexts.initStepDefs();
+		FullTexts_Special.initStepDefs();
 	}
 
 	@Test
@@ -121,14 +124,13 @@ public class TestStepFileParser {
 		when(reader.getAllStepDefinitionFiles())
 				.thenReturn(stepDefinitionFiles);
 
-		when(reader.readFullFileContents(featureFiles[0])).thenReturn(
-				FullTexts.FEATURE_0);
+		when(reader.readFullFileContents(featureFiles[0]))
+				.thenReturn(FEATURE_0);
 
-		when(reader.readFullFileContents(screenFiles[0])).thenReturn(
-				FullTexts.SCREEN_0);
+		when(reader.readFullFileContents(screenFiles[0])).thenReturn(SCREEN_0);
 
 		when(reader.readFullFileContents(stepDefinitionFiles[0])).thenReturn(
-				FullTexts.STEP_DEF_0);
+				STEP_DEF_0);
 
 	}
 

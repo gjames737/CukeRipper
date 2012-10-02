@@ -27,7 +27,7 @@ public class FeatureFileParser {
 		return reader;
 	}
 
-	public CukeFeature getFeatureFromFile(File file) {
+	public CukeFeature getFeatureFromFile(File file) throws Exception {
 		CukeConsole.println(
 				CONSOLE_STR_PARSING_FEATURE_FROM_FILE + " "
 						+ file.getAbsolutePath(), false);

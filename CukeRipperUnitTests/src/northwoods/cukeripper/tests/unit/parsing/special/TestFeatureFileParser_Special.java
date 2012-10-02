@@ -1,5 +1,11 @@
-package northwoods.cukeripper.tests.unit.parsing;
+package northwoods.cukeripper.tests.unit.parsing.special;
 
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0_NAME;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0_NUMBER_OF_SCENARIOS;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0_SCENARIOS;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.SCREEN_0;
+import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.STEP_DEF_0;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -10,7 +16,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.io.File;
 import java.util.List;
 
-import northwoods.cukeripper.tests.unit.helpers.FullTexts;
+import northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
@@ -21,7 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class TestFeatureFileParser {
+public class TestFeatureFileParser_Special {
 
 	private File[] featureFiles = null;
 	private File[] screenFiles = null;
@@ -40,7 +46,7 @@ public class TestFeatureFileParser {
 		setupReader();
 
 		featureParser = new FeatureFileParser(reader);
-		FullTexts.initFeatureScenarios();
+		FullTexts_Special.initFeatureScenarios();
 	}
 
 	@Test
@@ -55,14 +61,13 @@ public class TestFeatureFileParser {
 
 	@Test
 	public void itCreatesAFeatureFromAFileWithTheCorrectName() {
-		assertThat(theFeatureParsed(0).getName(), is(FullTexts.FEATURE_0_NAME));
+		assertThat(theFeatureParsed(0).getName(), is(FEATURE_0_NAME));
 	}
 
 	@Test
 	public void itCreatesAFeatureFromAFileWithTheCorrectNumberOfScenarios() {
 		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
-		assertThat(theScenarios.size(),
-				is(FullTexts.FEATURE_0_NUMBER_OF_SCENARIOS));
+		assertThat(theScenarios.size(), is(FEATURE_0_NUMBER_OF_SCENARIOS));
 	}
 
 	@Test
@@ -72,7 +77,7 @@ public class TestFeatureFileParser {
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
 			assertThat(cukeScenario.getName(),
-					is(FullTexts.FEATURE_0_SCENARIOS[i].getName()));
+					is(FEATURE_0_SCENARIOS[i].getName()));
 		}
 	}
 
@@ -84,7 +89,7 @@ public class TestFeatureFileParser {
 			CukeScenario cukeScenario = theScenarios.get(i);
 			List<GWTStatement> theStatements = cukeScenario.getStatements();
 			int numOfStatements = theStatements.size();
-			List<GWTStatement> expectedStatements = FullTexts.FEATURE_0_SCENARIOS[i]
+			List<GWTStatement> expectedStatements = FEATURE_0_SCENARIOS[i]
 					.getStatements();
 			assertThat(numOfStatements, is(expectedStatements.size()));
 
@@ -102,7 +107,7 @@ public class TestFeatureFileParser {
 
 			for (int j = 0; j < numOfStatements; j++) {
 				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
+				GWTStatement expectedStatement = FEATURE_0_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(actualStatement.getType(),
 						is(expectedStatement.getType()));
@@ -121,7 +126,7 @@ public class TestFeatureFileParser {
 
 			for (int j = 0; j < numOfStatements; j++) {
 				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
+				GWTStatement expectedStatement = FEATURE_0_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(actualStatement.getStatement(),
 						is(expectedStatement.getStatement()));
@@ -140,7 +145,7 @@ public class TestFeatureFileParser {
 
 			for (int j = 0; j < numOfStatements; j++) {
 				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FullTexts.FEATURE_1_SCENARIOS[i]
+				GWTStatement expectedStatement = FEATURE_0_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(actualStatement.getStatement(),
 						is(expectedStatement.getStatement()));
@@ -159,7 +164,7 @@ public class TestFeatureFileParser {
 
 			for (int j = 0; j < numOfStatements; j++) {
 				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FullTexts.FEATURE_1_SCENARIOS[i]
+				GWTStatement expectedStatement = FEATURE_0_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(
 						actualStatement.getFeatureFile().getAbsolutePath(),
@@ -194,16 +199,13 @@ public class TestFeatureFileParser {
 		when(reader.getAllStepDefinitionFiles())
 				.thenReturn(stepDefinitionFiles);
 
-		when(reader.readFullFileContents(featureFiles[0])).thenReturn(
-				FullTexts.FEATURE_0);
-		when(reader.readFullFileContents(featureFiles[1])).thenReturn(
-				FullTexts.FEATURE_1);
+		when(reader.readFullFileContents(featureFiles[0]))
+				.thenReturn(FEATURE_0);
 
-		when(reader.readFullFileContents(screenFiles[0])).thenReturn(
-				FullTexts.SCREEN_0);
+		when(reader.readFullFileContents(screenFiles[0])).thenReturn(SCREEN_0);
 
 		when(reader.readFullFileContents(stepDefinitionFiles[0])).thenReturn(
-				FullTexts.STEP_DEF_0);
+				STEP_DEF_0);
 
 	}
 

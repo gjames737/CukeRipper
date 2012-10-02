@@ -21,9 +21,11 @@ import northwoods.cukeripper.utils.StepAction;
 public class CukeParser {
 
 	public String CONSOLE_STR_ERROR_PARSING_SCENARIO_IN_FILE;
+	public static boolean THROW_ERRORS = false;
 
 	CukeScenario parseScenario(File file, String featureContents,
-			String scenarioTag, List<Integer> indicesOfScenarioTags, int index) {
+			String scenarioTag, List<Integer> indicesOfScenarioTags, int index)
+			throws Exception {
 		try {
 			int thisCharIndex = indicesOfScenarioTags.get(index);
 
@@ -50,11 +52,14 @@ public class CukeParser {
 			CukeConsole.println(
 					"parseScenario: on file " + file.getAbsolutePath(), true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return null;
 	}
 
-	List<Integer> indicesOfOccurances(String haystack, String subStr) {
+	List<Integer> indicesOfOccurances(String haystack, String subStr)
+			throws Exception {
 		try {
 			int lastIndex = 0;
 			List<Integer> indices = new ArrayList<Integer>();
@@ -77,12 +82,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("indicesOfOccurances", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return new ArrayList<Integer>();
 	}
 
 	String getObjectNameFromContents(int offset, String tag,
-			String stringContents) {
+			String stringContents) throws Exception {
 		try {
 			int indexOfNameStart = offset + tag.length();
 			int indexOfNextEndOfLineChar = indexOfNameStart
@@ -97,12 +104,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("getObjectNameFromContents", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return "";
 	}
 
 	List<GWTStatement> parseStatementsFromStepFile(File file,
-			String fullContents) {
+			String fullContents) throws Exception {
 		List<GWTStatement> statements = new ArrayList<GWTStatement>();
 		try {
 			List<Integer> indicesOfSlashPt = indicesOfOccurances(fullContents,
@@ -122,12 +131,14 @@ public class CukeParser {
 					"parseStatementsFromStepFile on file "
 							+ file.getAbsolutePath(), true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return statements;
 	}
 
 	private List<Integer> getIndicesOfAllStatementsInScenario(
-			String fullScenarioString) {
+			String fullScenarioString) throws Exception {
 		try {
 			List<Integer> indicesOfStatements = indicesOfOccurances(
 					fullScenarioString, "Given");
@@ -145,12 +156,15 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("getIndicesOfAllStatementsInScenario", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return new ArrayList<Integer>();
 	}
 
 	private List<GWTStatement> getStatementTypes(File file,
-			String fullScenarioString, List<Integer> indicesOfStatements) {
+			String fullScenarioString, List<Integer> indicesOfStatements)
+			throws Exception {
 		try {
 			StatementType lastType = StatementType.GIVEN;
 			List<GWTStatement> gwts = new ArrayList<GWTStatement>();
@@ -187,11 +201,13 @@ public class CukeParser {
 							"getStatementTypes on file:"
 									+ file.getAbsolutePath(), true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return new ArrayList<GWTStatement>();
 	}
 
-	private boolean isFeatureFile(File file) {
+	private boolean isFeatureFile(File file) throws Exception {
 		try {
 			if (file == null)
 				return false;
@@ -204,11 +220,13 @@ public class CukeParser {
 			CukeConsole.println(
 					"isFeatureFile on file:" + file.getAbsolutePath(), true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return false;
 	}
 
-	private String cleanStatementString(String statement) {
+	private String cleanStatementString(String statement) throws Exception {
 		try {
 			statement = statement.trim();
 			statement = statement.replace("\n", "");
@@ -219,12 +237,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("cleanStatementString", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
 
 	private String getSnippetOfStatement(String fullScenarioString,
-			int statementIndex, int snippetLength) {
+			int statementIndex, int snippetLength) throws Exception {
 		try {
 			String snippetOfStatement = fullScenarioString.substring(
 					statementIndex, statementIndex + snippetLength);
@@ -235,11 +255,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("getSnippetOfStatement", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
 
-	private int calculateTypeLength(boolean isAnd, StatementType thisType) {
+	private int calculateTypeLength(boolean isAnd, StatementType thisType)
+			throws Exception {
 		try {
 			int typeLength;
 			typeLength = isAnd ? "And".length() : thisType.name().length();
@@ -250,12 +273,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("calculateTypeLength", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return 0;
 	}
 
 	private StatementType parseStatementType(StatementType lastType,
-			String snippetOfStatement) {
+			String snippetOfStatement) throws Exception {
 		try {
 			StatementType thisType = null;
 			if (snippetOfStatement.equals("Giv")) {
@@ -274,13 +299,15 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("parseStatementType", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return null;
 	}
 
 	private String parseStatementString(String fullScenarioString,
 			List<Integer> indicesOfStatements, int i, int statementIndex,
-			StatementType thisType, boolean isAnd) {
+			StatementType thisType, boolean isAnd) throws Exception {
 		try {
 			int typeLength;
 			typeLength = calculateTypeLength(isAnd, thisType);
@@ -294,13 +321,15 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("parseStatementString 1", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
 
 	private String parseStatementString(String fullScenarioString,
 			List<Integer> indicesOfStatements, int indexIndex,
-			int statementIndex, int typeLength) {
+			int statementIndex, int typeLength) throws Exception {
 		try {
 			int nextIndexpfStatement = indexIndex + 1 < indicesOfStatements
 					.size() ? indicesOfStatements.get(indexIndex + 1)
@@ -318,12 +347,15 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("parseStatementString 2", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
 
 	private String getFullScenarioString(String featureContents,
-			List<Integer> indicesOfScenarioTags, int index, int thisCharIndex) {
+			List<Integer> indicesOfScenarioTags, int index, int thisCharIndex)
+			throws Exception {
 		try {
 			String fullScenarioString = "";
 			if (index + 1 == indicesOfScenarioTags.size()) {
@@ -340,13 +372,15 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("getFullScenarioString", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
 
 	private void extractTypeAndStatementsToList(File file, String fullContents,
 			List<GWTStatement> outStatements, List<Integer> indicesOfSlashPt,
-			List<Integer> indicesOfDollarSlash) {
+			List<Integer> indicesOfDollarSlash) throws Exception {
 		try {
 			int numberOfStepDefs = indicesOfSlashPt.size();
 			for (int i = 0; i < numberOfStepDefs; i++) {
@@ -383,12 +417,14 @@ public class CukeParser {
 			CukeConsole.println("extractTypeAndStatementsToList on file:"
 					+ file.getAbsolutePath(), true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 	}
 
 	private List<StepAction> parseOutStepActionsForStatement(
 			String fullContents, List<Integer> indicesOfSlashPt,
-			int statementIndex, int endIndexLastStatement) {
+			int statementIndex, int endIndexLastStatement) throws Exception {
 		try {
 			List<StepAction> stepActionsInStatement = new ArrayList<StepAction>();
 			int startStatementSearchBound = endIndexLastStatement;
@@ -410,12 +446,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("parseOutStepActionsForStatement", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return new ArrayList<StepAction>();
 	}
 
 	private String convertSpanishStatementsParagraphToEnglish(
-			String statementsParagraph) {
+			String statementsParagraph) throws Exception {
 		try {
 			List<Integer> bar_indices = indicesOfOccurances(
 					statementsParagraph, "|");
@@ -443,11 +481,14 @@ public class CukeParser {
 			CukeConsole.println("convertSpanishStatementsParagraphToEnglish",
 					true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
 
-	private String getScreenNameFromStatementText(String thisStatement) {
+	private String getScreenNameFromStatementText(String thisStatement)
+			throws Exception {
 		try {
 			List<Integer> indicesOfParamsLeft = indicesOfOccurances(
 					thisStatement, "(");
@@ -464,11 +505,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("getScreenNameFromStatementText", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
 
-	private boolean isASpanishStatementsParagraph(String statementsParagraph) {
+	private boolean isASpanishStatementsParagraph(String statementsParagraph)
+			throws Exception {
 		try {
 			boolean isSpanish = numberOfOccurences(statementsParagraph, "|") == 2;
 			return isSpanish;
@@ -478,12 +522,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("isASpanishStatementsParagraph", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return false;
 	}
 
 	private List<StepAction> getStatementsFromStatementsParagraph(
-			String statementsParagraph) {
+			String statementsParagraph) throws Exception {
 		try {
 			List<StepAction> allActionsForStep = new ArrayList<StepAction>();
 
@@ -518,12 +564,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("getStatementsFromStatementsParagraph", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return new ArrayList<StepAction>();
 	}
 
 	private StatementType determineStatementTypeFromSubstring(
-			String substringOfType) {
+			String substringOfType) throws Exception {
 		try {
 			StatementType type = null;
 			if (substringOfType.contains(GIVEN)) {
@@ -540,12 +588,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("determineStatementTypeFromSubstring", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return null;
 	}
 
 	private String getSubStringForStepDefAtStatementIndex(String fullContents,
-			int indexEnd) {
+			int indexEnd) throws Exception {
 		try {
 			int maxBackTrack = 20;
 			int backTrackLength = indexEnd < maxBackTrack ? indexEnd
@@ -560,11 +610,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("getSubStringForStepDefAtStatementIndex", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
 	}
 
-	private static int numberOfOccurences(String str, String findStr) {
+	private static int numberOfOccurences(String str, String findStr)
+			throws Exception {
 		try {
 			int lastIndex = 0;
 			int count = 0;
@@ -585,12 +638,14 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("numberOfOccurences", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return 0;
 	}
 
 	public File findStepFileForStatement(CukeFileReader reader,
-			GWTStatement gwtStatement) {
+			GWTStatement gwtStatement) throws Exception {
 		try {
 			File[] stepFiles = reader.getAllStepDefinitionFiles();
 			String theStepString = gwtStatement.slashToSlashStatement();
@@ -616,6 +671,8 @@ public class CukeParser {
 					+ CommonRips.CONSOLE_STR_ERROR_GENERAL_STRING, true);
 			CukeConsole.println("findStepFileForStatement", true);
 			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
 		}
 		return null;
 	}

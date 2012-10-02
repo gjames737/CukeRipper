@@ -20,19 +20,25 @@ public class SparkView {
 	public static void main(String[] args) {
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
-		reader = new CukeFileReader("C:" + File.separator + "TFSBuild"
-				+ File.separator + "CoPilot" + File.separator + "Trunk"
-				+ File.separator + "CoPilotCukes");
-		featureParser = new FeatureFileParser(reader);
-		stepParser = new StepFileParser(reader);
+		try {
+			reader = new CukeFileReader("C:" + File.separator + "TFSBuild"
+					+ File.separator + "CoPilot" + File.separator + "Trunk"
+					+ File.separator + "CoPilotCukes");
 
-		showFeatures();
+			featureParser = new FeatureFileParser(reader);
+			stepParser = new StepFileParser(reader);
 
-		showStepDefs();
+			showFeatures();
+
+			showStepDefs();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
-	private static void showStepDefs() {
+	private static void showStepDefs() throws Exception {
 		File[] stepFiles = reader.getAllStepDefinitionFiles();
 		System.err.println("\nStep def files:");
 		for (File file : stepFiles) {
@@ -60,7 +66,7 @@ public class SparkView {
 
 	}
 
-	private static void showFeatures() {
+	private static void showFeatures() throws Exception {
 
 		File[] featureFiles = reader.getAllFeatureFiles();
 
