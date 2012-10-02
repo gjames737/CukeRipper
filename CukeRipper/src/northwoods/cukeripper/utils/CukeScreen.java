@@ -61,7 +61,9 @@ public class CukeScreen {
 
 	@Override
 	public String toString() {
-		return getName();
+		String fileNameStr = screenFile != null ? " [" + screenFile.getName()
+				+ "]" : "";
+		return getName() + fileNameStr;
 	}
 
 	public File getScreenFile() {

@@ -1,7 +1,11 @@
 package northwoods.cukeripper.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import northwoods.cukeripper.utils.parsing.CukeConsole;
+import northwoods.cukeripper.utils.parsing.CukeParser;
 
 public class LoadedCukes {
 
@@ -47,5 +51,28 @@ public class LoadedCukes {
 
 	public static FeatureBuilder getFeatureBuilder() {
 		return featureBuilder;
+	}
+
+	public static void attachScreensToFiles(CukeFileReader reader,
+			CukeParser parser) {
+		File[] allScreenFiles = reader.getAllScreenFiles();
+		for (CukeScreen screen : screens) {
+			if (screen.getScreenFile() == null) {
+				boolean found = false;
+				for (File screenFile : allScreenFiles) {
+					if (parser.fileBelongsToScreen(reader, screen.getName(),
+							screenFile)) {
+						screen.setScreenFile(screenFile);
+						found = true;
+					}
+				}
+				if (!found) {
+					CukeConsole.println("           "
+							+ CukeConsole.MSG_COULD_NOT_FIND_FILE_FOR_SCREEN
+							+ ": " + screen.getName(), false);
+				}
+			}
+		}
+
 	}
 }

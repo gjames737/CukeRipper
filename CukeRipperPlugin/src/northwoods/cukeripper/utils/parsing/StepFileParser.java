@@ -5,6 +5,7 @@ import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.LoadedCukes;
 
 public class StepFileParser {
 
@@ -28,7 +29,7 @@ public class StepFileParser {
 		String fullContents = getStepFileContents(file);
 		List<GWTStatement> statements = parser.parseStatementsFromStepFile(
 				file, fullContents);
-
+		LoadedCukes.attachScreensToFiles(reader, parser);
 		return statements;
 	}
 

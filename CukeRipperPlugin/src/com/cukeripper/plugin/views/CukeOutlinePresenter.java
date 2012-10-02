@@ -5,6 +5,7 @@ import java.io.File;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
@@ -68,8 +69,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		hookClickActions();
 	}
 
-	private void handleTreeItemClick() {
-		getCurrentFeatureTreeSelection();
+	private void handleFeatureTreeItemClick() {
 		Object obj = getCurrentFeatureTreeSelection();
 		if (obj instanceof CukeFeature) {
 			handleFeatureSingleClick((CukeFeature) obj);
@@ -78,6 +78,19 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		} else if (obj instanceof GWTStatement) {
 			handleStatementSingleClick((GWTStatement) obj);
 		}
+	}
+
+	private void handleSupportScreenTreeItemDoubleClick() {
+		Object obj = getCurrentSuppotScreensTreeSelection();
+		if (obj instanceof CukeScreen) {
+			handleCukeScreenDoubleClick((CukeScreen) obj);
+		}
+	}
+
+	private void handleCukeScreenDoubleClick(CukeScreen screen) {
+		File screenFile = screen.getScreenFile();
+		if (screenFile != null)
+			view.openEditorOnFile(screenFile);
 	}
 
 	private void handleFeatureSingleClick(CukeFeature feature) {
@@ -98,6 +111,11 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	private Object getCurrentFeatureTreeSelection() {
 		ISelection selection = view.getFeatureTree().getSelection();
+		return ((IStructuredSelection) selection).getFirstElement();
+	}
+
+	private Object getCurrentSuppotScreensTreeSelection() {
+		ISelection selection = view.getSupportScreensTree().getSelection();
 		return ((IStructuredSelection) selection).getFirstElement();
 	}
 
@@ -146,11 +164,18 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 						featureTreeDoubleClickAction.run();
 					}
 				});
+		view.getSupportScreensTree().addDoubleClickListener(
+				new IDoubleClickListener() {
+					@Override
+					public void doubleClick(DoubleClickEvent event) {
+						handleSupportScreenTreeItemDoubleClick();
+					}
+				});
 		view.getFeatureTree().addSelectionChangedListener(
 				new ISelectionChangedListener() {
 					@Override
 					public void selectionChanged(SelectionChangedEvent event) {
-						handleTreeItemClick();
+						handleFeatureTreeItemClick();
 					}
 				});
 

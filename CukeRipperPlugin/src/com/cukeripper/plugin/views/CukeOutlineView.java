@@ -128,6 +128,10 @@ public class CukeOutlineView extends ViewPart {
 		return treeViewer;
 	}
 
+	public TreeViewer getSupportScreensTree() {
+		return treeViewer_SupportScreens;
+	}
+
 	public void showMessage(String message) {
 		MessageDialog.openInformation(treeViewer.getControl().getShell(),
 				"Sample View", message);
@@ -175,4 +179,5 @@ public class CukeOutlineView extends ViewPart {
 	public void setCurrentFileRootPath(String string) {
 		txtRootFile.setText(string);
 	}
+
 }

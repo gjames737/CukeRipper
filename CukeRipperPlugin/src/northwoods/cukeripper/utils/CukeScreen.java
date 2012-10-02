@@ -5,6 +5,7 @@ import static northwoods.cukeripper.utils.CommonRips.CLASS;
 import static northwoods.cukeripper.utils.CommonRips.END;
 import static northwoods.cukeripper.utils.CommonRips.TODO;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class CukeScreen {
 
 	private List<ScreenMethod> methodList;
 	private String name;
+	private File screenFile;
 
 	public CukeScreen(String _name) {
 		this.name = _name;
@@ -59,6 +61,16 @@ public class CukeScreen {
 
 	@Override
 	public String toString() {
-		return getName();
+		String fileNameStr = screenFile != null ? " [" + screenFile.getName()
+				+ "]" : "";
+		return getName() + fileNameStr;
+	}
+
+	public File getScreenFile() {
+		return screenFile;
+	}
+
+	public void setScreenFile(File _screenFile) {
+		this.screenFile = _screenFile;
 	}
 }

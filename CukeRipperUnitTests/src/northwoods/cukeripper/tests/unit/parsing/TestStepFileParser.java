@@ -116,6 +116,8 @@ public class TestStepFileParser {
 				assertThat(cukeScreen.getScreenFile(), is(notNullValue()));
 				assertThat(cukeScreen.getScreenFile().getName(),
 						is(screenFiles[0].getName()));
+				assertThat(cukeScreen.toString(), is(cukeScreen.getName()
+						+ " [" + screenFiles[0].getName() + "]"));
 			}
 		}
 	}

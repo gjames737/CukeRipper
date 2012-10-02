@@ -786,4 +786,14 @@ public class CukeParser {
 		System.out.println(mark);
 	}
 
+	public boolean fileBelongsToScreen(CukeFileReader reader, String name,
+			File screenFile) {
+		String contents = reader.readFullFileContents(screenFile);
+		contents = contents.replaceAll("\\s+", "");
+		contents = contents.replace("\n", "");
+		String classAndName = CommonRips.CLASS + name;
+		boolean belongs = contents.contains(classAndName);
+		return belongs;
+	}
+
 }
