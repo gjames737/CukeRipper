@@ -727,51 +727,67 @@ public class CukeParser {
 	}
 
 	private String cleanOutExtraWordingCodes(String contents) {
-		String cleaned = contents;
 
 		try {
-			List<Integer> indicesOfParCloseQ = indicesOfOccurances(cleaned,
-					CommonRips.PAREN_CLOSE_QUESTION);
-			List<Integer> indicesOfParOpen = indicesOfOccurances(cleaned, "(");
-			List<Integer[]> openMappedToCloseQ = new ArrayList<Integer[]>();
-			for (int i = 0; i < indicesOfParCloseQ.size(); i++) {
 
-				Integer icq = indicesOfParCloseQ.get(i);
-				int closestDistance = 100000;
-				int closestPOindexIO = 0;
-				for (int j = 0; j < indicesOfParOpen.size(); j++) {
-					Integer io = indicesOfParOpen.get(j);
-					int distance = icq - io;
-					if (distance > 0 && distance < closestDistance) {
-						closestDistance = distance;
-						closestPOindexIO = io;
-					}
-				}
-				if (icq > 0 && closestPOindexIO > 0 && closestPOindexIO < icq)
-					openMappedToCloseQ.add(new Integer[] { closestPOindexIO,
-							(icq + 2) });
-			}
+			String startMatcher = "(";
+			String endMatcher = CommonRips.PAREN_CLOSE_QUESTION;
+			boolean leaveMarkers = false;
 
-			for (int i = openMappedToCloseQ.size() - 1; i >= 0; i--) {
-				Integer[] indices = openMappedToCloseQ.get(i);
-				String replacement = "";
-				int length = indices[1] - indices[0];
-				for (int j = 0; j < length; j++) {
-					replacement += " ";
-				}
-				String toReplace = cleaned.substring(indices[0], indices[1]);
-				cleaned = cleaned.replace(toReplace, replacement);
-				cleaned = cleaned.replaceAll("\\s+", "");
-				cleaned = cleaned.replace(CommonRips.SLASH_POINT, "").replace(
-						CommonRips.DOLLAR_SLASH, "");
-			}
+			String cleaned = cleanOutMatches(contents, startMatcher,
+					endMatcher, leaveMarkers);
 
+			return cleaned;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// printWithMarkings(cleaned, ":");
 
+		return contents;
+	}
+
+	private String cleanOutMatches(String contents, String startMatcher,
+			String endMatcher, boolean leaveMarkers) throws Exception {
+		String cleaned = contents;
+		List<Integer> indicesOfEndMatcher = indicesOfOccurances(cleaned,
+				endMatcher);
+		List<Integer> indicesOfStartMatcher = indicesOfOccurances(cleaned,
+				startMatcher);
+		List<Integer[]> mappedStartEndIndices = new ArrayList<Integer[]>();
+		for (int i = 0; i < indicesOfEndMatcher.size(); i++) {
+
+			Integer icq = indicesOfEndMatcher.get(i);
+			int closestDistance = 100000;
+			int closestPOindexIO = 0;
+			for (int j = 0; j < indicesOfStartMatcher.size(); j++) {
+				Integer io = indicesOfStartMatcher.get(j);
+				int distance = icq - io;
+				if (distance > 0 && distance < closestDistance) {
+					closestDistance = distance;
+					closestPOindexIO = io;
+				}
+			}
+			if (icq > 0 && closestPOindexIO > 0 && closestPOindexIO < icq)
+				mappedStartEndIndices.add(new Integer[] { closestPOindexIO,
+						(icq + 2) });
+		}
+
+		for (int i = mappedStartEndIndices.size() - 1; i >= 0; i--) {
+			Integer[] indices = mappedStartEndIndices.get(i);
+			String replacement = "";
+			int length = indices[1] - indices[0];
+			for (int j = 0; j < length; j++) {
+				replacement += "^";
+			}
+			String toReplace = cleaned.substring(indices[0], indices[1]);
+			cleaned = cleaned.replace(toReplace, replacement);
+			cleaned = cleaned.replaceAll("\\s+", "");
+			if (!leaveMarkers)
+				cleaned = cleaned.replace("^", "");
+			cleaned = cleaned.replace(CommonRips.SLASH_POINT, "").replace(
+					CommonRips.DOLLAR_SLASH, "");
+		}
 		return cleaned;
 	}
 

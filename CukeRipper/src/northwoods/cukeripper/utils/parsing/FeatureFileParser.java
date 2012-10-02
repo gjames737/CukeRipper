@@ -45,13 +45,12 @@ public class FeatureFileParser {
 		List<Integer> indicesOfScenarioTags = parser.indicesOfOccurances(
 				featureContents, scenarioTag);
 		int numberOfScenarios = indicesOfScenarioTags.size();
-		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
-		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
+		// System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
+		// System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
 		for (int i = 0; i < numberOfScenarios; i++) {
 			CukeScenario scenario = parser.parseScenario(file, featureContents,
 					scenarioTag, indicesOfScenarioTags, i);
-			System.out
-					.println("=================================================");
+			// System.out.println("=================================================");
 			GWTStatement[] statements = scenario.getStatementsArray();
 			for (int j = 0; j < statements.length; j++) {
 				GWTStatement gwtStatement = statements[j];
