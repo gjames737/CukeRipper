@@ -13,6 +13,7 @@ public class CukeScenario {
 	private List<GWTStatement> statements;
 	private String name;
 	private File file;
+	private int lineNumber = -1;
 
 	public CukeScenario(String name, File f) {
 		this.name = name;
@@ -64,5 +65,13 @@ public class CukeScenario {
 
 	public File getFile() {
 		return file;
+	}
+
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
+	public int getLineNumber() {
+		return this.lineNumber;
 	}
 }

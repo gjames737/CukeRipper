@@ -20,6 +20,8 @@ public class FullTexts_Special {
 		FEATURE_0_SCENARIOS = new CukeScenario[] {
 				new CukeScenario("Special scenario 0 with extra wording", null),
 				new CukeScenario("Special scenario 1 with extra wording", null) };
+		FEATURE_0_SCENARIOS[0].setLineNumber(6);
+
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
 				featureFile(), StatementType.GIVEN, "I am doing something EW"));
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
@@ -34,7 +36,7 @@ public class FullTexts_Special {
 				featureFile(), StatementType.WHEN, "I do this"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
 				featureFile(), StatementType.THEN, "I get that"));
-
+		FEATURE_0_SCENARIOS[1].setLineNumber(11);
 	}
 
 	public static final int FEATURE_0_NUMBER_OF_SCENARIOS = 2;

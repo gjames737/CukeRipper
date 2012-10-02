@@ -28,11 +28,13 @@ public class CukeParser {
 			throws Exception {
 		try {
 			int thisCharIndex = indicesOfScenarioTags.get(index);
-
+			int lineNumber = numberOfBreaksBefore(featureContents,
+					thisCharIndex);
 			String scenarioName = getObjectNameFromContents(thisCharIndex,
 					scenarioTag, featureContents);
 			scenarioName = scenarioName.trim();
 			CukeScenario scenario = new CukeScenario(scenarioName, file);
+			scenario.setLineNumber(lineNumber);
 			//
 			String fullScenarioString = getFullScenarioString(featureContents,
 					indicesOfScenarioTags, index, thisCharIndex);
@@ -358,6 +360,7 @@ public class CukeParser {
 			throws Exception {
 		try {
 			String fullScenarioString = "";
+
 			if (index + 1 == indicesOfScenarioTags.size()) {
 				fullScenarioString = featureContents.substring(thisCharIndex);
 			} else {
@@ -376,6 +379,25 @@ public class CukeParser {
 				throw e;
 		}
 		return CommonRips.MSG_NO_PARSABLE_CONTENT;
+	}
+
+	private int numberOfBreaksBefore(String featureContents, int startOfScenario)
+			throws Exception {
+		printWithMarkings(featureContents, "##");
+		int endSubStrIndex = startOfScenario;
+		if (featureContents.length() - 1 > endSubStrIndex)
+			endSubStrIndex++;
+
+		String sub = featureContents.substring(0, endSubStrIndex);
+		try {
+			return numberOfOccurences(sub, "\n") + 1;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			if (THROW_ERRORS)
+				throw e;
+		}
+		return 0;
 	}
 
 	private void extractTypeAndStatementsToList(File file, String fullContents,

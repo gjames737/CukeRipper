@@ -7,6 +7,7 @@ import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special
 import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.SCREEN_0;
 import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.STEP_DEF_0;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -80,6 +81,18 @@ public class TestFeatureFileParser_Special {
 			CukeScenario cukeScenario = theScenarios.get(i);
 			assertThat(cukeScenario.getName(),
 					is(FEATURE_0_SCENARIOS[i].getName()));
+		}
+	}
+
+	@Test
+	public void itCreatesAFeatureFromAFileWithTheCorrectScenarioLineNumbers() {
+		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
+		int size = theScenarios.size();
+		for (int i = 0; i < size; i++) {
+			CukeScenario cukeScenario = theScenarios.get(i);
+			assertThat(cukeScenario.getLineNumber(), is(not(-1)));
+			assertThat(cukeScenario.getLineNumber(),
+					is(FEATURE_0_SCENARIOS[i].getLineNumber()));
 		}
 	}
 
