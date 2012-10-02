@@ -7,7 +7,9 @@ import northwoods.cukeripper.utils.StepAction;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.cukeripper.plugin.views.ICukeParsingListener;
 import com.cukeripper.plugin.views.SupportScreenTreeContentProvider;
 
 public class TestSupportScreenContentProvider extends BaseParseTesting {
@@ -19,7 +21,7 @@ public class TestSupportScreenContentProvider extends BaseParseTesting {
 		super.Setup();
 
 		supportScreenTreeContentProvider = new SupportScreenTreeContentProvider(
-				reader);
+				Mockito.mock(ICukeParsingListener.class), reader);
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

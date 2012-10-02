@@ -21,7 +21,8 @@ public class StepFileParser {
 		return reader;
 	}
 
-	public List<GWTStatement> getGWTStatementsFromFile(File file) {
+	public List<GWTStatement> getGWTStatementsFromFile(File file)
+			throws Exception {
 		CukeConsole.println(CONSOLE_STR_PARSING_STATEMENTS_FROM_FILE + " "
 				+ file.getAbsolutePath(), false);
 		String fullContents = getStepFileContents(file);

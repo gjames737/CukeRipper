@@ -18,4 +18,5 @@ public class CommonRips {
 	public static final String MSG_NO_PARSABLE_CONTENT = "   --- no parsable content ---   ";
 	public static final String CONSOLE_STR_ERROR_GENERAL_STRING = "An error occured in the string operation";
 	public static final String MSG_NO_STEP_FILE_FOUND_FOR_STATEMENT = "No step file found for statement";
+	public static final String PAREN_CLOSE_QUESTION = ")?";
 }

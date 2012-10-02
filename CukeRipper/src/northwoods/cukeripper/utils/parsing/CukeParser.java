@@ -696,8 +696,10 @@ public class CukeParser {
 				|| cleanContents.contains(theStepStringNoSpaces)
 				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces);
 		if (!isInFile) {
-			printWithMarkings(isInFile + "\n" + theStepStringNoSpaces + "\n"
-					+ contentsNoParensNoSpaces, "@");
+			CukeConsole.println("Could not find step file for: "
+					+ theStepString, false);
+			// printWithMarkings(isInFile + "\n" + theStepStringNoSpaces + "\n"
+			// + contentsNoParensNoSpaces, "@");
 		}
 		return isInFile;
 	}

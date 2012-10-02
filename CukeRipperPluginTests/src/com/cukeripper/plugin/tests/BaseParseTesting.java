@@ -1,5 +1,6 @@
 package com.cukeripper.plugin.tests;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,8 +36,13 @@ public class BaseParseTesting {
 		setupTestFeatureFiles();
 		setupTestCukeFeatures();
 		setupParser();
-		when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_0))
-				.thenReturn(testFeatures[0]);
+		try {
+			when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_0))
+					.thenReturn(testFeatures[0]);
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
 
 	private void setupReader() {
@@ -66,10 +72,16 @@ public class BaseParseTesting {
 	private void setupParser() {
 		featureFileParser = mock(FeatureFileParser.class);
 
-		when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_0))
-				.thenReturn(testFeatures[0]);
-		when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_1))
-				.thenReturn(testFeatures[1]);
+		try {
+			when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_0))
+					.thenReturn(testFeatures[0]);
+
+			when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_1))
+					.thenReturn(testFeatures[1]);
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
 	}
 
 	private void setupTestCukeFeatures() {

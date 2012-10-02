@@ -13,8 +13,10 @@ import northwoods.cukeripper.utils.GWTStatement;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.cukeripper.plugin.views.FeatureTreeContentProvider;
+import com.cukeripper.plugin.views.ICukeParsingListener;
 
 public class TestFeatureTreeContentProvider extends BaseParseTesting {
 
@@ -25,7 +27,8 @@ public class TestFeatureTreeContentProvider extends BaseParseTesting {
 		super.Setup();
 
 		feature_treeContentProvider = new FeatureTreeContentProvider(
-				new File[] { TEST_FEATURE_FILE_0, TEST_FEATURE_FILE_1 },
+				Mockito.mock(ICukeParsingListener.class), new File[] {
+						TEST_FEATURE_FILE_0, TEST_FEATURE_FILE_1 },
 				featureFileParser);
 	}
 

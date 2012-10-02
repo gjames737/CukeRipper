@@ -18,12 +18,12 @@ public class CukeFileReader {
 	private File rootOfAllFiles;
 	private List<File> allFiles;
 
-	public CukeFileReader(String root) {
+	public CukeFileReader(String root) throws Exception {
 		this.rootOfAllFiles = new File(root);
 		reloadRoot();
 	}
 
-	public void reloadRoot() {
+	public void reloadRoot() throws Exception {
 		allFiles = new ArrayList<File>();
 		if (rootOfAllFiles.exists() && rootOfAllFiles.isDirectory()) {
 			loadAllFilesFromDirectory(rootOfAllFiles);
@@ -31,13 +31,13 @@ public class CukeFileReader {
 		}
 	}
 
-	private void resetFeatureBuilder() {
+	private void resetFeatureBuilder() throws Exception {
 		if (LoadedCukes.getFeatureBuilder() == null) {
 			loadFeatureBuilder();
 		}
 	}
 
-	public void loadFeatureBuilder() {
+	public void loadFeatureBuilder() throws Exception {
 		FeatureBuilder featureBuilder = new FeatureBuilder();
 
 		File[] featureFiles = getAllFeatureFiles();
