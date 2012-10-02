@@ -20,6 +20,7 @@ import northwoods.cukeripper.utils.StepAction;
 
 public class CukeParser {
 
+	private static final String REGEX_MARKER = "~.{]";
 	public String CONSOLE_STR_ERROR_PARSING_SCENARIO_IN_FILE;
 	public static boolean THROW_ERRORS = false;
 
@@ -704,47 +705,65 @@ public class CukeParser {
 	}
 
 	private boolean isStatementFoundInStepFile(CukeFileReader reader,
-			String theStepString, File stepFile) {
+			String theStepString, File stepFile) throws Exception {
 		boolean isInFile = false;
 		String contents = reader.readFullFileContents(stepFile);
-		String contentsNoParensNoSpaces = contents.replace("(", "")
-				.replace(")?", "").replace(CommonRips.SLASH_POINT, "")
-				.replace(CommonRips.DOLLAR_SLASH, "").replaceAll("\\s+", "");
+		String contentsNoParensNoSpaces = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
 		String cleanContents = cleanOutExtraWordingCodes(contents);
+		String markedRegexStepString = cleanOutQuotedInStep(theStepString);
+		String regexMarkedStepDefContents = setInRegexMarkersAndCleanStepDefContents(cleanContents);
+
 		String theStepStringNoSpaces = theStepString.replaceAll("\\s+", "")
 				.replace(CommonRips.SLASH_POINT, "")
 				.replace(CommonRips.DOLLAR_SLASH, "");
 		isInFile = contents.contains(theStepString)
 				|| cleanContents.contains(theStepStringNoSpaces)
-				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces);
+				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces)
+				|| regexMarkedStepDefContents.contains(markedRegexStepString);
+
+		if (theStepString.contains("\""))
+			printWithMarkings(isInFile + "\n" + markedRegexStepString + "\n"
+					+ regexMarkedStepDefContents, "@");
 		if (!isInFile) {
 			CukeConsole.println("Could not find step file for: "
 					+ theStepString, false);
-			// printWithMarkings(isInFile + "\n" + theStepStringNoSpaces + "\n"
-			// + contentsNoParensNoSpaces, "@");
+
 		}
 		return isInFile;
 	}
 
-	private String cleanOutExtraWordingCodes(String contents) {
+	private String cleanFromParensSpacesSlashPointAndDollarSlash(String contents) {
+		return contents.replace("(", "").replace(")?", "")
+				.replace(CommonRips.SLASH_POINT, "")
+				.replace(CommonRips.DOLLAR_SLASH, "").replaceAll("\\s+", "");
+	}
 
-		try {
+	private String setInRegexMarkersAndCleanStepDefContents(String contents) {
+		String c = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
+		c = c.replace(CommonRips.REGEX_INSERT, REGEX_MARKER);
+		// TODO
+		printWithMarkings(contents + "\n" + c, "$$");
+		return c;
+	}
 
-			String startMatcher = "(";
-			String endMatcher = CommonRips.PAREN_CLOSE_QUESTION;
-			boolean leaveMarkers = false;
-
-			String cleaned = cleanOutMatches(contents, startMatcher,
-					endMatcher, leaveMarkers);
-
-			return cleaned;
-		} catch (Exception e) {
-			e.printStackTrace();
+	private String cleanOutQuotedInStep(String stepString) throws Exception {
+		if (!stepString.contains("\"")) {
+			return stepString;
 		}
 
-		// printWithMarkings(cleaned, ":");
+		String cleaned = cleanOutMatches(stepString, "\"", "\"", true);
+		while (cleaned.contains(REGEX_MARKER + REGEX_MARKER)) {
+			cleaned = cleaned
+					.replace(REGEX_MARKER + REGEX_MARKER, REGEX_MARKER);
+		}
+		// printWithMarkings(cleaned, "$ %~");
+		return cleanFromParensSpacesSlashPointAndDollarSlash(cleaned);
+	}
 
-		return contents;
+	private String cleanOutExtraWordingCodes(String contents) throws Exception {
+		String cleaned = cleanOutMatches(contents, "(",
+				CommonRips.PAREN_CLOSE_QUESTION, false);
+		return cleaned;
 	}
 
 	private String cleanOutMatches(String contents, String startMatcher,
@@ -778,13 +797,16 @@ public class CukeParser {
 			String replacement = "";
 			int length = indices[1] - indices[0];
 			for (int j = 0; j < length; j++) {
-				replacement += "^";
+				replacement += REGEX_MARKER;
 			}
 			String toReplace = cleaned.substring(indices[0], indices[1]);
 			cleaned = cleaned.replace(toReplace, replacement);
 			cleaned = cleaned.replaceAll("\\s+", "");
-			if (!leaveMarkers)
-				cleaned = cleaned.replace("^", "");
+			if (leaveMarkers) {
+
+			} else {
+				cleaned = cleaned.replace(REGEX_MARKER, "");
+			}
 			cleaned = cleaned.replace(CommonRips.SLASH_POINT, "").replace(
 					CommonRips.DOLLAR_SLASH, "");
 		}
