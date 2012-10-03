@@ -20,6 +20,7 @@ import northwoods.cukeripper.utils.StepAction;
 
 public class CukeParser {
 
+	private static final String REGEX_MARKER = "~.{]";
 	public String CONSOLE_STR_ERROR_PARSING_SCENARIO_IN_FILE;
 	public static boolean THROW_ERRORS = false;
 
@@ -383,7 +384,7 @@ public class CukeParser {
 
 	private int numberOfBreaksBefore(String featureContents, int startOfScenario)
 			throws Exception {
-		printWithMarkings(featureContents, "##");
+		// printWithMarkings(featureContents, "##");
 		int endSubStrIndex = startOfScenario;
 		if (featureContents.length() - 1 > endSubStrIndex)
 			endSubStrIndex++;
@@ -679,8 +680,8 @@ public class CukeParser {
 						theStepString, stepFile);
 
 				if (isInFile) {
-					System.out.println("Found step file for: "
-							+ gwtStatement.slashToSlashStatement());
+					// System.out.println("Found step file for: "
+					// + gwtStatement.slashToSlashStatement());
 					return stepFile;
 				}
 			}
@@ -704,74 +705,127 @@ public class CukeParser {
 	}
 
 	private boolean isStatementFoundInStepFile(CukeFileReader reader,
-			String theStepString, File stepFile) {
+			String theStepString, File stepFile) throws Exception {
 		boolean isInFile = false;
 		String contents = reader.readFullFileContents(stepFile);
-		String contentsNoParensNoSpaces = contents.replace("(", "")
-				.replace(")?", "").replace(CommonRips.SLASH_POINT, "")
-				.replace(CommonRips.DOLLAR_SLASH, "").replaceAll("\\s+", "");
+		String contentsNoParensNoSpaces = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
 		String cleanContents = cleanOutExtraWordingCodes(contents);
+		String markedRegexStepString = cleanOutQuotedInStep(theStepString);
+		String regexMarkedStepDefContents = setInRegexMarkersAndCleanStepDefContents(cleanContents);
+
 		String theStepStringNoSpaces = theStepString.replaceAll("\\s+", "")
 				.replace(CommonRips.SLASH_POINT, "")
 				.replace(CommonRips.DOLLAR_SLASH, "");
 		isInFile = contents.contains(theStepString)
 				|| cleanContents.contains(theStepStringNoSpaces)
-				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces);
+				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces)
+				|| regexMarkedStepDefContents.contains(markedRegexStepString);
+
+		// if (theStepString.contains("\"")) {
+		// printWithMarkings(isInFile + "\n" + markedRegexStepString + "\n"
+		// + regexMarkedStepDefContents, "@");
+		// }
+
 		if (!isInFile) {
 			CukeConsole.println("Could not find step file for: "
 					+ theStepString, false);
-			// printWithMarkings(isInFile + "\n" + theStepStringNoSpaces + "\n"
-			// + contentsNoParensNoSpaces, "@");
+
 		}
 		return isInFile;
 	}
 
-	private String cleanOutExtraWordingCodes(String contents) {
-		String cleaned = contents;
+	private String cleanFromParensSpacesSlashPointAndDollarSlash(String contents) {
+		return contents.replace("(", "").replace(")?", "")
+				.replace(CommonRips.SLASH_POINT, "")
+				.replace(CommonRips.DOLLAR_SLASH, "").replaceAll("\\s+", "");
+	}
+
+	private String setInRegexMarkersAndCleanStepDefContents(String contents) {
+		String c1 = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
+		if (!c1.contains("\""))
+			return c1;
 
 		try {
-			List<Integer> indicesOfParCloseQ = indicesOfOccurances(cleaned,
-					CommonRips.PAREN_CLOSE_QUESTION);
-			List<Integer> indicesOfParOpen = indicesOfOccurances(cleaned, "(");
-			List<Integer[]> openMappedToCloseQ = new ArrayList<Integer[]>();
-			for (int i = 0; i < indicesOfParCloseQ.size(); i++) {
-
-				Integer icq = indicesOfParCloseQ.get(i);
-				int closestDistance = 100000;
-				int closestPOindexIO = 0;
-				for (int j = 0; j < indicesOfParOpen.size(); j++) {
-					Integer io = indicesOfParOpen.get(j);
-					int distance = icq - io;
-					if (distance > 0 && distance < closestDistance) {
-						closestDistance = distance;
-						closestPOindexIO = io;
-					}
-				}
-				if (icq > 0 && closestPOindexIO > 0 && closestPOindexIO < icq)
-					openMappedToCloseQ.add(new Integer[] { closestPOindexIO,
-							(icq + 2) });
-			}
-
-			for (int i = openMappedToCloseQ.size() - 1; i >= 0; i--) {
-				Integer[] indices = openMappedToCloseQ.get(i);
-				String replacement = "";
-				int length = indices[1] - indices[0];
-				for (int j = 0; j < length; j++) {
-					replacement += " ";
-				}
-				String toReplace = cleaned.substring(indices[0], indices[1]);
-				cleaned = cleaned.replace(toReplace, replacement);
-				cleaned = cleaned.replaceAll("\\s+", "");
-				cleaned = cleaned.replace(CommonRips.SLASH_POINT, "").replace(
-						CommonRips.DOLLAR_SLASH, "");
-			}
-
+			c1 = cleanOutMatches(c1, "\"", "\"", true);
+			return cleanOutDoubleMarkers(c1);
 		} catch (Exception e) {
 			e.printStackTrace();
+			CukeConsole.println("Error parsing: "
+					+ this.getClass().getCanonicalName()
+					+ "setInRegexMarkersAndCleanStepDefContents", true);
+		}
+		return c1;
+	}
+
+	private String cleanOutQuotedInStep(String stepString) throws Exception {
+		if (!stepString.contains("\"")) {
+			return stepString;
 		}
 
-		// printWithMarkings(cleaned, ":");
+		String cleaned = cleanOutMatches(stepString, "\"", "\"", true);
+		cleaned = cleanOutDoubleMarkers(cleaned);
+		// printWithMarkings(cleaned, "$ %~");
+		return cleanFromParensSpacesSlashPointAndDollarSlash(cleaned);
+	}
 
+	private String cleanOutDoubleMarkers(String cleaned) {
+		while (cleaned.contains(REGEX_MARKER + REGEX_MARKER)) {
+			cleaned = cleaned
+					.replace(REGEX_MARKER + REGEX_MARKER, REGEX_MARKER);
+		}
+		return cleaned;
+	}
+
+	private String cleanOutExtraWordingCodes(String contents) throws Exception {
+		String cleaned = cleanOutMatches(contents, "(",
+				CommonRips.PAREN_CLOSE_QUESTION, false);
+		return cleaned;
+	}
+
+	private String cleanOutMatches(String contents, String startMatcher,
+			String endMatcher, boolean leaveMarkers) throws Exception {
+		String cleaned = contents;
+		List<Integer> indicesOfEndMatcher = indicesOfOccurances(cleaned,
+				endMatcher);
+		List<Integer> indicesOfStartMatcher = indicesOfOccurances(cleaned,
+				startMatcher);
+		List<Integer[]> mappedStartEndIndices = new ArrayList<Integer[]>();
+		for (int i = 0; i < indicesOfEndMatcher.size(); i++) {
+
+			Integer icq = indicesOfEndMatcher.get(i);
+			int closestDistance = 100000;
+			int closestPOindexIO = 0;
+			for (int j = 0; j < indicesOfStartMatcher.size(); j++) {
+				Integer io = indicesOfStartMatcher.get(j);
+				int distance = icq - io;
+				if (distance > 0 && distance < closestDistance) {
+					closestDistance = distance;
+					closestPOindexIO = io;
+				}
+			}
+			if (icq > 0 && closestPOindexIO > 0 && closestPOindexIO < icq)
+				mappedStartEndIndices.add(new Integer[] { closestPOindexIO,
+						(icq + endMatcher.length()) });
+		}
+
+		for (int i = mappedStartEndIndices.size() - 1; i >= 0; i--) {
+			Integer[] indices = mappedStartEndIndices.get(i);
+			String replacement = "";
+			int length = indices[1] - indices[0];
+			for (int j = 0; j < length; j++) {
+				replacement += REGEX_MARKER;
+			}
+			String toReplace = cleaned.substring(indices[0], indices[1]);
+			cleaned = cleaned.replace(toReplace, replacement);
+			cleaned = cleaned.replaceAll("\\s+", "");
+			if (leaveMarkers) {
+
+			} else {
+				cleaned = cleaned.replace(REGEX_MARKER, "");
+			}
+			cleaned = cleaned.replace(CommonRips.SLASH_POINT, "").replace(
+					CommonRips.DOLLAR_SLASH, "");
+		}
 		return cleaned;
 	}
 
