@@ -708,18 +708,27 @@ public class CukeParser {
 			String theStepString, File stepFile) throws Exception {
 		boolean isInFile = false;
 		String contents = reader.readFullFileContents(stepFile);
-		String contentsNoParensNoSpaces = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
-		String cleanContents = cleanOutExtraWordingCodes(contents);
-		String markedRegexStepString = cleanOutQuotedInStep(theStepString);
-		String regexMarkedStepDefContents = setInRegexMarkersAndCleanStepDefContents(cleanContents);
+		String cleanContents = "";
+		String contentsNoParensNoSpaces = "";
 
 		String theStepStringNoSpaces = theStepString.replaceAll("\\s+", "")
 				.replace(CommonRips.SLASH_POINT, "")
 				.replace(CommonRips.DOLLAR_SLASH, "");
-		isInFile = contents.contains(theStepString)
-				|| cleanContents.contains(theStepStringNoSpaces)
-				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces)
-				|| regexMarkedStepDefContents.contains(markedRegexStepString);
+		isInFile = contents.contains(theStepString);
+		if (!isInFile) {
+			contentsNoParensNoSpaces = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
+			cleanContents = cleanOutExtraWordingCodes(contents);
+			isInFile = cleanContents.contains(theStepStringNoSpaces);
+		}
+		if (!isInFile) {
+			isInFile = contentsNoParensNoSpaces.contains(theStepStringNoSpaces);
+		}
+		if (!isInFile) {
+			String markedRegexStepString = cleanOutQuotedInStep(theStepString);
+			String regexMarkedStepDefContents = setInRegexMarkersAndCleanStepDefContents(cleanContents);
+			isInFile = regexMarkedStepDefContents
+					.contains(markedRegexStepString);
+		}
 
 		// if (theStepString.contains("\"")) {
 		// printWithMarkings(isInFile + "\n" + markedRegexStepString + "\n"

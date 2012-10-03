@@ -45,31 +45,29 @@ public class FeatureFileParser {
 		List<Integer> indicesOfScenarioTags = parser.indicesOfOccurances(
 				featureContents, scenarioTag);
 		int numberOfScenarios = indicesOfScenarioTags.size();
-		// System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
-		// System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
 		for (int i = 0; i < numberOfScenarios; i++) {
 			if (CukeFileReader.isAllEventsCanceled())
 				return null;
 			CukeScenario scenario = parser.parseScenario(file, featureContents,
 					scenarioTag, indicesOfScenarioTags, i);
-			// System.out.println("=================================================");
 			GWTStatement[] statements = scenario.getStatementsArray();
 			for (int j = 0; j < statements.length; j++) {
 				if (CukeFileReader.isAllEventsCanceled())
 					return null;
 				GWTStatement gwtStatement = statements[j];
 				if (gwtStatement.getStepFile() == null) {
-					System.out.println(gwtStatement.slashToSlashStatement());
+					CukeConsole.println(gwtStatement.slashToSlashStatement(),
+							false);
 					File stepFile = parser.findStepFileForStatement(reader,
 							gwtStatement);
 					if (stepFile == null) {
-						System.err.println("it is null here");
+						CukeConsole.println("it is null here", true);
 					}
 
 					gwtStatement.setStepFile(stepFile);
 				} else {
-					System.err.println("it already has a step file ["
-							+ gwtStatement.slashToSlashStatement() + "]");
+					CukeConsole.println("it already has a step file ["
+							+ gwtStatement.slashToSlashStatement() + "]", true);
 				}
 			}
 			feature.addScenario(scenario);

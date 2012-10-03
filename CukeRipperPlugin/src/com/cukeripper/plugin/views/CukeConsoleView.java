@@ -54,7 +54,7 @@ public class CukeConsoleView extends ViewPart implements ICukeConsoleListener {
 
 	@Override
 	public void onPrintLn(final String text, boolean error) {
-		Display.getDefault().asyncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				listViewer.add(text);

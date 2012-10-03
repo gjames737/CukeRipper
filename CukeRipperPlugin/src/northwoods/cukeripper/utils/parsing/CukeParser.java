@@ -680,8 +680,9 @@ public class CukeParser {
 		try {
 			File[] stepFiles = reader.getAllStepDefinitionFiles();
 			String theStepString = gwtStatement.slashToSlashStatement();
-			System.err.println("the step string: "
-					+ gwtStatement.slashToSlashStatement());
+			CukeConsole.println(
+					"the step string: " + gwtStatement.slashToSlashStatement(),
+					false);
 			for (int i = 0; i < stepFiles.length; i++) {
 				if (CukeFileReader.isAllEventsCanceled())
 					return new File("");
@@ -718,18 +719,27 @@ public class CukeParser {
 			String theStepString, File stepFile) throws Exception {
 		boolean isInFile = false;
 		String contents = reader.readFullFileContents(stepFile);
-		String contentsNoParensNoSpaces = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
-		String cleanContents = cleanOutExtraWordingCodes(contents);
-		String markedRegexStepString = cleanOutQuotedInStep(theStepString);
-		String regexMarkedStepDefContents = setInRegexMarkersAndCleanStepDefContents(cleanContents);
+		String cleanContents = "";
+		String contentsNoParensNoSpaces = "";
 
 		String theStepStringNoSpaces = theStepString.replaceAll("\\s+", "")
 				.replace(CommonRips.SLASH_POINT, "")
 				.replace(CommonRips.DOLLAR_SLASH, "");
-		isInFile = contents.contains(theStepString)
-				|| cleanContents.contains(theStepStringNoSpaces)
-				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces)
-				|| regexMarkedStepDefContents.contains(markedRegexStepString);
+		isInFile = contents.contains(theStepString);
+		if (!isInFile) {
+			contentsNoParensNoSpaces = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
+			cleanContents = cleanOutExtraWordingCodes(contents);
+			isInFile = cleanContents.contains(theStepStringNoSpaces);
+		}
+		if (!isInFile) {
+			isInFile = contentsNoParensNoSpaces.contains(theStepStringNoSpaces);
+		}
+		if (!isInFile) {
+			String markedRegexStepString = cleanOutQuotedInStep(theStepString);
+			String regexMarkedStepDefContents = setInRegexMarkersAndCleanStepDefContents(cleanContents);
+			isInFile = regexMarkedStepDefContents
+					.contains(markedRegexStepString);
+		}
 
 		// if (theStepString.contains("\"")) {
 		// printWithMarkings(isInFile + "\n" + markedRegexStepString + "\n"
@@ -842,18 +852,18 @@ public class CukeParser {
 		return cleaned;
 	}
 
-	private void printWithMarkings(String contents, String marking) {
-		String mark = "";
-		for (int i = 0; i < 40; i++) {
-			if (CukeFileReader.isAllEventsCanceled())
-				return;
-			mark += marking;
-		}
-		mark = "       " + mark;
-		System.out.println(mark);
-		System.out.println(contents);
-		System.out.println(mark);
-	}
+	// private void printWithMarkings(String contents, String marking) {
+	// String mark = "";
+	// for (int i = 0; i < 40; i++) {
+	// if (CukeFileReader.isAllEventsCanceled())
+	// return;
+	// mark += marking;
+	// }
+	// mark = "       " + mark;
+	// System.out.println(mark);
+	// System.out.println(contents);
+	// System.out.println(mark);
+	// }
 
 	public boolean fileBelongsToScreen(CukeFileReader reader, String name,
 			File screenFile) {

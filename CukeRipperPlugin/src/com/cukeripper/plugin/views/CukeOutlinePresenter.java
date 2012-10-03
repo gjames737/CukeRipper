@@ -34,15 +34,30 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	private CukeFileReader reader;
 	private FeatureFileParser featureParser;
 	private Action featureTreeDoubleClickAction;
+	private String currentFileRootPath;
 
 	private CukeOutlineView view;
 
 	private Job job_handleRefreshEvent;
-	private Thread nonUIThread;
+	private boolean refreshing = false;
 
 	public CukeOutlinePresenter(CukeOutlineView _view) {
-		nonUIThread = new Thread();
 		this.view = _view;
+		job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				long t = System.currentTimeMillis();
+				refreshing = true;
+				setViewToStoppableState();
+				refresh(currentFileRootPath);
+				view.refresh();
+				refreshing = false;
+				long time = (System.currentTimeMillis() - t) / 1000L;
+				System.err.println("::::::::::::::::::" + time
+						+ " secs::::::::::::::::::::::");
+				return Status.OK_STATUS;
+			}
+		};
 		refresh(this.view.getCurrentFileRootPath());
 	}
 
@@ -192,43 +207,30 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	public void handleRefreshEvent(boolean clear) {
 		savePluginSettings();
-		if (job_handleRefreshEvent != null) {
-			if (job_handleRefreshEvent.getJobManager().currentJob() != null) {
-				view.showMessage(job_handleRefreshEvent.getJobManager()
-						.currentJob().getName());
-			} else {
-				view.showMessage("no current job");
-			}
-		}
 
-		final String currentFileRootPath = clear ? "" : this.view
-				.getCurrentFileRootPath();
+		currentFileRootPath = clear ? "" : this.view.getCurrentFileRootPath();
 		if (clear) {
-			refresh(currentFileRootPath);
-			refreshView();
+			Job job_clear = new Job("clear") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					refresh(currentFileRootPath);
+					view.refresh();
+					return Status.OK_STATUS;
+				}
+			};
+			job_clear.schedule();
 			return;
 		} else {
 			setViewToStoppableState();
-
-			job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					setViewToStoppableState();
-					refresh(currentFileRootPath);
-					refreshView();
-					return Status.OK_STATUS;
+			if (job_handleRefreshEvent.getThread() != null) {
+				if (job_handleRefreshEvent.getThread().getName().equals("main")) {
+					throw new RuntimeException("cannot run on main thread");
 				}
+			}
 
-			};
-			job_handleRefreshEvent.setThread(nonUIThread);
 			job_handleRefreshEvent.schedule();
-
 		}
 
-	}
-
-	private void refreshView() {
-		view.refresh();
 	}
 
 	private void setViewToRefreshableState() {
@@ -249,29 +251,20 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		});
 	}
 
-	public void cancelJobs() {
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				CukeFileReader.stopAllEvents();
-
-				resetStopAllEventsAfter(RESET_STOP_EVENTS_DELAY);
-				view.setToDisabledState();
-				if (job_handleRefreshEvent != null)
-					job_handleRefreshEvent.cancel();
-				if (view.getJob_refresh() != null)
-					view.getJob_refresh().cancel();
-			}
-		});
-
+	public void stopJobs() {
+		CukeFileReader.stopAllEvents();
+		resetStopAllEventsAfter();
+		view.setToDisabledState();
 	}
 
-	private void resetStopAllEventsAfter(final long delay) {
+	private void resetStopAllEventsAfter() {
 
 		Job job_resetStopAllEvents = new Job("job_resetStopAllEvents23432324") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				// Do something long running
+				while (refreshing) {
+					System.err.println("~~~~~~~~");
+				}
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -279,7 +272,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 					}
 				});
 				try {
-					Thread.sleep(delay);
+					Thread.sleep(RESET_STOP_EVENTS_DELAY);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -289,7 +282,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 				return Status.OK_STATUS;
 			}
 		};
-		job_resetStopAllEvents.schedule(delay);
+		job_resetStopAllEvents.schedule();
 	}
 
 	void savePluginSettings() {
@@ -361,7 +354,8 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		view.showMessage(msg);
 	}
 
-	public Thread getNonUIThread() {
-		return nonUIThread;
+	public void handleStopBtnEvent() {
+		stopJobs();
 	}
+
 }

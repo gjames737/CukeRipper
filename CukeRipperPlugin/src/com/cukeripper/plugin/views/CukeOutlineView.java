@@ -4,10 +4,6 @@ import java.io.File;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -41,7 +37,7 @@ public class CukeOutlineView extends ViewPart {
 	private Button btnStop;
 	private Button btnRefresh;
 
-	private Job job_refresh;
+	// private Job job_refresh;
 
 	public CukeOutlineView() {
 		presenter = new CukeOutlinePresenter(this);
@@ -71,7 +67,7 @@ public class CukeOutlineView extends ViewPart {
 		btnStop.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				presenter.cancelJobs();
+				presenter.handleStopBtnEvent();
 			}
 		});
 		btnStop.setLayoutData(new FormData());
@@ -88,7 +84,6 @@ public class CukeOutlineView extends ViewPart {
 				new org.eclipse.swt.widgets.Listener() {
 					@Override
 					public void handleEvent(Event event) {
-						// showMessage("!");
 						presenter.handleRefreshEvent(false);
 					}
 				});
@@ -187,53 +182,28 @@ public class CukeOutlineView extends ViewPart {
 
 	public void refresh() {
 		if (treeViewer != null) {
-			job_refresh = new Job("cukejob_100010001000") {
+
+			final FeatureTreeContentProvider provider = presenter
+					.getFeatureTreeContentProvider();
+			final SupportScreenTreeContentProvider supportScreensProvider = presenter
+					.getSupportScreensTreeContentProvider();
+
+			// If you want to update the UI
+			Display.getDefault().syncExec(new Runnable() {
 				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					// Do something long running
-					final FeatureTreeContentProvider provider = presenter
-							.getFeatureTreeContentProvider();
-					final SupportScreenTreeContentProvider supportScreensProvider = presenter
-							.getSupportScreensTreeContentProvider();
-
-					// If you want to update the UI
-					Display.getDefault().syncExec(new Runnable() {
-						@Override
-						public void run() {
-							// Do something in the user interface
-
-							treeViewer.setContentProvider(provider);
-							treeViewer_SupportScreens
-									.setContentProvider(supportScreensProvider);
-						}
-					});
-					return Status.OK_STATUS;
+				public void run() {
+					// Do something in the user interface
+					treeViewer.setContentProvider(provider);
+					treeViewer_SupportScreens
+							.setContentProvider(supportScreensProvider);
+					setToRefreshableState();
 				}
-			};
-			job_refresh.setThread(presenter.getNonUIThread());
-			// Start the Job
-			job_refresh.schedule();
-
+			});
 		}
-	}
-
-	public Job getJob_refresh() {
-		return job_refresh;
-	}
-
-	public void setJob_refresh(Job job_refresh) {
-		this.job_refresh = job_refresh;
 	}
 
 	public void setCurrentFileRootPath(String string) {
 		txtRootFile.setText(string);
-	}
-
-	@Override
-	public void dispose() {
-		if (presenter != null)
-			presenter.cancelJobs();
-		super.dispose();
 	}
 
 	public void setToStoppableState() {
