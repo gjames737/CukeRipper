@@ -10,6 +10,10 @@ import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -18,6 +22,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -31,22 +36,23 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	private Action featureTreeDoubleClickAction;
 
 	private CukeOutlineView view;
+	private Job job_handleRefreshEvent;
 
 	public CukeOutlinePresenter(CukeOutlineView _view) {
 		this.view = _view;
-		refresh();
+		refresh(this.view.getCurrentFileRootPath());
 	}
 
-	private void refresh() {
+	private void refresh(final String currentFileRootPath) {
 		LoadedCukes.getScreens().clear();
-		String currentFileRootPath = this.view.getCurrentFileRootPath();
+
 		try {
-			this.reader = new CukeFileReader(currentFileRootPath);
-			this.featureParser = new FeatureFileParser(reader);
+			reader = new CukeFileReader(currentFileRootPath);
+			featureParser = new FeatureFileParser(reader);
 		} catch (Exception e) {
-			onCukeFileReader(e);
+			onCukeFileReaderError(e);
 		}
-		view.refresh();
+
 	}
 
 	public File[] getfeatureFiles() {
@@ -182,8 +188,33 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	}
 
 	public void handleRefreshEvent() {
-		refresh();
+		final String currentFileRootPath = this.view.getCurrentFileRootPath();
+		job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				// Do something long running
+				refresh(currentFileRootPath);
+				// If you want to update the UI
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						// Do something in the user interface
+						view.refresh();
+					}
+				});
+				return Status.OK_STATUS;
+			}
+		};
+
+		// Start the Job
+		job_handleRefreshEvent.schedule();
+
 		savePluginSettings();
+	}
+
+	public void cancelJobs() {
+		job_handleRefreshEvent.cancel();
+		view.getRefreshJob().cancel();
 	}
 
 	void savePluginSettings() {
@@ -234,8 +265,13 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	}
 
 	@Override
-	public void onCukeFileReader(Exception e) {
-		printStackTraceToMessage(e);
+	public void onCukeFileReaderError(final Exception e) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				printStackTraceToMessage(e);
+			}
+		});
 	}
 
 	private void printStackTraceToMessage(Exception e) {

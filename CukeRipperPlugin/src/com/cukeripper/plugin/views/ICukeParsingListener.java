@@ -2,7 +2,7 @@ package com.cukeripper.plugin.views;
 
 public interface ICukeParsingListener {
 
-	public void onCukeFileReader(Exception e);
+	public void onCukeFileReaderError(Exception e);
 
 	public void onFeatureParseException(Exception e);
 

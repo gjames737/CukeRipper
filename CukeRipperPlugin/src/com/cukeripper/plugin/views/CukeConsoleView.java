@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.part.ViewPart;
 
@@ -52,7 +53,12 @@ public class CukeConsoleView extends ViewPart implements ICukeConsoleListener {
 	}
 
 	@Override
-	public void onPrintLn(String text, boolean error) {
-		listViewer.add(text);
+	public void onPrintLn(final String text, boolean error) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				listViewer.add(text);
+			}
+		});
 	}
 }

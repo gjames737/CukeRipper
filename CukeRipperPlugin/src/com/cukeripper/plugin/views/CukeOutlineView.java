@@ -4,6 +4,10 @@ import java.io.File;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -13,6 +17,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
@@ -31,6 +36,7 @@ public class CukeOutlineView extends ViewPart {
 	private TreeViewer treeViewer_SupportScreens;
 	private CukeOutlinePresenter presenter;
 	private Text txtRootFile;
+	private Job job_refresh;
 
 	public CukeOutlineView() {
 		presenter = new CukeOutlinePresenter(this);
@@ -166,18 +172,41 @@ public class CukeOutlineView extends ViewPart {
 
 	public void refresh() {
 		if (treeViewer != null) {
-			FeatureTreeContentProvider provider = presenter
-					.getFeatureTreeContentProvider();
-			SupportScreenTreeContentProvider supportScreensProvider = presenter
-					.getSupportScreensTreeContentProvider();
-			treeViewer.setContentProvider(provider);
-			treeViewer_SupportScreens
-					.setContentProvider(supportScreensProvider);
+			job_refresh = new Job("cukejob_100010001000") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					// Do something long running
+					final FeatureTreeContentProvider provider = presenter
+							.getFeatureTreeContentProvider();
+					final SupportScreenTreeContentProvider supportScreensProvider = presenter
+							.getSupportScreensTreeContentProvider();
+
+					// If you want to update the UI
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							// Do something in the user interface
+
+							treeViewer.setContentProvider(provider);
+							treeViewer_SupportScreens
+									.setContentProvider(supportScreensProvider);
+						}
+					});
+					return Status.OK_STATUS;
+				}
+			};
+			// Start the Job
+			job_refresh.schedule();
+
 		}
 	}
 
 	public void setCurrentFileRootPath(String string) {
 		txtRootFile.setText(string);
+	}
+
+	public Job getRefreshJob() {
+		return job_refresh;
 	}
 
 }
