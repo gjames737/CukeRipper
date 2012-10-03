@@ -384,7 +384,7 @@ public class CukeParser {
 
 	private int numberOfBreaksBefore(String featureContents, int startOfScenario)
 			throws Exception {
-		printWithMarkings(featureContents, "##");
+		// printWithMarkings(featureContents, "##");
 		int endSubStrIndex = startOfScenario;
 		if (featureContents.length() - 1 > endSubStrIndex)
 			endSubStrIndex++;
@@ -680,8 +680,8 @@ public class CukeParser {
 						theStepString, stepFile);
 
 				if (isInFile) {
-					System.out.println("Found step file for: "
-							+ gwtStatement.slashToSlashStatement());
+					// System.out.println("Found step file for: "
+					// + gwtStatement.slashToSlashStatement());
 					return stepFile;
 				}
 			}
@@ -721,9 +721,11 @@ public class CukeParser {
 				|| contentsNoParensNoSpaces.contains(theStepStringNoSpaces)
 				|| regexMarkedStepDefContents.contains(markedRegexStepString);
 
-		if (theStepString.contains("\""))
-			printWithMarkings(isInFile + "\n" + markedRegexStepString + "\n"
-					+ regexMarkedStepDefContents, "@");
+		// if (theStepString.contains("\"")) {
+		// printWithMarkings(isInFile + "\n" + markedRegexStepString + "\n"
+		// + regexMarkedStepDefContents, "@");
+		// }
+
 		if (!isInFile) {
 			CukeConsole.println("Could not find step file for: "
 					+ theStepString, false);
@@ -739,11 +741,20 @@ public class CukeParser {
 	}
 
 	private String setInRegexMarkersAndCleanStepDefContents(String contents) {
-		String c = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
-		c = c.replace(CommonRips.REGEX_INSERT, REGEX_MARKER);
-		// TODO
-		printWithMarkings(contents + "\n" + c, "$$");
-		return c;
+		String c1 = cleanFromParensSpacesSlashPointAndDollarSlash(contents);
+		if (!c1.contains("\""))
+			return c1;
+
+		try {
+			c1 = cleanOutMatches(c1, "\"", "\"", true);
+			return cleanOutDoubleMarkers(c1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			CukeConsole.println("Error parsing: "
+					+ this.getClass().getCanonicalName()
+					+ "setInRegexMarkersAndCleanStepDefContents", true);
+		}
+		return c1;
 	}
 
 	private String cleanOutQuotedInStep(String stepString) throws Exception {
@@ -752,12 +763,17 @@ public class CukeParser {
 		}
 
 		String cleaned = cleanOutMatches(stepString, "\"", "\"", true);
+		cleaned = cleanOutDoubleMarkers(cleaned);
+		// printWithMarkings(cleaned, "$ %~");
+		return cleanFromParensSpacesSlashPointAndDollarSlash(cleaned);
+	}
+
+	private String cleanOutDoubleMarkers(String cleaned) {
 		while (cleaned.contains(REGEX_MARKER + REGEX_MARKER)) {
 			cleaned = cleaned
 					.replace(REGEX_MARKER + REGEX_MARKER, REGEX_MARKER);
 		}
-		// printWithMarkings(cleaned, "$ %~");
-		return cleanFromParensSpacesSlashPointAndDollarSlash(cleaned);
+		return cleaned;
 	}
 
 	private String cleanOutExtraWordingCodes(String contents) throws Exception {
@@ -789,7 +805,7 @@ public class CukeParser {
 			}
 			if (icq > 0 && closestPOindexIO > 0 && closestPOindexIO < icq)
 				mappedStartEndIndices.add(new Integer[] { closestPOindexIO,
-						(icq + 2) });
+						(icq + endMatcher.length()) });
 		}
 
 		for (int i = mappedStartEndIndices.size() - 1; i >= 0; i--) {

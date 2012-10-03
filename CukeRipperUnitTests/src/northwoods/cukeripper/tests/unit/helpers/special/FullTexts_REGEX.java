@@ -24,7 +24,8 @@ public class FullTexts_REGEX {
 		FEATURE_0_SCENARIOS[0].setLineNumber(6);
 
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
-				featureFile(), StatementType.GIVEN, "I am doing something"));
+				featureFile(), StatementType.GIVEN,
+				"I am doing something \"reg insert\""));
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
 				featureFile(), StatementType.WHEN, "I do this"));
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
@@ -32,7 +33,7 @@ public class FullTexts_REGEX {
 		//
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
 				featureFile(), StatementType.GIVEN,
-				"I am doing something extra wording present"));
+				"I am doing \"reg insert\" something"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
 				featureFile(), StatementType.WHEN, "I do this"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
@@ -48,7 +49,7 @@ public class FullTexts_REGEX {
 			+ "\n When I do this\nThen I get that"
 
 			+ "\n\n Scenario: Regex scenario 1"
-			+ "\nGiven I am doing something extra wording present"
+			+ "\nGiven I am doing \"reg insert\" something"
 			+ "\n When I do this\n Then I get that";
 
 	public static final String SCREEN_0 = ""
@@ -118,21 +119,13 @@ public class FullTexts_REGEX {
 	}
 
 	public static final String STEP_DEF_0 = ""
-			+ "Given /^Given I am doing something "
-			+ CommonRips.REGEX_INSERT
-			+ "$/ do"
-			+ "\n  on(screen1).method0"
-			+ "\n on(screen2).method0"
-			+ "\n end"
-			+ "\nWhen /^I do this$/ do"
-			+ "\n  on(screen1).method0"
-			+ "\n on(screen1).method0"
-			+ "\n end"
-			+ "\nThen /^I get that$/ do"
-			+ "\n  on(screen1).method0"
-			+ "\n on(screen2).method0"
-			+ "\n end"
-			+ "Given /^The given statement spanish$/ do\n on(screen1) do |scrn|"
-			+ "  scrn.method0" + "  \n scrn.method0" + "       \nend     \nend";
+			+ "Given /^Given I am doing something " + CommonRips.REGEX_INSERT
+			+ "$/ do" + "\n  on(screen1).method0" + "\n on(screen2).method0"
+			+ "\n end" + "\nWhen /^I do this$/ do" + "\n  on(screen1).method0"
+			+ "\n on(screen1).method0" + "\n end" + "\nThen /^I get that$/ do"
+			+ "\n  on(screen1).method0" + "\n on(screen2).method0" + "\n end"
+			+ "Given /^I am doing " + CommonRips.REGEX_INSERT
+			+ " something$/ do\n on(screen1) do |scrn|" + "  scrn.method0"
+			+ "  \n scrn.method0" + "       \nend     \nend";
 
 }
