@@ -68,18 +68,6 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 		try {
 			List<File> excludedFiles = new ArrayList<File>();
-			// String supportFolderPath =
-			// "C:\\TFSBuild\\CoPilot\\Trunk\\CoPilotCukes\\features\\support";
-			// excludedFiles.add(new File(supportFolderPath + File.separator
-			// + "copilot.rb"));
-			// excludedFiles.add(new File(supportFolderPath + File.separator
-			// + "copilot_adb.rb"));
-			// excludedFiles.add(new File(supportFolderPath + File.separator
-			// + "env.rb"));
-			// excludedFiles.add(new File(supportFolderPath + File.separator
-			// + "manifest_manager.rb"));
-			// excludedFiles.add(new File(supportFolderPath + File.separator
-			// + "view_finder.rb"));
 
 			reader = new CukeFileReader(currentFileRootPath, excludedFiles);
 			featureParser = new FeatureFileParser(reader);
