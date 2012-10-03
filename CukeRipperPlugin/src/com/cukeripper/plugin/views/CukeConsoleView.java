@@ -14,17 +14,18 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.part.ViewPart;
 
 public class CukeConsoleView extends ViewPart implements ICukeConsoleListener {
 	private ListViewer listViewer;
 	private java.util.List<String> lineItems;
+	private boolean disposed;
 
 	public CukeConsoleView() {
 		lineItems = new ArrayList<String>();
 		CukeConsole.addListener(this);
+		disposed = false;
 	}
 
 	// http://www.eclipse.org/swt/widgets/
@@ -79,20 +80,28 @@ public class CukeConsoleView extends ViewPart implements ICukeConsoleListener {
 	}
 
 	@Override
-	public void onPrintLn(final String text, boolean error) {
-		Display.getDefault().syncExec(new Runnable() {
+	public void dispose() {
+		disposed = true;
+		super.dispose();
+	}
 
-			@Override
-			public void run() {
-				lineItems.add(text);
-				listViewer.add(text);
-			}
-		});
+	@Override
+	public void onPrintLn(final String text, boolean error) {
+
+		lineItems.add(text);
+		listViewer.add(text);
+
 	}
 
 	private void handleClearEvent() {
 		for (String li : lineItems) {
 			listViewer.remove(li);
 		}
+		lineItems.clear();
+	}
+
+	@Override
+	public boolean isDisposed() {
+		return disposed;
 	}
 }

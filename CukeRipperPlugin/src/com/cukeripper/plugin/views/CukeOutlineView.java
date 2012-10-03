@@ -15,7 +15,6 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
@@ -188,17 +187,15 @@ public class CukeOutlineView extends ViewPart {
 			final SupportScreenTreeContentProvider supportScreensProvider = presenter
 					.getSupportScreensTreeContentProvider();
 
-			// If you want to update the UI
-			Display.getDefault().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					// Do something in the user interface
-					treeViewer.setContentProvider(provider);
-					treeViewer_SupportScreens
-							.setContentProvider(supportScreensProvider);
-					setToRefreshableState();
-				}
-			});
+			// Display.getDefault().syncExec(new Runnable() {
+			// @Override
+			// public void run() {
+			treeViewer.setContentProvider(provider);
+			treeViewer_SupportScreens
+					.setContentProvider(supportScreensProvider);
+			setToRefreshableState();
+			// }
+			// });
 		}
 	}
 

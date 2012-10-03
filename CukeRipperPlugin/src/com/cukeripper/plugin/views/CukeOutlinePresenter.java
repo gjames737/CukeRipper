@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.swt.widgets.Display;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -41,26 +40,30 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	private CukeOutlineView view;
 
-	private Job job_handleRefreshEvent;
+	// private Job job_handleRefreshEvent;
 	private boolean refreshing = false;
 
 	public CukeOutlinePresenter(CukeOutlineView _view) {
 		this.view = _view;
-		job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				long startTime = System.currentTimeMillis();
-				refreshing = true;
-				setViewToStoppableState();
-				refresh(currentFileRootPath);
-				view.refresh();
-				refreshing = false;
-				long time = (System.currentTimeMillis() - startTime) / 1000L;
-				CukeConsole.println("Parse time: " + time + " secs", false);
-				return Status.OK_STATUS;
-			}
-		};
+		// job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
+		// @Override
+		// protected IStatus run(IProgressMonitor monitor) {
+		// runRefresh();
+		// return Status.OK_STATUS;
+		// }
+		// };
 		refresh(this.view.getCurrentFileRootPath());
+	}
+
+	private void runRefresh() {
+		long startTime = System.currentTimeMillis();
+		refreshing = true;
+		setViewToStoppableState();
+		refresh(currentFileRootPath);
+		view.refresh();
+		refreshing = false;
+		long time = (System.currentTimeMillis() - startTime) / 1000L;
+		CukeConsole.println("Parse time: " + time + " secs", false);
 	}
 
 	private void refresh(final String currentFileRootPath) {
@@ -239,33 +242,34 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 			return;
 		} else {
 			setViewToStoppableState();
-			if (job_handleRefreshEvent.getThread() != null) {
-				if (job_handleRefreshEvent.getThread().getName().equals("main")) {
-					throw new RuntimeException("cannot run on main thread");
-				}
-			}
-
-			job_handleRefreshEvent.schedule();
+			// if (job_handleRefreshEvent.getThread() != null) {
+			// if (job_handleRefreshEvent.getThread().getName().equals("main"))
+			// {
+			// throw new RuntimeException("cannot run on main thread");
+			// }
+			// }
+			// job_handleRefreshEvent.schedule();
+			runRefresh();
 		}
 
 	}
 
 	private void setViewToRefreshableState() {
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				view.setToRefreshableState();
-			}
-		});
+		// Display.getDefault().syncExec(new Runnable() {
+		// @Override
+		// public void run() {
+		view.setToRefreshableState();
+		// }
+		// });
 	}
 
 	private void setViewToStoppableState() {
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				view.setToStoppableState();
-			}
-		});
+		// Display.getDefault().syncExec(new Runnable() {
+		// @Override
+		// public void run() {
+		view.setToStoppableState();
+		// }
+		// });
 	}
 
 	public void stopJobs() {
@@ -276,41 +280,50 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	private void resetStopAllEventsAfter() {
 
-		Job job_resetStopAllEvents = new Job("job_resetStopAllEvents23432324") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				while (refreshing) {
-					System.err.println("~~~~~~~~");
-				}
-				Display.getDefault().syncExec(new Runnable() {
-					@Override
-					public void run() {
-						handleRefreshEvent(true);
-					}
-				});
-				try {
-					Thread.sleep(RESET_STOP_EVENTS_DELAY);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				CukeFileReader.resetStopAllEvents();
-				setViewToRefreshableState();
+		// Job job_resetStopAllEvents = new
+		// Job("job_resetStopAllEvents23432324") {
+		// @Override
+		// protected IStatus run(IProgressMonitor monitor) {
+		// while (refreshing) {
+		// System.err.println("~~~~~~~~");
+		// }
+		// Display.getDefault().syncExec(new Runnable() {
+		// @Override
+		// public void run() {
+		// handleRefreshEvent(true);
+		// }
+		// });
+		// try {
+		// Thread.sleep(RESET_STOP_EVENTS_DELAY);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+		// CukeFileReader.resetStopAllEvents();
+		// setViewToRefreshableState();
+		//
+		// return Status.OK_STATUS;
+		// }
+		// };
+		// job_resetStopAllEvents.schedule();
 
-				return Status.OK_STATUS;
-			}
-		};
-		job_resetStopAllEvents.schedule();
+		while (refreshing) {
+			// System.err.println("~~~~~~~~");
+		}
+		handleRefreshEvent(true);
+		CukeFileReader.resetStopAllEvents();
+		setViewToRefreshableState();
+
 	}
 
 	void savePluginSettings() {
 		// saves plugin preferences at the workspace level
 		final Preferences prefs = InstanceScope.INSTANCE.getNode(MY_PLUGIN_ID);
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				prefs.put(KEY_ROOT_PATH_TO_CUKES, view.getCurrentFileRootPath());
-			}
-		});
+		// Display.getDefault().syncExec(new Runnable() {
+		// @Override
+		// public void run() {
+		prefs.put(KEY_ROOT_PATH_TO_CUKES, view.getCurrentFileRootPath());
+		// }
+		// });
 
 		try {
 			prefs.flush();
@@ -351,12 +364,12 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	@Override
 	public void onCukeFileReaderError(final Exception e) {
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				printStackTraceToMessage(e);
-			}
-		});
+		// Display.getDefault().syncExec(new Runnable() {
+		// @Override
+		// public void run() {
+		printStackTraceToMessage(e);
+		// }
+		// });
 	}
 
 	private void printStackTraceToMessage(Exception e) {

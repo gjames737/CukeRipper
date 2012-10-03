@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="CukeRipper 1.0.4"
+            name="CukeRipper 1.0.5"
             id="com.cukeripper.plugin">
       </category>
       <view
@@ -16,7 +16,7 @@
             id="com.cukeripper.plugin.views.CukeConsoleView">
       </view>
       <view
-            name="Outline (CukeRipper 1.0.4)"
+            name="Outline (CukeRipper 1.0.5)"
             icon="icons/cuke_ripper_icon.gif"
             category="com.cukeripper.plugin"
             class="com.cukeripper.plugin.views.CukeOutlineView"

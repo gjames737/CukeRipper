@@ -4,4 +4,6 @@ public interface ICukeConsoleListener {
 
 	public void onPrintLn(String text, boolean error);
 
+	public boolean isDisposed();
+
 }
