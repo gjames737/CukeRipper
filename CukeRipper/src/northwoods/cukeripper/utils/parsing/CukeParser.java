@@ -10,14 +10,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import northwoods.cukeripper.utils.CommonRips;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.GWTStatement.StatementType;
-import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.StepAction;
 
 public class CukeParser {
@@ -681,12 +679,12 @@ public class CukeParser {
 			GWTStatement gwtStatement) throws Exception {
 		try {
 			// TODO
-			Map<String, File> filesMap = LoadedCukes.getStatemetFilesMap();
-			File currentStatemetFiles = LoadedCukes
-					.getInStatemetFilesMap(gwtStatement);
-			if (currentStatemetFiles != null) {
-				return filesMap.get(currentStatemetFiles);
-			}
+			// Map<String, File> filesMap = LoadedCukes.getStatemetFilesMap();
+			// File currentStatemetFiles = LoadedCukes
+			// .getInStatemetFilesMap(gwtStatement);
+			// if (currentStatemetFiles != null) {
+			// return filesMap.get(currentStatemetFiles);
+			// }
 
 			//
 			File[] stepFiles = reader.getAllStepDefinitionFiles();

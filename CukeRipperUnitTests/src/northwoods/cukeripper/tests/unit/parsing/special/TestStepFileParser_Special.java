@@ -36,7 +36,7 @@ public class TestStepFileParser_Special {
 
 	@Before
 	public void Setup() {
-
+		CukeFileReader.setJIT(false);
 		initMocks(this);
 		setUpAllFiles();
 		setupReader();

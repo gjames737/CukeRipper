@@ -15,6 +15,8 @@ import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 public class CukeFileReader {
 
 	public static final String CONSOLE_STR_READING_FILE = "Reading";
+	private static boolean IS_JIT = true;
+
 	private File rootOfAllFiles;
 	private List<File> allFiles;
 	private static boolean STOP_ALL_EVENTS = false;
@@ -199,6 +201,14 @@ public class CukeFileReader {
 
 	public static boolean isAllEventsCanceled() {
 		return STOP_ALL_EVENTS;
+	}
+
+	public static boolean isJIT() {
+		return IS_JIT;
+	}
+
+	public static void setJIT(boolean isJIT) {
+		IS_JIT = isJIT;
 	}
 
 }

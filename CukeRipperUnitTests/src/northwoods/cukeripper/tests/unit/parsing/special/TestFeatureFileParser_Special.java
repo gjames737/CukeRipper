@@ -43,6 +43,7 @@ public class TestFeatureFileParser_Special {
 
 	@Before
 	public void Setup() {
+		CukeFileReader.setJIT(false);
 		CukeParser.THROW_ERRORS = true;
 		initMocks(this);
 		setUpAllFiles();

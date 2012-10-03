@@ -95,9 +95,9 @@ public class GWTStatement {
 
 	public void setStepFile(File stepFile) {
 		this.step_file = stepFile;
-		if (this.step_file != null) {
-			LoadedCukes.addStateFileToMap(this, stepFile);
-		}
+		// if (this.step_file != null) {
+		// LoadedCukes.addStateFileToMap(this, stepFile);
+		// }
 	}
 
 	public String slashToSlashStatement() {
