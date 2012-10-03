@@ -1,6 +1,8 @@
 package com.cukeripper.plugin.views;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
@@ -65,7 +67,18 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		LoadedCukes.getScreens().clear();
 
 		try {
-			reader = new CukeFileReader(currentFileRootPath);
+			List<File> excludedFiles = new ArrayList<File>();
+			String supportFolderPath = "C:\\TFSBuild\\CoPilot\\Trunk\\CoPilotCukes\\features\\support";
+			excludedFiles.add(new File(supportFolderPath + File.separator + "copilot.rb"));
+			excludedFiles.add(new File(supportFolderPath + File.separator
+					+ "copilot_adb.rb"));
+			excludedFiles.add(new File(supportFolderPath + File.separator + "env.rb"));
+			excludedFiles.add(new File(supportFolderPath + File.separator
+					+ "manifest_manager.rb"));
+			excludedFiles.add(new File(supportFolderPath + File.separator
+					+ "view_finder.rb"));
+
+			reader = new CukeFileReader(currentFileRootPath, excludedFiles);
 			featureParser = new FeatureFileParser(reader);
 		} catch (Exception e) {
 			onCukeFileReaderError(e);

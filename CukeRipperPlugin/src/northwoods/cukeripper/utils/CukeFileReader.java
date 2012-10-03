@@ -18,9 +18,20 @@ public class CukeFileReader {
 	private File rootOfAllFiles;
 	private List<File> allFiles;
 	private static boolean STOP_ALL_EVENTS = false;
+	private List<File> excludedFiles;
 
 	public CukeFileReader(String root) throws Exception {
+		this(root, null);
+	}
+
+	public CukeFileReader(String root, List<File> _excludedFiles)
+			throws Exception {
 		this.rootOfAllFiles = new File(root);
+		if (_excludedFiles == null)
+			excludedFiles = new ArrayList<File>();
+		else
+			excludedFiles = _excludedFiles;
+
 		reloadRoot();
 	}
 
@@ -146,14 +157,23 @@ public class CukeFileReader {
 		File[] files = rootFile.listFiles();
 		if (files != null) {
 			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
+				if (files[i].isDirectory() && !isInExclusions(files[i])) {
 					loadAllFilesFromDirectory(files[i]);
 				} else {
-					allFiles.add(files[i]);
+					if (!isInExclusions(files[i]))
+						allFiles.add(files[i]);
 				}
 			}
 		}
 
+	}
+
+	private boolean isInExclusions(File file) {
+		for (File exc : excludedFiles) {
+			if (exc.getAbsolutePath().equals(file.getAbsolutePath()))
+				return true;
+		}
+		return false;
 	}
 
 	private static String readFile(String path) throws IOException {
