@@ -17,6 +17,7 @@ public class CukeFileReader {
 	public static final String CONSOLE_STR_READING_FILE = "Reading";
 	private File rootOfAllFiles;
 	private List<File> allFiles;
+	private static boolean STOP_ALL_EVENTS = false;
 
 	public CukeFileReader(String root) throws Exception {
 		this.rootOfAllFiles = new File(root);
@@ -166,6 +167,18 @@ public class CukeFileReader {
 		} finally {
 			stream.close();
 		}
+	}
+
+	public static void resetStopAllEvents() {
+		STOP_ALL_EVENTS = false;
+	}
+
+	public static void stopAllEvents() {
+		STOP_ALL_EVENTS = true;
+	}
+
+	public static boolean isCanceled() {
+		return STOP_ALL_EVENTS;
 	}
 
 }

@@ -27,7 +27,7 @@ import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 public class CukeOutlinePresenter implements ICukeParsingListener {
-
+	private static final long RESET_STOP_EVENTS_DELAY = 3000L;
 	private static final String NO_FILE_FOUND = "No file was found. Refresh!";
 	private static final String KEY_ROOT_PATH_TO_CUKES = "cukeripper.keys.KEY_ROOT_PATH_TO_CUKES";
 	private static final String MY_PLUGIN_ID = "plugin.id.cukeripper.plugin.outline";
@@ -36,7 +36,8 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	private Action featureTreeDoubleClickAction;
 
 	private CukeOutlineView view;
-	private Job job_handleRefreshEvent;
+
+	// private Job job_handleRefreshEvent;
 
 	public CukeOutlinePresenter(CukeOutlineView _view) {
 		this.view = _view;
@@ -187,11 +188,15 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	}
 
-	public void handleRefreshEvent() {
-		final String currentFileRootPath = this.view.getCurrentFileRootPath();
-		job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
+	public void handleRefreshEvent(boolean clear) {
+		setViewToStoppableState();
+		final String currentFileRootPath = clear ? "" : this.view
+				.getCurrentFileRootPath();
+
+		Job job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
+				setViewToStoppableState();
 				// Do something long running
 				refresh(currentFileRootPath);
 				// If you want to update the UI
@@ -204,6 +209,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 				});
 				return Status.OK_STATUS;
 			}
+
 		};
 
 		// Start the Job
@@ -212,19 +218,69 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		savePluginSettings();
 	}
 
+	private void setViewToRefreshableState() {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				view.setToRefreshableState();
+			}
+		});
+	}
+
+	private void setViewToStoppableState() {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				view.setToStoppableState();
+			}
+		});
+	}
+
 	public void cancelJobs() {
-		job_handleRefreshEvent.cancel();
-		view.getRefreshJob().cancel();
+		CukeFileReader.stopAllEvents();
+
+		resetStopAllEventsAfter(RESET_STOP_EVENTS_DELAY);
+		view.setToDisabledState();
+
+		// job_handleRefreshEvent.cancel();
+		// view.getRefreshJob().cancel();
+
+	}
+
+	private void resetStopAllEventsAfter(final long delay) {
+
+		Job job_resetStopAllEvents = new Job("job_resetStopAllEvents23432324") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				// Do something long running
+				handleRefreshEvent(true);
+				try {
+					Thread.sleep(delay);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				CukeFileReader.resetStopAllEvents();
+				// If you want to update the UI
+				setViewToRefreshableState();
+				return Status.OK_STATUS;
+			}
+		};
+		job_resetStopAllEvents.schedule(delay);
 	}
 
 	void savePluginSettings() {
 		// saves plugin preferences at the workspace level
-		Preferences prefs =
+		final Preferences prefs = InstanceScope.INSTANCE.getNode(MY_PLUGIN_ID);
 		// Platform.getPreferencesService().getRootNode().node(Plugin.PLUGIN_PREFEERENCES_SCOPE).node(MY_PLUGIN_ID);
-		InstanceScope.INSTANCE.getNode(MY_PLUGIN_ID); // does all the above
-														// behind the scenes
-
-		prefs.put(KEY_ROOT_PATH_TO_CUKES, view.getCurrentFileRootPath());
+		// does all the above
+		// behind the scenes
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				prefs.put(KEY_ROOT_PATH_TO_CUKES, view.getCurrentFileRootPath());
+			}
+		});
 
 		try {
 			// prefs are automatically flushed during a plugin's "super.stop()".

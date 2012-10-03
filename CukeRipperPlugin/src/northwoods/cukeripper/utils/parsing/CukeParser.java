@@ -71,6 +71,8 @@ public class CukeParser {
 			}
 
 			while (lastIndex != -1) {
+				if (CukeFileReader.isCanceled())
+					return new ArrayList<Integer>();
 				lastIndex = haystack.indexOf(subStr, lastIndex);
 				if (lastIndex != -1) {
 					indices.add(lastIndex);
@@ -172,7 +174,8 @@ public class CukeParser {
 			StatementType lastType = StatementType.GIVEN;
 			List<GWTStatement> gwts = new ArrayList<GWTStatement>();
 			for (int i = 0; i < indicesOfStatements.size(); i++) {
-
+				if (CukeFileReader.isCanceled())
+					return new ArrayList<GWTStatement>();
 				int statementIndex = indicesOfStatements.get(i);
 				String snippetOfStatement = getSnippetOfStatement(
 						fullScenarioString, statementIndex, "And".length());
@@ -407,7 +410,8 @@ public class CukeParser {
 		try {
 			int numberOfStepDefs = indicesOfSlashPt.size();
 			for (int i = 0; i < numberOfStepDefs; i++) {
-
+				if (CukeFileReader.isCanceled())
+					return;
 				String substringOfType = getSubStringForStepDefAtStatementIndex(
 						fullContents, indicesOfSlashPt.get(i));
 
@@ -564,6 +568,8 @@ public class CukeParser {
 			List<Integer> indicesOfOn = indicesOfOccurances(
 					statementsParagraph, on_subStr);
 			for (int index : indicesOfOn) {
+				if (CukeFileReader.isCanceled())
+					return new ArrayList<StepAction>();
 				int startScreenNameIndex = on_subStr.length() + index;
 				String screenNameIsInThisString = statementsParagraph
 						.substring(startScreenNameIndex);
@@ -675,6 +681,8 @@ public class CukeParser {
 			System.err.println("the step string: "
 					+ gwtStatement.slashToSlashStatement());
 			for (int i = 0; i < stepFiles.length; i++) {
+				if (CukeFileReader.isCanceled())
+					return new File("");
 				File stepFile = stepFiles[i];
 				boolean isInFile = isStatementFoundInStepFile(reader,
 						theStepString, stepFile);
@@ -791,11 +799,14 @@ public class CukeParser {
 				startMatcher);
 		List<Integer[]> mappedStartEndIndices = new ArrayList<Integer[]>();
 		for (int i = 0; i < indicesOfEndMatcher.size(); i++) {
-
+			if (CukeFileReader.isCanceled())
+				return CommonRips.MSG_NO_PARSABLE_CONTENT;
 			Integer icq = indicesOfEndMatcher.get(i);
 			int closestDistance = 100000;
 			int closestPOindexIO = 0;
 			for (int j = 0; j < indicesOfStartMatcher.size(); j++) {
+				if (CukeFileReader.isCanceled())
+					return CommonRips.MSG_NO_PARSABLE_CONTENT;
 				Integer io = indicesOfStartMatcher.get(j);
 				int distance = icq - io;
 				if (distance > 0 && distance < closestDistance) {
@@ -832,6 +843,8 @@ public class CukeParser {
 	private void printWithMarkings(String contents, String marking) {
 		String mark = "";
 		for (int i = 0; i < 40; i++) {
+			if (CukeFileReader.isCanceled())
+				return;
 			mark += marking;
 		}
 		mark = "       " + mark;

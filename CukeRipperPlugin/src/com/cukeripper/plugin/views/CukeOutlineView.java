@@ -11,6 +11,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -36,7 +38,9 @@ public class CukeOutlineView extends ViewPart {
 	private TreeViewer treeViewer_SupportScreens;
 	private CukeOutlinePresenter presenter;
 	private Text txtRootFile;
-	private Job job_refresh;
+	// private Job job_refresh;
+	private Button btnStop;
+	private Button btnRefresh;
 
 	public CukeOutlineView() {
 		presenter = new CukeOutlinePresenter(this);
@@ -61,12 +65,22 @@ public class CukeOutlineView extends ViewPart {
 		fd_txtRootFile.left = new FormAttachment(0, 195);
 		txtRootFile.setLayoutData(fd_txtRootFile);
 		txtRootFile.setText(ROOT_FILE);
+
+		btnStop = new Button(composite, SWT.NONE);
+		btnStop.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.cancelJobs();
+			}
+		});
+		btnStop.setLayoutData(new FormData());
+		btnStop.setText("Stop");
 		//
-		Button btnRefresh = new Button(composite, SWT.NONE);
+		btnRefresh = new Button(composite, SWT.NONE);
 		FormData fd_btnRefresh = new FormData();
+		fd_btnRefresh.left = new FormAttachment(btnStop, 6);
 		fd_btnRefresh.right = new FormAttachment(0, 189);
-		fd_btnRefresh.top = new FormAttachment(0, 1);
-		fd_btnRefresh.left = new FormAttachment(0);
+		fd_btnRefresh.top = new FormAttachment(0);
 		btnRefresh.setLayoutData(fd_btnRefresh);
 		btnRefresh.setText("Refresh");
 		btnRefresh.addListener(SWT.Selection,
@@ -74,7 +88,7 @@ public class CukeOutlineView extends ViewPart {
 					@Override
 					public void handleEvent(Event event) {
 						// showMessage("!");
-						presenter.handleRefreshEvent();
+						presenter.handleRefreshEvent(false);
 					}
 				});
 		//
@@ -117,7 +131,7 @@ public class CukeOutlineView extends ViewPart {
 		tree_supportScreens.setLayoutData(fd_tree_supportScreens);
 		GridData gd_tree_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_tree_1.widthHint = 494;
-
+		setToRefreshableState();
 		//
 
 		presenter.makeActions();
@@ -172,7 +186,8 @@ public class CukeOutlineView extends ViewPart {
 
 	public void refresh() {
 		if (treeViewer != null) {
-			job_refresh = new Job("cukejob_100010001000") {
+
+			Job job_refresh = new Job("cukejob_100010001000") {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					// Do something long running
@@ -195,6 +210,7 @@ public class CukeOutlineView extends ViewPart {
 					return Status.OK_STATUS;
 				}
 			};
+
 			// Start the Job
 			job_refresh.schedule();
 
@@ -205,8 +221,35 @@ public class CukeOutlineView extends ViewPart {
 		txtRootFile.setText(string);
 	}
 
-	public Job getRefreshJob() {
-		return job_refresh;
+	// public Job getRefreshJob() {
+	// return job_refresh;
+	// }
+
+	@Override
+	public void dispose() {
+		if (presenter != null)
+			presenter.cancelJobs();
+		super.dispose();
 	}
 
+	public void setToStoppableState() {
+		btnRefresh.setEnabled(false);
+		btnStop.setEnabled(true);
+	}
+
+	public void setToRefreshableState() {
+		System.err.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+		btnRefresh.setEnabled(true);
+		btnStop.setEnabled(false);
+
+	}
+
+	public void setToDisabledState() {
+		btnRefresh.setEnabled(false);
+		btnStop.setEnabled(false);
+	}
+
+	// public void setRefreshJob(Job j) {
+	// this.job_refresh = j;
+	// }
 }
