@@ -48,14 +48,14 @@ public class FeatureFileParser {
 		// System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
 		// System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
 		for (int i = 0; i < numberOfScenarios; i++) {
-			if (CukeFileReader.isCanceled())
+			if (CukeFileReader.isAllEventsCanceled())
 				return null;
 			CukeScenario scenario = parser.parseScenario(file, featureContents,
 					scenarioTag, indicesOfScenarioTags, i);
 			// System.out.println("=================================================");
 			GWTStatement[] statements = scenario.getStatementsArray();
 			for (int j = 0; j < statements.length; j++) {
-				if (CukeFileReader.isCanceled())
+				if (CukeFileReader.isAllEventsCanceled())
 					return null;
 				GWTStatement gwtStatement = statements[j];
 				if (gwtStatement.getStepFile() == null) {
@@ -82,7 +82,7 @@ public class FeatureFileParser {
 		try {
 			String firstChar = stringContents.substring(0, 1);
 			while (firstChar.equals("\n") || firstChar.equals(" ")) {
-				if (CukeFileReader.isCanceled())
+				if (CukeFileReader.isAllEventsCanceled())
 					return CommonRips.MSG_NO_PARSABLE_CONTENT;
 				stringContents = stringContents.substring(1);
 				firstChar = stringContents.substring(0, 1);

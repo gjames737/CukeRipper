@@ -57,7 +57,7 @@ public class LoadedCukes {
 			CukeParser parser) {
 		File[] allScreenFiles = reader.getAllScreenFiles();
 		for (CukeScreen screen : screens) {
-			if (!CukeFileReader.isCanceled())
+			if (!CukeFileReader.isAllEventsCanceled())
 				return;
 			if (screen.getScreenFile() == null) {
 				boolean found = false;

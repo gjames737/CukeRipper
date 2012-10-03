@@ -177,7 +177,7 @@ public class CukeFileReader {
 		STOP_ALL_EVENTS = true;
 	}
 
-	public static boolean isCanceled() {
+	public static boolean isAllEventsCanceled() {
 		return STOP_ALL_EVENTS;
 	}
 

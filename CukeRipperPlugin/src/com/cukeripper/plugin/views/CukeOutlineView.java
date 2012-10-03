@@ -38,9 +38,10 @@ public class CukeOutlineView extends ViewPart {
 	private TreeViewer treeViewer_SupportScreens;
 	private CukeOutlinePresenter presenter;
 	private Text txtRootFile;
-	// private Job job_refresh;
 	private Button btnStop;
 	private Button btnRefresh;
+
+	private Job job_refresh;
 
 	public CukeOutlineView() {
 		presenter = new CukeOutlinePresenter(this);
@@ -186,8 +187,7 @@ public class CukeOutlineView extends ViewPart {
 
 	public void refresh() {
 		if (treeViewer != null) {
-
-			Job job_refresh = new Job("cukejob_100010001000") {
+			job_refresh = new Job("cukejob_100010001000") {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					// Do something long running
@@ -197,7 +197,7 @@ public class CukeOutlineView extends ViewPart {
 							.getSupportScreensTreeContentProvider();
 
 					// If you want to update the UI
-					Display.getDefault().asyncExec(new Runnable() {
+					Display.getDefault().syncExec(new Runnable() {
 						@Override
 						public void run() {
 							// Do something in the user interface
@@ -210,20 +210,24 @@ public class CukeOutlineView extends ViewPart {
 					return Status.OK_STATUS;
 				}
 			};
-
+			job_refresh.setThread(presenter.getNonUIThread());
 			// Start the Job
 			job_refresh.schedule();
 
 		}
 	}
 
+	public Job getJob_refresh() {
+		return job_refresh;
+	}
+
+	public void setJob_refresh(Job job_refresh) {
+		this.job_refresh = job_refresh;
+	}
+
 	public void setCurrentFileRootPath(String string) {
 		txtRootFile.setText(string);
 	}
-
-	// public Job getRefreshJob() {
-	// return job_refresh;
-	// }
 
 	@Override
 	public void dispose() {
@@ -238,10 +242,8 @@ public class CukeOutlineView extends ViewPart {
 	}
 
 	public void setToRefreshableState() {
-		System.err.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		btnRefresh.setEnabled(true);
 		btnStop.setEnabled(false);
-
 	}
 
 	public void setToDisabledState() {
@@ -249,7 +251,4 @@ public class CukeOutlineView extends ViewPart {
 		btnStop.setEnabled(false);
 	}
 
-	// public void setRefreshJob(Job j) {
-	// this.job_refresh = j;
-	// }
 }
