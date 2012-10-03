@@ -49,15 +49,14 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				long t = System.currentTimeMillis();
+				long startTime = System.currentTimeMillis();
 				refreshing = true;
 				setViewToStoppableState();
 				refresh(currentFileRootPath);
 				view.refresh();
 				refreshing = false;
-				long time = (System.currentTimeMillis() - t) / 1000L;
-				System.err.println("::::::::::::::::::" + time
-						+ " secs::::::::::::::::::::::");
+				long time = (System.currentTimeMillis() - startTime) / 1000L;
+				CukeConsole.println("Parse time: " + time + " secs", false);
 				return Status.OK_STATUS;
 			}
 		};
@@ -69,17 +68,18 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 		try {
 			List<File> excludedFiles = new ArrayList<File>();
-			String supportFolderPath = "C:\\TFSBuild\\CoPilot\\Trunk\\CoPilotCukes\\features\\support";
-			excludedFiles.add(new File(supportFolderPath + File.separator
-					+ "copilot.rb"));
-			excludedFiles.add(new File(supportFolderPath + File.separator
-					+ "copilot_adb.rb"));
-			excludedFiles.add(new File(supportFolderPath + File.separator
-					+ "env.rb"));
-			excludedFiles.add(new File(supportFolderPath + File.separator
-					+ "manifest_manager.rb"));
-			excludedFiles.add(new File(supportFolderPath + File.separator
-					+ "view_finder.rb"));
+			// String supportFolderPath =
+			// "C:\\TFSBuild\\CoPilot\\Trunk\\CoPilotCukes\\features\\support";
+			// excludedFiles.add(new File(supportFolderPath + File.separator
+			// + "copilot.rb"));
+			// excludedFiles.add(new File(supportFolderPath + File.separator
+			// + "copilot_adb.rb"));
+			// excludedFiles.add(new File(supportFolderPath + File.separator
+			// + "env.rb"));
+			// excludedFiles.add(new File(supportFolderPath + File.separator
+			// + "manifest_manager.rb"));
+			// excludedFiles.add(new File(supportFolderPath + File.separator
+			// + "view_finder.rb"));
 
 			reader = new CukeFileReader(currentFileRootPath, excludedFiles);
 			featureParser = new FeatureFileParser(reader);
