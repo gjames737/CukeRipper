@@ -10,6 +10,7 @@ import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.LoadedCukes;
+import northwoods.cukeripper.utils.parsing.CukeConsole;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,10 +70,12 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		try {
 			List<File> excludedFiles = new ArrayList<File>();
 			String supportFolderPath = "C:\\TFSBuild\\CoPilot\\Trunk\\CoPilotCukes\\features\\support";
-			excludedFiles.add(new File(supportFolderPath + File.separator + "copilot.rb"));
+			excludedFiles.add(new File(supportFolderPath + File.separator
+					+ "copilot.rb"));
 			excludedFiles.add(new File(supportFolderPath + File.separator
 					+ "copilot_adb.rb"));
-			excludedFiles.add(new File(supportFolderPath + File.separator + "env.rb"));
+			excludedFiles.add(new File(supportFolderPath + File.separator
+					+ "env.rb"));
 			excludedFiles.add(new File(supportFolderPath + File.separator
 					+ "manifest_manager.rb"));
 			excludedFiles.add(new File(supportFolderPath + File.separator
@@ -137,12 +140,10 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	}
 
 	private void handleScenarioSingleClick(CukeScenario obj) {
-		// TODO Auto-generated method stub
 
 	}
 
 	private void handleStatementSingleClick(GWTStatement obj) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -180,18 +181,33 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		view.openEditorOnFile(scenarioFile);
 	}
 
-	private void handleStatementDoubleClick(GWTStatement statment) {
-		File statmentFile = statment.getStepFile();
-		if (statmentFile != null) {
-			view.openEditorOnFile(statmentFile);
+	private void handleStatementDoubleClick(GWTStatement statement) {
+
+		// TODO
+		File statementFile = findFileForStatement(statement);
+		statement.setStepFile(statementFile);
+
+		if (statementFile != null) {
+			view.openEditorOnFile(statementFile);
 		} else {
-			File featureFile = statment.getFeatureFile();
+			File featureFile = statement.getFeatureFile();
 			if (featureFile != null) {
 				view.openEditorOnFile(featureFile);
 			} else {
 				view.showMessage(NO_FILE_FOUND);
 			}
 		}
+	}
+
+	private File findFileForStatement(GWTStatement statement) {
+		File statementFile = null;
+		try {
+			statementFile = featureParser.findFileForStatement(statement);
+		} catch (Exception e) {
+			CukeConsole.println(e.getMessage(), true);
+			e.printStackTrace();
+		}
+		return statementFile;
 	}
 
 	private void hookClickActions() {
@@ -309,10 +325,9 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		});
 
 		try {
-			// prefs are automatically flushed during a plugin's "super.stop()".
 			prefs.flush();
 		} catch (BackingStoreException e) {
-			// TODO write a real exception handler.
+			CukeConsole.println(e.getMessage(), true);
 			e.printStackTrace();
 		}
 	}

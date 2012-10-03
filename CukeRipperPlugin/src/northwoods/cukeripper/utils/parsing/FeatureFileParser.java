@@ -58,13 +58,8 @@ public class FeatureFileParser {
 				if (gwtStatement.getStepFile() == null) {
 					CukeConsole.println(gwtStatement.slashToSlashStatement(),
 							false);
-					File stepFile = parser.findStepFileForStatement(reader,
-							gwtStatement);
-					if (stepFile == null) {
-						CukeConsole.println("it is null here", true);
-					}
-
-					gwtStatement.setStepFile(stepFile);
+					// File stepFile = findFileForStatement(gwtStatement);
+					// gwtStatement.setStepFile(stepFile);
 				} else {
 					CukeConsole.println("it already has a step file ["
 							+ gwtStatement.slashToSlashStatement() + "]", true);
@@ -74,6 +69,15 @@ public class FeatureFileParser {
 		}
 
 		return feature;
+	}
+
+	public File findFileForStatement(GWTStatement gwtStatement)
+			throws Exception {
+		File stepFile = parser.findStepFileForStatement(reader, gwtStatement);
+		if (stepFile == null) {
+			CukeConsole.println("it is null here", true);
+		}
+		return stepFile;
 	}
 
 	private String cleanFileContents(String stringContents) {

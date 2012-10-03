@@ -2,9 +2,7 @@ package northwoods.cukeripper.utils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import northwoods.cukeripper.utils.parsing.CukeConsole;
 import northwoods.cukeripper.utils.parsing.CukeParser;
@@ -13,7 +11,9 @@ public class LoadedCukes {
 
 	private static List<CukeScreen> screens = new ArrayList<CukeScreen>();
 	private static FeatureBuilder featureBuilder = null;
-	private static Map<String, File> statementFilesMap = new HashMap<String, File>();
+
+	// private static Map<String, File> statementFilesMap = new HashMap<String,
+	// File>();
 
 	public static List<CukeScreen> getScreens() {
 		return screens;
@@ -60,7 +60,7 @@ public class LoadedCukes {
 			CukeParser parser) {
 		File[] allScreenFiles = reader.getAllScreenFiles();
 		for (CukeScreen screen : screens) {
-			if (!CukeFileReader.isAllEventsCanceled())
+			if (CukeFileReader.isAllEventsCanceled())
 				return;
 			if (screen.getScreenFile() == null) {
 				boolean found = false;
@@ -81,17 +81,17 @@ public class LoadedCukes {
 
 	}
 
-	public static Map<String, File> getStatemetFilesMap() {
-		return statementFilesMap;
-	}
-
-	public static void addStateFileToMap(GWTStatement gwtStatement,
-			File stepFile) {
-		statementFilesMap.put(gwtStatement.slashToSlashStatement(), stepFile);
-
-	}
-
-	public static File getInStatemetFilesMap(GWTStatement statement) {
-		return statementFilesMap.get(statement.slashToSlashStatement());
-	}
+	// public static Map<String, File> getStatemetFilesMap() {
+	// return statementFilesMap;
+	// }
+	//
+	// public static void addStateFileToMap(GWTStatement gwtStatement,
+	// File stepFile) {
+	// statementFilesMap.put(gwtStatement.slashToSlashStatement(), stepFile);
+	//
+	// }
+	//
+	// public static File getInStatemetFilesMap(GWTStatement statement) {
+	// return statementFilesMap.get(statement.slashToSlashStatement());
+	// }
 }

@@ -10,17 +10,17 @@ public class CukeConsole {
 	private static List<ICukeConsoleListener> listeners = new ArrayList<ICukeConsoleListener>();
 
 	public static void println(String text, boolean error) {
-		String prefix = error ? "ERROR: " : "";
+		String prefix = error ? "        ERROR: " : "";
 		text = prefix + text;
 		CukeConsole.printStatements.add(text);
 
-		// if (error) {
-		// System.err.println("{" + Thread.currentThread().getName() + "} "
-		// + text);
-		// } else {
-		// System.out.println("{" + Thread.currentThread().getName() + "} "
-		// + text);
-		// }
+		if (error) {
+			System.err.println("{" + Thread.currentThread().getName() + "} "
+					+ text);
+		} else {
+			System.out.println("{" + Thread.currentThread().getName() + "} "
+					+ text);
+		}
 		for (ICukeConsoleListener listener : listeners) {
 			listener.onPrintLn(text, error);
 		}
