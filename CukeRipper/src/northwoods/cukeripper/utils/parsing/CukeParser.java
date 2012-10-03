@@ -10,12 +10,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import northwoods.cukeripper.utils.CommonRips;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.GWTStatement.StatementType;
+import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.StepAction;
 
 public class CukeParser {
@@ -71,6 +73,8 @@ public class CukeParser {
 			}
 
 			while (lastIndex != -1) {
+				if (CukeFileReader.isAllEventsCanceled())
+					return new ArrayList<Integer>();
 				lastIndex = haystack.indexOf(subStr, lastIndex);
 				if (lastIndex != -1) {
 					indices.add(lastIndex);
@@ -94,6 +98,8 @@ public class CukeParser {
 	String getObjectNameFromContents(int offset, String tag,
 			String stringContents) throws Exception {
 		try {
+			if (CukeFileReader.isAllEventsCanceled())
+				return CommonRips.MSG_NO_PARSABLE_CONTENT;
 			int indexOfNameStart = offset + tag.length();
 			int indexOfNextEndOfLineChar = indexOfNameStart
 					+ stringContents.substring(indexOfNameStart).indexOf("\n");
@@ -172,7 +178,8 @@ public class CukeParser {
 			StatementType lastType = StatementType.GIVEN;
 			List<GWTStatement> gwts = new ArrayList<GWTStatement>();
 			for (int i = 0; i < indicesOfStatements.size(); i++) {
-
+				if (CukeFileReader.isAllEventsCanceled())
+					return new ArrayList<GWTStatement>();
 				int statementIndex = indicesOfStatements.get(i);
 				String snippetOfStatement = getSnippetOfStatement(
 						fullScenarioString, statementIndex, "And".length());
@@ -407,7 +414,8 @@ public class CukeParser {
 		try {
 			int numberOfStepDefs = indicesOfSlashPt.size();
 			for (int i = 0; i < numberOfStepDefs; i++) {
-
+				if (CukeFileReader.isAllEventsCanceled())
+					return;
 				String substringOfType = getSubStringForStepDefAtStatementIndex(
 						fullContents, indicesOfSlashPt.get(i));
 
@@ -564,6 +572,8 @@ public class CukeParser {
 			List<Integer> indicesOfOn = indicesOfOccurances(
 					statementsParagraph, on_subStr);
 			for (int index : indicesOfOn) {
+				if (CukeFileReader.isAllEventsCanceled())
+					return new ArrayList<StepAction>();
 				int startScreenNameIndex = on_subStr.length() + index;
 				String screenNameIsInThisString = statementsParagraph
 						.substring(startScreenNameIndex);
@@ -670,11 +680,23 @@ public class CukeParser {
 	public File findStepFileForStatement(CukeFileReader reader,
 			GWTStatement gwtStatement) throws Exception {
 		try {
+			// TODO
+			Map<String, File> filesMap = LoadedCukes.getStatemetFilesMap();
+			File currentStatemetFiles = LoadedCukes
+					.getInStatemetFilesMap(gwtStatement);
+			if (currentStatemetFiles != null) {
+				return filesMap.get(currentStatemetFiles);
+			}
+
+			//
 			File[] stepFiles = reader.getAllStepDefinitionFiles();
 			String theStepString = gwtStatement.slashToSlashStatement();
-			System.err.println("the step string: "
-					+ gwtStatement.slashToSlashStatement());
+			CukeConsole.println(
+					"the step string: " + gwtStatement.slashToSlashStatement(),
+					false);
 			for (int i = 0; i < stepFiles.length; i++) {
+				if (CukeFileReader.isAllEventsCanceled())
+					return new File("");
 				File stepFile = stepFiles[i];
 				boolean isInFile = isStatementFoundInStepFile(reader,
 						theStepString, stepFile);
@@ -800,11 +822,14 @@ public class CukeParser {
 				startMatcher);
 		List<Integer[]> mappedStartEndIndices = new ArrayList<Integer[]>();
 		for (int i = 0; i < indicesOfEndMatcher.size(); i++) {
-
+			if (CukeFileReader.isAllEventsCanceled())
+				return CommonRips.MSG_NO_PARSABLE_CONTENT;
 			Integer icq = indicesOfEndMatcher.get(i);
 			int closestDistance = 100000;
 			int closestPOindexIO = 0;
 			for (int j = 0; j < indicesOfStartMatcher.size(); j++) {
+				if (CukeFileReader.isAllEventsCanceled())
+					return CommonRips.MSG_NO_PARSABLE_CONTENT;
 				Integer io = indicesOfStartMatcher.get(j);
 				int distance = icq - io;
 				if (distance > 0 && distance < closestDistance) {
@@ -838,16 +863,18 @@ public class CukeParser {
 		return cleaned;
 	}
 
-	private void printWithMarkings(String contents, String marking) {
-		String mark = "";
-		for (int i = 0; i < 40; i++) {
-			mark += marking;
-		}
-		mark = "       " + mark;
-		System.out.println(mark);
-		System.out.println(contents);
-		System.out.println(mark);
-	}
+	// private void printWithMarkings(String contents, String marking) {
+	// String mark = "";
+	// for (int i = 0; i < 40; i++) {
+	// if (CukeFileReader.isAllEventsCanceled())
+	// return;
+	// mark += marking;
+	// }
+	// mark = "       " + mark;
+	// System.out.println(mark);
+	// System.out.println(contents);
+	// System.out.println(mark);
+	// }
 
 	public boolean fileBelongsToScreen(CukeFileReader reader, String name,
 			File screenFile) {

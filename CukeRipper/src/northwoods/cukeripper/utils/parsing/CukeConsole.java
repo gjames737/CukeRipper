@@ -14,11 +14,13 @@ public class CukeConsole {
 		text = prefix + text;
 		CukeConsole.printStatements.add(text);
 
-		if (error)
-			System.err.println(text);
-		else
-			System.out.println(text);
-
+		// if (error) {
+		// System.err.println("{" + Thread.currentThread().getName() + "} "
+		// + text);
+		// } else {
+		// System.out.println("{" + Thread.currentThread().getName() + "} "
+		// + text);
+		// }
 		for (ICukeConsoleListener listener : listeners) {
 			listener.onPrintLn(text, error);
 		}

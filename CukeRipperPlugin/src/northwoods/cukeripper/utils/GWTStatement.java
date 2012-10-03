@@ -26,8 +26,9 @@ public class GWTStatement {
 		this.type = _type;
 		this.statement = _statement;
 		this.actionsList = new ArrayList<StepAction>();
-		this.step_file = _step_file;
+
 		this.feature_file = _feature_file;
+		setStepFile(_step_file);
 	}
 
 	public String getFormattedStatement(boolean isAnd) {
@@ -94,6 +95,9 @@ public class GWTStatement {
 
 	public void setStepFile(File stepFile) {
 		this.step_file = stepFile;
+		if (this.step_file != null) {
+			LoadedCukes.addStateFileToMap(this, stepFile);
+		}
 	}
 
 	public String slashToSlashStatement() {
