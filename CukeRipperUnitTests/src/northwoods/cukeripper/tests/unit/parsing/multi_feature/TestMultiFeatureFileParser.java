@@ -9,15 +9,13 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.File;
-import java.util.List;
 
 import northwoods.cukeripper.tests.unit.helpers.texts.FullTexts;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
-import northwoods.cukeripper.utils.CukeScenario;
-import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.parsing.CukeParser;
 import northwoods.cukeripper.utils.parsing.FeatureFileParser;
+import northwoods.cukeripper.utils.parsing.string.FeatureFileStringParser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,206 +23,116 @@ import org.mockito.Mock;
 
 public class TestMultiFeatureFileParser {
 
-	private File[] featureFiles = null;
-	private File[] screenFiles = null;
-	private File[] stepDefinitionFiles = null;
+	private static final int NUMBER_OF_FEATURES = 10;
 
-	private FeatureFileParser featureParser;
+	private FeatureFileParser featureFileParser;
 
 	@Mock
 	private CukeFileReader reader;
+
+	@Mock
+	private CukeParser parser;
+
+	@Mock
+	private FeatureFileStringParser featureFileStringParser;
+
+	private File[] testFiles;
+
+	private CukeFeature[] testCukeFeatures;
+
+	private String[] orderedFeatureNames;
+	private String[] featureNames;
 
 	@Before
 	public void Setup() {
 		CukeFileReader.setJIT(false);
 		CukeParser.THROW_ERRORS = true;
+		setupFeatureNames();
 		initMocks(this);
-		setUpAllFiles();
-		setupReader();
 
-		featureParser = new FeatureFileParser(reader);
+		try {
+			setupMocks();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			fail();
+		}
+		featureFileParser = new FeatureFileParser(reader);
 		FullTexts.initFeatureScenarios();
 	}
 
 	@Test
 	public void itHasAFileReader() {
-		assertThat(featureParser.getReader(), is(reader));
+		assertThat(featureFileParser.getReader(), is(reader));
 	}
 
 	@Test
-	public void itCreatesAFeatureFromAFile() {
-		assertThat(theFeatureParsed(0), is(notNullValue()));
-	}
-
-	@Test
-	public void itCreatesAFeatureFromAFileWithTheCorrectName() {
-		assertThat(theFeatureParsed(0).getName(), is(FullTexts.FEATURE_0_NAME));
-	}
-
-	@Test
-	public void itCreatesAFeatureFromAFileWithTheCorrectNumberOfScenarios() {
-		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
-		assertThat(theScenarios.size(),
-				is(FullTexts.FEATURE_0_NUMBER_OF_SCENARIOS));
-	}
-
-	@Test
-	public void itCreatesAFeatureFromAFileWithTheCorrectScenarioNames() {
-		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
-		int size = theScenarios.size();
-		for (int i = 0; i < size; i++) {
-			CukeScenario cukeScenario = theScenarios.get(i);
-			assertThat(cukeScenario.getName(),
-					is(FullTexts.FEATURE_0_SCENARIOS[i].getName()));
+	public void itReturnsEachFeatures() throws Exception {
+		for (int i = 0; i < NUMBER_OF_FEATURES; i++) {
+			CukeFeature actual_featureFromFile = featureFileParser
+					.getFeatureFromFile(testFiles[i], featureFileStringParser,
+							parser);
+			assertThat(actual_featureFromFile, is(notNullValue()));
+			assertThat(actual_featureFromFile, is(testCukeFeatures[i]));
 		}
 	}
 
 	@Test
-	public void itCreatesTheCorrectScenariosWithTheCorrectNumberOfGWTStatements() {
-		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
-		int size = theScenarios.size();
-		for (int i = 0; i < size; i++) {
-			CukeScenario cukeScenario = theScenarios.get(i);
-			List<GWTStatement> theStatements = cukeScenario.getStatements();
-			int numOfStatements = theStatements.size();
-			List<GWTStatement> expectedStatements = FullTexts.FEATURE_0_SCENARIOS[i]
-					.getStatements();
-			assertThat(numOfStatements, is(expectedStatements.size()));
+	public void itReturnsAListOfFeatures() throws Exception {
 
-		}
-	}
+		CukeFeature[] actual_featuresFromFiles = featureFileParser
+				.getSortedFeaturesInFiles(testFiles, featureFileStringParser,
+						parser);
+		assertThat(actual_featuresFromFiles, is(notNullValue()));
+		assertThat(actual_featuresFromFiles.length, is(NUMBER_OF_FEATURES));
 
-	@Test
-	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementTypes() {
-		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
-		int size = theScenarios.size();
-		for (int i = 0; i < size; i++) {
-			CukeScenario cukeScenario = theScenarios.get(i);
-			List<GWTStatement> theStatements = cukeScenario.getStatements();
-			int numOfStatements = theStatements.size();
-
-			for (int j = 0; j < numOfStatements; j++) {
-				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
-						.getStatement(j);
-				assertThat(actualStatement.getType(),
-						is(expectedStatement.getType()));
-			}
-		}
-	}
-
-	@Test
-	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatements0() {
-		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
-		int size = theScenarios.size();
-		for (int i = 0; i < size; i++) {
-			CukeScenario cukeScenario = theScenarios.get(i);
-			List<GWTStatement> theStatements = cukeScenario.getStatements();
-			int numOfStatements = theStatements.size();
-
-			for (int j = 0; j < numOfStatements; j++) {
-				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
-						.getStatement(j);
-				assertThat(actualStatement.getStatement(),
-						is(expectedStatement.getStatement()));
-			}
-		}
-	}
-
-	@Test
-	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatements1() {
-		List<CukeScenario> theScenarios = theFeatureParsed(1).getScenarios();
-		int size = theScenarios.size();
-		for (int i = 0; i < size; i++) {
-			CukeScenario cukeScenario = theScenarios.get(i);
-			List<GWTStatement> theStatements = cukeScenario.getStatements();
-			int numOfStatements = theStatements.size();
-
-			for (int j = 0; j < numOfStatements; j++) {
-				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FullTexts.FEATURE_1_SCENARIOS[i]
-						.getStatement(j);
-				assertThat(actualStatement.getStatement(),
-						is(expectedStatement.getStatement()));
-			}
-		}
-	}
-
-	@Test
-	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatementsWithTheCorrectFeatureAndStepFile() {
-		List<CukeScenario> theScenarios = theFeatureParsed(1).getScenarios();
-		int size = theScenarios.size();
-		for (int i = 0; i < size; i++) {
-			CukeScenario cukeScenario = theScenarios.get(i);
-			List<GWTStatement> theStatements = cukeScenario.getStatements();
-			int numOfStatements = theStatements.size();
-
-			for (int j = 0; j < numOfStatements; j++) {
-				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FullTexts.FEATURE_1_SCENARIOS[i]
-						.getStatement(j);
-				assertThat(
-						actualStatement.getFeatureFile().getAbsolutePath(),
-						is(expectedStatement.getFeatureFile().getAbsolutePath()));
-				if (actualStatement.getStepFile() == null) {
-					System.err.println("it is null for "
-							+ actualStatement.slashToSlashStatement());
-				}
-				assertThat(actualStatement.getStepFile(), is(notNullValue()));
-				assertThat(actualStatement.getStepFile().getAbsolutePath(),
-						is(expectedStatement.getStepFile().getAbsolutePath()));
-			}
+		for (int i = 0; i < NUMBER_OF_FEATURES; i++) {
+			assertThat(actual_featuresFromFiles[i].getName(),
+					is(orderedFeatureNames[i]));
 		}
 	}
 
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-	private CukeFeature theFeatureParsed(int index) {
-		try {
-			return featureParser.getFeatureFromFile(featureFiles[index]);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-			return null;
+	private void setupFeatureNames() {
+		orderedFeatureNames = new String[NUMBER_OF_FEATURES];
+		orderedFeatureNames[0] = "aaadewq";
+		orderedFeatureNames[1] = "aavdewq";
+		orderedFeatureNames[2] = "ay";
+		orderedFeatureNames[3] = "b";
+		orderedFeatureNames[4] = "fa3wa";
+		orderedFeatureNames[5] = "nncv";
+		orderedFeatureNames[6] = "noooo";
+		orderedFeatureNames[7] = "reewrer";
+		orderedFeatureNames[8] = "zzzcz";
+		orderedFeatureNames[9] = "zzzdz";
+
+		featureNames = new String[NUMBER_OF_FEATURES];
+		featureNames[0] = orderedFeatureNames[6];
+		featureNames[1] = orderedFeatureNames[8];
+		featureNames[2] = orderedFeatureNames[3];
+		featureNames[3] = orderedFeatureNames[5];
+		featureNames[4] = orderedFeatureNames[1];
+		featureNames[5] = orderedFeatureNames[0];
+		featureNames[6] = orderedFeatureNames[9];
+		featureNames[7] = orderedFeatureNames[2];
+		featureNames[8] = orderedFeatureNames[4];
+		featureNames[9] = orderedFeatureNames[7];
+
+	}
+
+	private void setupMocks() throws Exception {
+		testFiles = new File[NUMBER_OF_FEATURES];
+		testCukeFeatures = new CukeFeature[NUMBER_OF_FEATURES];
+		for (int i = 0; i < NUMBER_OF_FEATURES; i++) {
+			testFiles[i] = mock(File.class);
+
+			testCukeFeatures[i] = new CukeFeature(featureNames[i], testFiles[i]);
+			when(
+					featureFileStringParser.parseOutFeature(testFiles[i],
+							reader, parser)).thenReturn(testCukeFeatures[i]);
 		}
-	}
-
-	private void setupReader() {
-		when(reader.getAllFeatureFiles()).thenReturn(featureFiles);
-		when(reader.getAllScreenFiles()).thenReturn(screenFiles);
-		when(reader.getAllStepDefinitionFiles())
-				.thenReturn(stepDefinitionFiles);
-
-		when(reader.readFullFileContents(featureFiles[0])).thenReturn(
-				FullTexts.FEATURE_0);
-		when(reader.readFullFileContents(featureFiles[1])).thenReturn(
-				FullTexts.FEATURE_1);
-
-		when(reader.readFullFileContents(screenFiles[0])).thenReturn(
-				FullTexts.SCREEN_0);
-
-		when(reader.readFullFileContents(stepDefinitionFiles[0])).thenReturn(
-				FullTexts.STEP_DEF_0);
-
-	}
-
-	private void setUpAllFiles() {
-		featureFiles = new File[2];
-		featureFiles[0] = mock(File.class);
-		featureFiles[1] = mock(File.class);
-
-		screenFiles = new File[1];
-		screenFiles[0] = mock(File.class);
-
-		stepDefinitionFiles = new File[1];
-		stepDefinitionFiles[0] = mock(File.class);
-
-		when(featureFiles[0].getName()).thenReturn("foo0.feature");
-		when(featureFiles[1].getName()).thenReturn("foo1.feature");
-		when(screenFiles[0].getName()).thenReturn("foo.rb");
-		when(stepDefinitionFiles[0].getName()).thenReturn("foo.rb");
 
 	}
 }
