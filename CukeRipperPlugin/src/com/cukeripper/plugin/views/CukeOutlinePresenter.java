@@ -28,6 +28,9 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
+import com.cukeripper.plugin.views.providers.content.FeatureTreeContentProvider;
+import com.cukeripper.plugin.views.providers.content.SupportScreenTreeContentProvider;
+
 public class CukeOutlinePresenter implements ICukeParsingListener {
 	private static final long RESET_STOP_EVENTS_DELAY = 1000L;
 	private static final String NO_FILE_FOUND = "No file was found. Refresh!";

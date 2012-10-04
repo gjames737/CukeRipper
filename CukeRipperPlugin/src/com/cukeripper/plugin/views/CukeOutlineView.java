@@ -24,6 +24,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
+import com.cukeripper.plugin.views.providers.content.FeatureTreeContentProvider;
+import com.cukeripper.plugin.views.providers.content.SupportScreenTreeContentProvider;
+import com.cukeripper.plugin.views.providers.label.SupportScreenLabelProvider;
+
 public class CukeOutlineView extends ViewPart {
 	// http://www.eclipse.org/swt/widgets/
 	private static final String ROOT_FILE = "C:" + File.separator + "TFSBuild"
@@ -115,6 +119,8 @@ public class CukeOutlineView extends ViewPart {
 		SupportScreenTreeContentProvider supportScreensProvider = presenter
 				.getSupportScreensTreeContentProvider();
 		treeViewer_SupportScreens.setContentProvider(supportScreensProvider);
+		treeViewer_SupportScreens
+				.setLabelProvider(new SupportScreenLabelProvider());
 		treeViewer_SupportScreens.setInput(getViewSite());
 		Tree tree_supportScreens = treeViewer_SupportScreens.getTree();
 		fd_tree.right = new FormAttachment(tree_supportScreens, -6);

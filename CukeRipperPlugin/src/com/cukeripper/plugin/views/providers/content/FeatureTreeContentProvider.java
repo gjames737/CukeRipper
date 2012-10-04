@@ -1,4 +1,4 @@
-package com.cukeripper.plugin.views;
+package com.cukeripper.plugin.views.providers.content;
 
 import java.io.File;
 
@@ -8,6 +8,8 @@ import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+
+import com.cukeripper.plugin.views.ICukeParsingListener;
 
 public class FeatureTreeContentProvider implements ITreeContentProvider {
 

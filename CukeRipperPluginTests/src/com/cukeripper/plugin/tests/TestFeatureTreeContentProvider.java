@@ -16,8 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.cukeripper.plugin.views.FeatureTreeContentProvider;
 import com.cukeripper.plugin.views.ICukeParsingListener;
+import com.cukeripper.plugin.views.providers.content.FeatureTreeContentProvider;
 
 public class TestFeatureTreeContentProvider extends BaseParseTesting {
 

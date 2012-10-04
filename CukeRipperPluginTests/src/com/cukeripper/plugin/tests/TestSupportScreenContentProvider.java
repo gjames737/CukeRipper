@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.cukeripper.plugin.views.ICukeParsingListener;
-import com.cukeripper.plugin.views.SupportScreenTreeContentProvider;
+import com.cukeripper.plugin.views.providers.content.SupportScreenTreeContentProvider;
 
 public class TestSupportScreenContentProvider extends BaseParseTesting {
 
