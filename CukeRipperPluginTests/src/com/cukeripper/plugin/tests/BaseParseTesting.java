@@ -80,6 +80,10 @@ public class BaseParseTesting {
 
 			when(featureFileParser.getFeatureFromFile(TEST_FEATURE_FILE_1))
 					.thenReturn(testFeatures[1]);
+			when(
+					featureFileParser.getSortedFeaturesInFiles(new File[] {
+							TEST_FEATURE_FILE_0, TEST_FEATURE_FILE_1 }))
+					.thenReturn(testFeatures);
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

@@ -55,6 +55,12 @@ public class FeatureFileParser {
 		return stepFile;
 	}
 
+	public CukeFeature[] getSortedFeaturesInFiles(File[] featureFiles)
+			throws Exception {
+		return getSortedFeaturesInFiles(featureFiles,
+				new FeatureFileStringParser(), parser);
+	}
+
 	public CukeFeature[] getSortedFeaturesInFiles(File[] files,
 			FeatureFileStringParser featureFileStringParser, CukeParser _parser)
 			throws Exception {
@@ -74,4 +80,5 @@ public class FeatureFileParser {
 
 		return features;
 	}
+
 }

@@ -1,6 +1,7 @@
 package com.cukeripper.plugin.tests;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -38,6 +39,7 @@ public class TestFeatureTreeContentProvider extends BaseParseTesting {
 	public void itGetsTheCorrectElements() {
 		Object[] actualFeatures = feature_treeContentProvider.getElements(null);
 
+		assertThat(actualFeatures, is(notNullValue()));
 		assertThat(actualFeatures.length, is(testFeatures.length));
 
 		for (int i = 0; i < testFeatures.length; i++) {

@@ -24,7 +24,7 @@ public class CukeParser {
 	public String CONSOLE_STR_ERROR_PARSING_SCENARIO_IN_FILE;
 	public static boolean THROW_ERRORS = false;
 
-	CukeScenario parseScenario(File file, String featureContents,
+	public CukeScenario parseScenario(File file, String featureContents,
 			String scenarioTag, List<Integer> indicesOfScenarioTags, int index)
 			throws Exception {
 		try {
@@ -61,7 +61,7 @@ public class CukeParser {
 		return null;
 	}
 
-	List<Integer> indicesOfOccurances(String haystack, String subStr)
+	public List<Integer> indicesOfOccurances(String haystack, String subStr)
 			throws Exception {
 		try {
 			int lastIndex = 0;
@@ -93,7 +93,7 @@ public class CukeParser {
 		return new ArrayList<Integer>();
 	}
 
-	String getObjectNameFromContents(int offset, String tag,
+	public String getObjectNameFromContents(int offset, String tag,
 			String stringContents) throws Exception {
 		try {
 			if (CukeFileReader.isAllEventsCanceled())

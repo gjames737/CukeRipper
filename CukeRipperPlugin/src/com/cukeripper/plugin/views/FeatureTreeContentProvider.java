@@ -1,8 +1,6 @@
 package com.cukeripper.plugin.views;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeScenario;
@@ -13,7 +11,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class FeatureTreeContentProvider implements ITreeContentProvider {
 
-	private FeatureFileParser featureParser;
+	private FeatureFileParser featureFileParser;
 	private File[] featureFiles;
 	private ICukeParsingListener listener;
 
@@ -21,7 +19,7 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 			File[] _featureFiles, FeatureFileParser _featureParser) {
 		this.listener = _listener;
 		this.featureFiles = _featureFiles;
-		this.featureParser = _featureParser;
+		this.featureFileParser = _featureParser;
 	}
 
 	@Override
@@ -44,23 +42,13 @@ public class FeatureTreeContentProvider implements ITreeContentProvider {
 
 	private CukeFeature[] getFeatures() {
 
-		CukeFeature[] featuresArray = new CukeFeature[] {};
 		try {
-			List<CukeFeature> featuresList = new ArrayList<CukeFeature>();
-			for (int i = 0; i < featureFiles.length; i++) {
-				featuresList.add(featureParser
-						.getFeatureFromFile(featureFiles[i]));
-			}
-			featuresArray = new CukeFeature[featuresList.size()];
-			for (int i = 0; i < featuresArray.length; i++) {
-				featuresArray[i] = featuresList.get(i);
-			}
-
+			return featureFileParser.getSortedFeaturesInFiles(featureFiles);
 		} catch (Exception e) {
 			listener.onFeatureParseException(e);
 		}
 
-		return featuresArray;
+		return new CukeFeature[] {};
 	}
 
 	@Override
