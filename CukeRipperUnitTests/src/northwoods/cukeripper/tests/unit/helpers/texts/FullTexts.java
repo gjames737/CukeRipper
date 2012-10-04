@@ -1,7 +1,8 @@
-package northwoods.cukeripper.tests.unit.helpers;
+package northwoods.cukeripper.tests.unit.helpers.texts;
 
 import static northwoods.cukeripper.tests.unit.helpers.TestHelper.featureFile;
 import static northwoods.cukeripper.tests.unit.helpers.TestHelper.stepFile;
+import northwoods.cukeripper.tests.unit.helpers.TestHelper;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;

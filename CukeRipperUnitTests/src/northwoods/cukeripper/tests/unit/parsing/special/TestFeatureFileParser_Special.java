@@ -1,11 +1,11 @@
 package northwoods.cukeripper.tests.unit.parsing.special;
 
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0;
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0_NAME;
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0_NUMBER_OF_SCENARIOS;
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0_SCENARIOS;
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.SCREEN_0;
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.STEP_DEF_0;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.FEATURE_0;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.FEATURE_0_NAME;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.FEATURE_0_NUMBER_OF_SCENARIOS;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.FEATURE_0_SCENARIOS;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.SCREEN_0;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.STEP_DEF_0;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -18,7 +18,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.io.File;
 import java.util.List;
 
-import northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special;
+import northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;

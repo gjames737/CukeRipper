@@ -1,6 +1,6 @@
 package northwoods.cukeripper.tests.unit.parsing;
 
-import static northwoods.cukeripper.tests.unit.helpers.FullTexts.STEP_DEF_0_STATEMENTS;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts.STEP_DEF_0_STATEMENTS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -12,7 +12,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.io.File;
 import java.util.List;
 
-import northwoods.cukeripper.tests.unit.helpers.FullTexts;
+import northwoods.cukeripper.tests.unit.helpers.texts.FullTexts;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;

@@ -1,9 +1,9 @@
 package northwoods.cukeripper.tests.unit.parsing.special;
 
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.FEATURE_0;
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.SCREEN_0;
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.STEP_DEF_0;
-import static northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special.STEP_DEF_0_STATEMENTS;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.FEATURE_0;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.SCREEN_0;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.STEP_DEF_0;
+import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special.STEP_DEF_0_STATEMENTS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -14,7 +14,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.io.File;
 import java.util.List;
 
-import northwoods.cukeripper.tests.unit.helpers.special.FullTexts_Special;
+import northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_Special;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.GWTStatement;
 import northwoods.cukeripper.utils.parsing.StepFileParser;

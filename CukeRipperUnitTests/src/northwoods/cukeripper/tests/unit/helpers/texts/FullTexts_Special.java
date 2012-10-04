@@ -1,9 +1,8 @@
-package northwoods.cukeripper.tests.unit.helpers.special;
+package northwoods.cukeripper.tests.unit.helpers.texts;
 
 import static northwoods.cukeripper.tests.unit.helpers.TestHelper.featureFile;
 import static northwoods.cukeripper.tests.unit.helpers.TestHelper.stepFile;
 import northwoods.cukeripper.tests.unit.helpers.TestHelper;
-import northwoods.cukeripper.utils.CommonRips;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;
@@ -11,7 +10,7 @@ import northwoods.cukeripper.utils.GWTStatement.StatementType;
 import northwoods.cukeripper.utils.ScreenMethod;
 import northwoods.cukeripper.utils.StepAction;
 
-public class FullTexts_REGEX {
+public class FullTexts_Special {
 	public static GWTStatement[] STEP_DEF_0_STATEMENTS;
 
 	public static CukeScenario[] FEATURE_0_SCENARIOS;
@@ -19,13 +18,12 @@ public class FullTexts_REGEX {
 	public static void initFeatureScenarios() {
 		TestHelper.initiate();
 		FEATURE_0_SCENARIOS = new CukeScenario[] {
-				new CukeScenario("Regex scenario 0", null),
-				new CukeScenario("Regex scenario 1", null) };
+				new CukeScenario("Special scenario 0 with extra wording", null),
+				new CukeScenario("Special scenario 1 with extra wording", null) };
 		FEATURE_0_SCENARIOS[0].setLineNumber(6);
 
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
-				featureFile(), StatementType.GIVEN,
-				"I am doing something \"reg insert\""));
+				featureFile(), StatementType.GIVEN, "I am doing something EW"));
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
 				featureFile(), StatementType.WHEN, "I do this"));
 		FEATURE_0_SCENARIOS[0].createStatement(new GWTStatement(stepFile(),
@@ -33,7 +31,7 @@ public class FullTexts_REGEX {
 		//
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
 				featureFile(), StatementType.GIVEN,
-				"I am doing \"reg insert\" something"));
+				"I am doing something EW extra wording present"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
 				featureFile(), StatementType.WHEN, "I do this"));
 		FEATURE_0_SCENARIOS[1].createStatement(new GWTStatement(stepFile(),
@@ -42,14 +40,14 @@ public class FullTexts_REGEX {
 	}
 
 	public static final int FEATURE_0_NUMBER_OF_SCENARIOS = 2;
-	public static final String FEATURE_0_NAME = "Regex feature 0";
-	public static final String FEATURE_0 = "@wip   \n\n\n Feature:     Regex feature 0"
-			+ "\n\nScenario: Regex scenario 0"
-			+ "\nGiven I am doing something \"reg insert\""
+	public static final String FEATURE_0_NAME = "Special Feature 0";
+	public static final String FEATURE_0 = "@wip   \n\n\n Feature:     Special Feature 0"
+			+ "\n\nScenario: Special scenario 0 with extra wording"
+			+ "\nGiven I am doing something EW"
 			+ "\n When I do this\nThen I get that"
 
-			+ "\n\n Scenario: Regex scenario 1"
-			+ "\nGiven I am doing \"reg insert\" something"
+			+ "\n\n Scenario: Special scenario 1 with extra wording"
+			+ "\nGiven I am doing something EW extra wording present"
 			+ "\n When I do this\n Then I get that";
 
 	public static final String SCREEN_0 = ""
@@ -86,7 +84,7 @@ public class FullTexts_REGEX {
 		TestHelper.initiate();
 		GWTStatement g_statement = new GWTStatement(stepFile(), featureFile(),
 				StatementType.GIVEN,
-				"Given I am doing something \"reg insert\"");
+				"Given I am doing something EW( extra wording present)?");
 		GWTStatement w_statement = new GWTStatement(stepFile(), featureFile(),
 				StatementType.WHEN, "I do this");
 		GWTStatement t_statement = new GWTStatement(stepFile(), featureFile(),
@@ -119,13 +117,19 @@ public class FullTexts_REGEX {
 	}
 
 	public static final String STEP_DEF_0 = ""
-			+ "Given /^Given I am doing something " + CommonRips.REGEX_INSERT
-			+ "$/ do" + "\n  on(screen1).method0" + "\n on(screen2).method0"
-			+ "\n end" + "\nWhen /^I do this$/ do" + "\n  on(screen1).method0"
-			+ "\n on(screen1).method0" + "\n end" + "\nThen /^I get that$/ do"
-			+ "\n  on(screen1).method0" + "\n on(screen2).method0" + "\n end"
-			+ "Given /^I am doing " + CommonRips.REGEX_INSERT
-			+ " something$/ do\n on(screen1) do |scrn|" + "  scrn.method0"
-			+ "  \n scrn.method0" + "       \nend     \nend";
+			+ "Given /^Given I am doing something EW( extra wording present)?$/ do"
+			+ "\n  on(screen1).method0"
+			+ "\n on(screen2).method0"
+			+ "\n end"
+			+ "\nWhen /^I do this$/ do"
+			+ "\n  on(screen1).method0"
+			+ "\n on(screen1).method0"
+			+ "\n end"
+			+ "\nThen /^I get that$/ do"
+			+ "\n  on(screen1).method0"
+			+ "\n on(screen2).method0"
+			+ "\n end"
+			+ "Given /^The given statement spanish$/ do\n on(screen1) do |scrn|"
+			+ "  scrn.method0" + "  \n scrn.method0" + "       \nend     \nend";
 
 }

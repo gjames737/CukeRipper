@@ -1,13 +1,6 @@
-package northwoods.cukeripper.tests.unit.parsing.special;
+package northwoods.cukeripper.tests.unit.parsing.multi_feature;
 
-import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_REGEX.FEATURE_0;
-import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_REGEX.FEATURE_0_NAME;
-import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_REGEX.FEATURE_0_NUMBER_OF_SCENARIOS;
-import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_REGEX.FEATURE_0_SCENARIOS;
-import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_REGEX.SCREEN_0;
-import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_REGEX.STEP_DEF_0;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -18,7 +11,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.io.File;
 import java.util.List;
 
-import northwoods.cukeripper.tests.unit.helpers.texts.FullTexts_REGEX;
+import northwoods.cukeripper.tests.unit.helpers.texts.FullTexts;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
@@ -30,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class TestFeatureFileParser_Regex {
+public class TestMultiFeatureFileParser {
 
 	private File[] featureFiles = null;
 	private File[] screenFiles = null;
@@ -50,7 +43,7 @@ public class TestFeatureFileParser_Regex {
 		setupReader();
 
 		featureParser = new FeatureFileParser(reader);
-		FullTexts_REGEX.initFeatureScenarios();
+		FullTexts.initFeatureScenarios();
 	}
 
 	@Test
@@ -65,13 +58,14 @@ public class TestFeatureFileParser_Regex {
 
 	@Test
 	public void itCreatesAFeatureFromAFileWithTheCorrectName() {
-		assertThat(theFeatureParsed(0).getName(), is(FEATURE_0_NAME));
+		assertThat(theFeatureParsed(0).getName(), is(FullTexts.FEATURE_0_NAME));
 	}
 
 	@Test
 	public void itCreatesAFeatureFromAFileWithTheCorrectNumberOfScenarios() {
 		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
-		assertThat(theScenarios.size(), is(FEATURE_0_NUMBER_OF_SCENARIOS));
+		assertThat(theScenarios.size(),
+				is(FullTexts.FEATURE_0_NUMBER_OF_SCENARIOS));
 	}
 
 	@Test
@@ -81,19 +75,7 @@ public class TestFeatureFileParser_Regex {
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
 			assertThat(cukeScenario.getName(),
-					is(FEATURE_0_SCENARIOS[i].getName()));
-		}
-	}
-
-	@Test
-	public void itCreatesAFeatureFromAFileWithTheCorrectScenarioLineNumbers() {
-		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
-		int size = theScenarios.size();
-		for (int i = 0; i < size; i++) {
-			CukeScenario cukeScenario = theScenarios.get(i);
-			assertThat(cukeScenario.getLineNumber(), is(not(-1)));
-			assertThat(cukeScenario.getLineNumber(),
-					is(FEATURE_0_SCENARIOS[i].getLineNumber()));
+					is(FullTexts.FEATURE_0_SCENARIOS[i].getName()));
 		}
 	}
 
@@ -105,7 +87,7 @@ public class TestFeatureFileParser_Regex {
 			CukeScenario cukeScenario = theScenarios.get(i);
 			List<GWTStatement> theStatements = cukeScenario.getStatements();
 			int numOfStatements = theStatements.size();
-			List<GWTStatement> expectedStatements = FEATURE_0_SCENARIOS[i]
+			List<GWTStatement> expectedStatements = FullTexts.FEATURE_0_SCENARIOS[i]
 					.getStatements();
 			assertThat(numOfStatements, is(expectedStatements.size()));
 
@@ -123,7 +105,7 @@ public class TestFeatureFileParser_Regex {
 
 			for (int j = 0; j < numOfStatements; j++) {
 				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FEATURE_0_SCENARIOS[i]
+				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(actualStatement.getType(),
 						is(expectedStatement.getType()));
@@ -142,7 +124,7 @@ public class TestFeatureFileParser_Regex {
 
 			for (int j = 0; j < numOfStatements; j++) {
 				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FEATURE_0_SCENARIOS[i]
+				GWTStatement expectedStatement = FullTexts.FEATURE_0_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(actualStatement.getStatement(),
 						is(expectedStatement.getStatement()));
@@ -152,7 +134,7 @@ public class TestFeatureFileParser_Regex {
 
 	@Test
 	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatements1() {
-		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
+		List<CukeScenario> theScenarios = theFeatureParsed(1).getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
@@ -161,7 +143,7 @@ public class TestFeatureFileParser_Regex {
 
 			for (int j = 0; j < numOfStatements; j++) {
 				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FEATURE_0_SCENARIOS[i]
+				GWTStatement expectedStatement = FullTexts.FEATURE_1_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(actualStatement.getStatement(),
 						is(expectedStatement.getStatement()));
@@ -171,7 +153,7 @@ public class TestFeatureFileParser_Regex {
 
 	@Test
 	public void itCreatesTheCorrectScenariosWithTheCorrectGWTStatementStatementsWithTheCorrectFeatureAndStepFile() {
-		List<CukeScenario> theScenarios = theFeatureParsed(0).getScenarios();
+		List<CukeScenario> theScenarios = theFeatureParsed(1).getScenarios();
 		int size = theScenarios.size();
 		for (int i = 0; i < size; i++) {
 			CukeScenario cukeScenario = theScenarios.get(i);
@@ -180,7 +162,7 @@ public class TestFeatureFileParser_Regex {
 
 			for (int j = 0; j < numOfStatements; j++) {
 				GWTStatement actualStatement = theStatements.get(j);
-				GWTStatement expectedStatement = FEATURE_0_SCENARIOS[i]
+				GWTStatement expectedStatement = FullTexts.FEATURE_1_SCENARIOS[i]
 						.getStatement(j);
 				assertThat(
 						actualStatement.getFeatureFile().getAbsolutePath(),
@@ -215,19 +197,23 @@ public class TestFeatureFileParser_Regex {
 		when(reader.getAllStepDefinitionFiles())
 				.thenReturn(stepDefinitionFiles);
 
-		when(reader.readFullFileContents(featureFiles[0]))
-				.thenReturn(FEATURE_0);
+		when(reader.readFullFileContents(featureFiles[0])).thenReturn(
+				FullTexts.FEATURE_0);
+		when(reader.readFullFileContents(featureFiles[1])).thenReturn(
+				FullTexts.FEATURE_1);
 
-		when(reader.readFullFileContents(screenFiles[0])).thenReturn(SCREEN_0);
+		when(reader.readFullFileContents(screenFiles[0])).thenReturn(
+				FullTexts.SCREEN_0);
 
 		when(reader.readFullFileContents(stepDefinitionFiles[0])).thenReturn(
-				STEP_DEF_0);
+				FullTexts.STEP_DEF_0);
 
 	}
 
 	private void setUpAllFiles() {
-		featureFiles = new File[1];
+		featureFiles = new File[2];
 		featureFiles[0] = mock(File.class);
+		featureFiles[1] = mock(File.class);
 
 		screenFiles = new File[1];
 		screenFiles[0] = mock(File.class);
@@ -236,7 +222,7 @@ public class TestFeatureFileParser_Regex {
 		stepDefinitionFiles[0] = mock(File.class);
 
 		when(featureFiles[0].getName()).thenReturn("foo0.feature");
-
+		when(featureFiles[1].getName()).thenReturn("foo1.feature");
 		when(screenFiles[0].getName()).thenReturn("foo.rb");
 		when(stepDefinitionFiles[0].getName()).thenReturn("foo.rb");
 
