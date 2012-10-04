@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/CukeRipperFeature_1.0.5.qualifier.jar" id="CukeRipperFeature" version="1.0.5.qualifier">
+   <feature url="features/CukeRipperFeature_1.0.6.qualifier.jar" id="CukeRipperFeature" version="1.0.6.qualifier">
       <category name="CukeRipper"/>
    </feature>
    <category-def name="CukeRipper" label="CukeRipper"/>
