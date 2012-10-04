@@ -26,6 +26,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.cukeripper.plugin.views.providers.content.FeatureTreeContentProvider;
 import com.cukeripper.plugin.views.providers.content.SupportScreenTreeContentProvider;
+import com.cukeripper.plugin.views.providers.label.FeatureLabelProvider;
 import com.cukeripper.plugin.views.providers.label.SupportScreenLabelProvider;
 
 public class CukeOutlineView extends ViewPart {
@@ -33,7 +34,7 @@ public class CukeOutlineView extends ViewPart {
 	private static final String ROOT_FILE = "C:" + File.separator + "TFSBuild"
 			+ File.separator + "CoPilot" + File.separator + "Trunk"
 			+ File.separator + "CoPilotCukes";
-	private TreeViewer treeViewer;
+	private TreeViewer treeViewer_features;
 	private TreeViewer treeViewer_SupportScreens;
 	private CukeOutlinePresenter presenter;
 	private Text txtRootFile;
@@ -101,13 +102,14 @@ public class CukeOutlineView extends ViewPart {
 		composite_1.setLayoutData(fd_composite_1);
 		composite_1.setLayout(new FormLayout());
 		//
-		treeViewer = new TreeViewer(composite_1, SWT.BORDER);
+		treeViewer_features = new TreeViewer(composite_1, SWT.BORDER);
 		FeatureTreeContentProvider feature_provider = presenter
 				.getFeatureTreeContentProvider();
 
-		treeViewer.setContentProvider(feature_provider);
-		treeViewer.setInput(getViewSite());
-		Tree tree = treeViewer.getTree();
+		treeViewer_features.setContentProvider(feature_provider);
+		treeViewer_features.setLabelProvider(new FeatureLabelProvider());
+		treeViewer_features.setInput(getViewSite());
+		Tree tree = treeViewer_features.getTree();
 		FormData fd_tree = new FormData();
 		fd_tree.left = new FormAttachment(0);
 		fd_tree.top = new FormAttachment(0);
@@ -146,7 +148,7 @@ public class CukeOutlineView extends ViewPart {
 	}
 
 	public TreeViewer getFeatureTree() {
-		return treeViewer;
+		return treeViewer_features;
 	}
 
 	public TreeViewer getSupportScreensTree() {
@@ -154,8 +156,8 @@ public class CukeOutlineView extends ViewPart {
 	}
 
 	public void showMessage(String message) {
-		MessageDialog.openInformation(treeViewer.getControl().getShell(),
-				"Sample View", message);
+		MessageDialog.openInformation(treeViewer_features.getControl()
+				.getShell(), "Sample View", message);
 	}
 
 	public void openEditorOnFile(File fileToOpen) {
@@ -186,7 +188,7 @@ public class CukeOutlineView extends ViewPart {
 	}
 
 	public void refresh() {
-		if (treeViewer != null) {
+		if (treeViewer_features != null) {
 
 			final FeatureTreeContentProvider provider = presenter
 					.getFeatureTreeContentProvider();
@@ -196,7 +198,7 @@ public class CukeOutlineView extends ViewPart {
 			// Display.getDefault().syncExec(new Runnable() {
 			// @Override
 			// public void run() {
-			treeViewer.setContentProvider(provider);
+			treeViewer_features.setContentProvider(provider);
 			treeViewer_SupportScreens
 					.setContentProvider(supportScreensProvider);
 			setToRefreshableState();
