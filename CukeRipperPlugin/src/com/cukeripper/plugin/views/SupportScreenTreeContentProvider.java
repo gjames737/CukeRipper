@@ -78,6 +78,7 @@ public class SupportScreenTreeContentProvider implements ITreeContentProvider {
 	public Object[] getElements(Object inputElement) {
 
 		return LoadedCukes.getScreens().toArray();
+
 	}
 
 	@Override

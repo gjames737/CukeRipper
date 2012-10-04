@@ -23,6 +23,8 @@ public class BaseParseTesting {
 	protected static File TEST_STEP_FILE_0;
 	protected CukeFileReader reader;
 	protected FeatureFileParser featureFileParser;
+	protected static final String[] screenNames = new String[] { "screen_0",
+			"screen_1" };
 
 	protected CukeFeature[] testFeatures;
 	protected CukeScenario[] cukeScenarios;
@@ -121,8 +123,8 @@ public class BaseParseTesting {
 
 	private void setupStepActions() {
 		stepActions = new StepAction[3];
-		stepActions[0] = new StepAction("Screen_0", 0);
-		stepActions[1] = new StepAction("Screen_1", 0);
-		stepActions[2] = new StepAction("Screen_1", 1);
+		stepActions[0] = new StepAction(screenNames[0], 0);
+		stepActions[1] = new StepAction(screenNames[1], 0);
+		stepActions[2] = new StepAction(screenNames[1], 1);
 	}
 }
