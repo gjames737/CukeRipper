@@ -8,6 +8,7 @@ import java.util.List;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.parsing.comparators.CukeFeatureComparator;
 import northwoods.cukeripper.utils.parsing.string.FeatureFileStringParser;
 
 public class FeatureFileParser {

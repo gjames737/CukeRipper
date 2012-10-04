@@ -2,10 +2,12 @@ package northwoods.cukeripper.utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import northwoods.cukeripper.utils.parsing.CukeConsole;
 import northwoods.cukeripper.utils.parsing.CukeParser;
+import northwoods.cukeripper.utils.parsing.comparators.CukeScreenComparator;
 
 public class LoadedCukes {
 
@@ -21,6 +23,7 @@ public class LoadedCukes {
 
 	public static void setScreens(List<CukeScreen> screens) {
 		LoadedCukes.screens = screens;
+		sortScreens();
 	}
 
 	public static int addScreen(String screenName) {
@@ -29,6 +32,7 @@ public class LoadedCukes {
 			return found;
 		} else {
 			LoadedCukes.screens.add(new CukeScreen(screenName));
+			sortScreens();
 			return LoadedCukes.screens.size() - 1;
 		}
 	}
@@ -81,17 +85,8 @@ public class LoadedCukes {
 
 	}
 
-	// public static Map<String, File> getStatemetFilesMap() {
-	// return statementFilesMap;
-	// }
-	//
-	// public static void addStateFileToMap(GWTStatement gwtStatement,
-	// File stepFile) {
-	// statementFilesMap.put(gwtStatement.slashToSlashStatement(), stepFile);
-	//
-	// }
-	//
-	// public static File getInStatemetFilesMap(GWTStatement statement) {
-	// return statementFilesMap.get(statement.slashToSlashStatement());
-	// }
+	private static void sortScreens() {
+		Collections.sort(screens, new CukeScreenComparator());
+	}
+
 }
