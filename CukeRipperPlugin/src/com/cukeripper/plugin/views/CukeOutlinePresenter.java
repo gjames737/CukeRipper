@@ -1,17 +1,13 @@
 package com.cukeripper.plugin.views;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.CukeScreen;
 import northwoods.cukeripper.utils.GWTStatement;
-import northwoods.cukeripper.utils.LoadedCukes;
 import northwoods.cukeripper.utils.parsing.CukeConsole;
-import northwoods.cukeripper.utils.parsing.FeatureFileParser;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -28,22 +24,23 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
+import com.cukeripper.plugin.CommonSettings;
 import com.cukeripper.plugin.views.providers.content.FeatureTreeContentProvider;
 import com.cukeripper.plugin.views.providers.content.SupportScreenTreeContentProvider;
 
-public class CukeOutlinePresenter implements ICukeParsingListener {
+public class CukeOutlinePresenter extends FeaturePresenter implements
+		ICukeParsingListener {
 	// private static final long RESET_STOP_EVENTS_DELAY = 1000L;
 	private static final String NO_FILE_FOUND = "No file was found. Refresh!";
-	private static final String KEY_ROOT_PATH_TO_CUKES = "cukeripper.keys.KEY_ROOT_PATH_TO_CUKES";
-	private static final String MY_PLUGIN_ID = "plugin.id.cukeripper.plugin.outline";
+
 	// private static final String KEY_SELECTED_FEATURE =
 	// "cukeripper.keys.KEY_SELECTED_FEATURE";
 	// private static final String KEY_SELECTED_SCENARIO =
 	// "cukeripper.keys.KEY_SELECTED_SCENARIO";
 	// private static final String KEY_SELECTED_STATEMENT =
 	// "cukeripper.keys.KEY_SELECTED_STATEMENT";
-	private CukeFileReader reader;
-	private FeatureFileParser featureParser;
+	// private CukeFileReader reader;
+	// private FeatureFileParser featureParser;
 
 	private Action featureTreeDoubleClickAction;
 	private String currentFileRootPath;
@@ -59,6 +56,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	public CukeOutlinePresenter(CukeOutlineView _view) {
 		this.view = _view;
 		refresh(this.view.getCurrentFileRootPath());
+
 	}
 
 	private void runRefresh() {
@@ -72,28 +70,28 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		CukeConsole.println("Parse time: " + time + " secs", false);
 	}
 
-	private void refresh(final String currentFileRootPath) {
-		LoadedCukes.getScreens().clear();
+	// protected void refresh(final String currentFileRootPath) {
+	// LoadedCukes.getScreens().clear();
+	//
+	// try {
+	// List<File> excludedFiles = new ArrayList<File>();
+	//
+	// reader = new CukeFileReader(currentFileRootPath, excludedFiles);
+	// featureParser = new FeatureFileParser(reader);
+	// } catch (Exception e) {
+	// onCukeFileReaderError(e);
+	// }
+	//
+	// }
 
-		try {
-			List<File> excludedFiles = new ArrayList<File>();
-
-			reader = new CukeFileReader(currentFileRootPath, excludedFiles);
-			featureParser = new FeatureFileParser(reader);
-		} catch (Exception e) {
-			onCukeFileReaderError(e);
-		}
-
-	}
-
-	public File[] getfeatureFiles() {
-		File[] allFeatureFiles = reader.getAllFeatureFiles();
-		return allFeatureFiles;
-	}
-
-	public FeatureFileParser getFeatureParser() {
-		return featureParser;
-	}
+	// public File[] getfeatureFiles() {
+	// File[] allFeatureFiles = reader.getAllFeatureFiles();
+	// return allFeatureFiles;
+	// }
+	//
+	// public FeatureFileParser getFeatureParser() {
+	// return featureParser;
+	// }
 
 	void makeActions() {
 		featureTreeDoubleClickAction = new Action() {
@@ -196,7 +194,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	private File findFileForStatement(GWTStatement statement) {
 		File statementFile = null;
 		try {
-			statementFile = featureParser.findFileForStatement(statement);
+			statementFile = featureFileParser.findFileForStatement(statement);
 		} catch (Exception e) {
 			CukeConsole.println(e.getMessage(), true);
 			e.printStackTrace();
@@ -228,6 +226,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	}
 
+	@Override
 	public void handleRefreshEvent(boolean clear) {
 		savePluginSettings();
 
@@ -278,8 +277,10 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	void savePluginSettings() {
 
 		// saves plugin preferences at the workspace level
-		final Preferences prefs = InstanceScope.INSTANCE.getNode(MY_PLUGIN_ID);
-		prefs.put(KEY_ROOT_PATH_TO_CUKES, view.getCurrentFileRootPath());
+		final Preferences prefs = InstanceScope.INSTANCE
+				.getNode(CommonSettings.MY_PLUGIN_ID);
+		prefs.put(CommonSettings.KEY_ROOT_PATH_TO_CUKES,
+				view.getCurrentFileRootPath());
 
 		// Object obj = getCurrentFeatureTreeSelection();
 		// if (obj instanceof CukeFeature) {
@@ -302,7 +303,8 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	}
 
 	void loadPluginSettings() {
-		Preferences prefs = new InstanceScope().getNode(MY_PLUGIN_ID);
+		Preferences prefs = new InstanceScope()
+				.getNode(CommonSettings.MY_PLUGIN_ID);
 
 		// selectedFeature = prefs.get(KEY_SELECTED_FEATURE, "");
 		// selectedScenario = prefs.get(KEY_SELECTED_SCENARIO, "");
@@ -310,8 +312,8 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 		// you might want to call prefs.sync() if you're worried about others
 		// changing your settings
-		view.setCurrentFileRootPath(prefs.get(KEY_ROOT_PATH_TO_CUKES, "")
-				.toString());
+		view.setCurrentFileRootPath(prefs.get(
+				CommonSettings.KEY_ROOT_PATH_TO_CUKES, "").toString());
 
 	}
 
@@ -339,7 +341,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 		printStackTraceToMessage(e);
 	}
 
-	private void printStackTraceToMessage(Exception e) {
+	protected void printStackTraceToMessage(Exception e) {
 		StackTraceElement[] trace = e.getStackTrace();
 		String msg = e.getMessage();
 		for (StackTraceElement s : trace) {

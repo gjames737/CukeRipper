@@ -4,6 +4,10 @@ import org.eclipse.swt.graphics.RGB;
 
 public class CommonSettings {
 
+	public static final String MY_PLUGIN_ID = "plugin.id.cukeripper.plugin.outline";
+
+	public static final String KEY_ROOT_PATH_TO_CUKES = "cukeripper.keys.KEY_ROOT_PATH_TO_CUKES";
+
 	public static final String ICON_FN_CUKE_SCREEN = "cuke_screen_icon.gif";
 	public static final String ICON_FN_CUKE_SCREEN_BAD = "cuke_screen_bad_icon.gif";
 	public static final String ICON_FN_CUKE_FEATURE = "cuke_feature_icon.gif";
