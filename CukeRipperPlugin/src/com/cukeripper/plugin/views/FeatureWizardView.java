@@ -3,8 +3,9 @@ package com.cukeripper.plugin.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import northwoods.cukeripper.utils.CommonRips;
 import northwoods.cukeripper.utils.CukeFeature;
+import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.GWTStatement;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,10 +24,10 @@ public class FeatureWizardView extends ViewPart {
 	private List<Combo> statementCombos;
 	private List<Combo> gwtCombos;
 	private Combo comboFeatures;
-	private String[] gwtItems = new String[] { "", CommonRips.GIVEN,
-			CommonRips.WHEN, CommonRips.THEN };
+
 	private FeatureWizardPresenter presenter;
 	private Combo comboScenarios;
+	private int statementCursor = 0;
 
 	public FeatureWizardView() {
 
@@ -182,6 +183,7 @@ public class FeatureWizardView extends ViewPart {
 
 		comboScenarios = new Combo(composite_scenario_drops, SWT.NONE);
 		comboScenarios.setBounds(61, 42, 249, 23);
+		comboScenarios.addSelectionListener(new ScenarioSelectionListener());
 		//
 
 		refresh();
@@ -197,7 +199,7 @@ public class FeatureWizardView extends ViewPart {
 		String[] allPossibleStatementStrings = presenter
 				.getAllPossibleStatementStrings();
 		for (Combo gwtCombo : gwtCombos) {
-			gwtCombo.setItems(gwtItems);
+			gwtCombo.setItems(FeatureWizardPresenter.gwtItems);
 		}
 		for (Combo statCombo : statementCombos) {
 			statCombo.setItems(allPossibleStatementStrings);
@@ -206,20 +208,59 @@ public class FeatureWizardView extends ViewPart {
 		String[] allPossibleFeaturesStrings = presenter.getAllFeatureStrings();
 		comboFeatures.setItems(allPossibleFeaturesStrings);
 
-		String[] allPossibleScenarioStrings = presenter.getAllScenarioStrings();
-		updateScenariosDropdown(allPossibleScenarioStrings);
+		presenter.getAllScenarioStrings();
+		// String[] allPossibleScenarioStrings =
+		// presenter.getAllScenarioStrings();
+		// updateScenariosDropdown(allPossibleScenarioStrings);
 	}
 
 	public void updateScenariosDropdown(String[] items) {
 		comboScenarios.setItems(items);
 	}
 
-	public int getComboFeaturesSelectedIndex() {
-		return comboFeatures.getSelectionIndex();
+	public String getComboFeatureSelectedString() {
+		int index = comboFeatures.getSelectionIndex();
+		return comboFeatures.getItem(index);
+	}
+
+	public String getComboScenarioSelectedString() {
+		int index = comboScenarios.getSelectionIndex();
+		return comboScenarios.getItem(index);
 	}
 
 	public void updateFeatureText(CukeFeature currentSelectedFeature) {
 		txtFeature.setText(currentSelectedFeature.toRuby());
+	}
+
+	public void onScenarioSelected(CukeScenario currentSelectedScenario) {
+		clearStatementInputs();
+		List<GWTStatement> statements = currentSelectedScenario.getStatements();
+		for (int i = 0; i < statements.size(); i++) {
+			addStatementToCombos(statements.get(i));
+		}
+	}
+
+	private void addStatementToCombos(GWTStatement gwtStatement) {
+
+		int gwtIndex = presenter.getGWTIndexForType(gwtStatement.getType());
+		int statementIndex = presenter
+				.getStatementIndexForStatement(gwtStatement);
+
+		if (gwtIndex != -1 && statementIndex != -1) {
+			gwtCombos.get(statementCursor).select(gwtIndex);
+			statementCombos.get(statementCursor).select(statementIndex);
+			statementCursor++;
+		}
+	}
+
+	public void clearStatementInputs() {
+		for (Combo c : gwtCombos) {
+			c.deselectAll();
+		}
+		for (Combo c : statementCombos) {
+			c.deselectAll();
+		}
+		statementCursor = 0;
 	}
 
 	// CLASSES
@@ -232,6 +273,21 @@ public class FeatureWizardView extends ViewPart {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			presenter.handleFeatureSelected();
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	private class ScenarioSelectionListener implements SelectionListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			presenter.handleScenarioSelected();
 		}
 
 		@Override

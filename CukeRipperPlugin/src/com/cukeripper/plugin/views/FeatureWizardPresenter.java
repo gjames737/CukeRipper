@@ -2,10 +2,12 @@ package com.cukeripper.plugin.views;
 
 import java.util.List;
 
+import northwoods.cukeripper.utils.CommonRips;
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeScenario;
 import northwoods.cukeripper.utils.FeatureBuilder;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.GWTStatement.StatementType;
 import northwoods.cukeripper.utils.LoadedCukes;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -22,6 +24,8 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	private CukeFeature[] features;
 	private CukeScenario[] scenarios;
 	private GWTStatement[] statements;
+	public static final String[] gwtItems = new String[] { "",
+			CommonRips.GIVEN, CommonRips.WHEN, CommonRips.THEN };
 
 	public FeatureWizardPresenter(FeatureWizardView featureWizard) {
 		this.view = featureWizard;
@@ -135,8 +139,8 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	}
 
 	public void handleFeatureSelected() {
-		System.err.println("@@@@@@");
-		int featureIndex = view.getComboFeaturesSelectedIndex();
+		String featureStr = view.getComboFeatureSelectedString();
+		int featureIndex = getFeatureIndex(featureStr);
 		CukeFeature currentSelectedFeature = features[featureIndex];
 		List<CukeScenario> scenariosList = currentSelectedFeature
 				.getScenarios();
@@ -146,6 +150,32 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 		}
 		view.updateScenariosDropdown(scenarioStrings);
 		view.updateFeatureText(currentSelectedFeature);
+		// view.clearStatementInputs();
+	}
+
+	public void handleScenarioSelected() {
+		String scenarioStr = view.getComboScenarioSelectedString();
+		int scenarioIndex = getScenarioIndex(scenarioStr);
+		CukeScenario currentSelectedScenario = scenarios[scenarioIndex];
+		view.onScenarioSelected(currentSelectedScenario);
+	}
+
+	private int getFeatureIndex(String featureStr) {
+		for (int i = 0; i < features.length; i++) {
+			if (getItemForFeature(features[i]).equals(featureStr)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private int getScenarioIndex(String scenarioStr) {
+		for (int i = 0; i < scenarios.length; i++) {
+			if (getItemForScenario(scenarios[i]).equals(scenarioStr)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	private String getItemForScenario(CukeScenario scenario) {
@@ -160,4 +190,22 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 		return statement.getStatement();
 	}
 
+	public int getGWTIndexForType(StatementType type) {
+		for (int i = 0; i < gwtItems.length; i++) {
+			if (gwtItems[i].toLowerCase().equals(type.name().toLowerCase())) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public int getStatementIndexForStatement(GWTStatement gwtStatement) {
+		for (int i = 0; i < statements.length; i++) {
+			if (statements[i].getStatement()
+					.equals(gwtStatement.getStatement())) {
+				return i;
+			}
+		}
+		return -1;
+	}
 }
