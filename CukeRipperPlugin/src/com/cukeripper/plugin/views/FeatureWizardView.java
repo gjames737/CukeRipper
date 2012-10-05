@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import northwoods.cukeripper.utils.CommonRips;
+import northwoods.cukeripper.utils.CukeFeature;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -153,18 +154,7 @@ public class FeatureWizardView extends ViewPart {
 
 		comboFeatures = new Combo(composite_scenario_drops, SWT.READ_ONLY);
 		comboFeatures.setBounds(61, 7, 249, 23);
-		comboFeatures.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				presenter.handleFeatureSelected();
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		comboFeatures.addSelectionListener(new FeatureSelectionListener());
 		//
 		statementCombos.add(comboStatement0);
 		statementCombos.add(comboStatement1);
@@ -226,6 +216,30 @@ public class FeatureWizardView extends ViewPart {
 
 	public int getComboFeaturesSelectedIndex() {
 		return comboFeatures.getSelectionIndex();
+	}
+
+	public void updateFeatureText(CukeFeature currentSelectedFeature) {
+		txtFeature.setText(currentSelectedFeature.toRuby());
+	}
+
+	// CLASSES
+	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+	private class FeatureSelectionListener implements SelectionListener {
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			presenter.handleFeatureSelected();
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
 	}
 
 }

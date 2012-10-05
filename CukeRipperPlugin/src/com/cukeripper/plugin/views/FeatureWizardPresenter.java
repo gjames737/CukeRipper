@@ -145,7 +145,7 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 			scenarioStrings[i] = getItemForScenario(scenariosList.get(i));
 		}
 		view.updateScenariosDropdown(scenarioStrings);
-
+		view.updateFeatureText(currentSelectedFeature);
 	}
 
 	private String getItemForScenario(CukeScenario scenario) {
