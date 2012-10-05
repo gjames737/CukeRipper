@@ -194,7 +194,7 @@ public class FeatureWizardView extends ViewPart {
 
 	}
 
-	private void refresh() {
+	void refresh() {
 		String[] allPossibleStatementStrings = presenter
 				.getAllPossibleStatementStrings();
 		for (Combo statCombo : statementCombos) {

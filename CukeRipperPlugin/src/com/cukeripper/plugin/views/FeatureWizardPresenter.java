@@ -5,15 +5,18 @@ import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeScenario;
+import northwoods.cukeripper.utils.FeatureBuilder;
 import northwoods.cukeripper.utils.GWTStatement;
+import northwoods.cukeripper.utils.LoadedCukes;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.Preferences;
 
 import com.cukeripper.plugin.CommonSettings;
+import com.cukeripper.plugin.views.CukeOutlinePresenter.ICukeOutlinePresenterUpdateListener;
 
 public class FeatureWizardPresenter extends FeaturePresenter implements
-		ICukeParsingListener {
+		ICukeParsingListener, ICukeOutlinePresenterUpdateListener {
 
 	private FeatureWizardView view;
 	private String currentRootFilePath = "";
@@ -21,6 +24,7 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	public FeatureWizardPresenter(FeatureWizardView featureWizard) {
 		this.view = featureWizard;
 		loadPluginSettings();
+		CukeOutlinePresenter.addCukeOutlinePresenterUpdateListener(this);
 	}
 
 	public String[] getAllPossibleStatementStrings() {
@@ -34,31 +38,30 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	}
 
 	private GWTStatement[] getAllPossibleStatements() {
-		try {
-			CukeFeature[] features = featureFileParser
-					.getSortedFeaturesInFiles(getfeatureFiles());
-			List<GWTStatement> statementsList = new ArrayList<GWTStatement>();
 
-			for (int i = 0; i < features.length; i++) {
-				List<CukeScenario> scens = features[i].getScenarios();
-				for (CukeScenario cukeScenario : scens) {
-					List<GWTStatement> states = cukeScenario.getStatements();
-					for (GWTStatement gwtStatement : states) {
-						statementsList.add(gwtStatement);
-					}
+		FeatureBuilder featureBuilder = LoadedCukes.getFeatureBuilder();
+		if (featureBuilder == null)
+			return new GWTStatement[] {};
+
+		List<CukeFeature> features = featureBuilder.getFeatures();
+		List<GWTStatement> statementsList = new ArrayList<GWTStatement>();
+
+		for (CukeFeature feature : features) {
+			List<CukeScenario> scens = feature.getScenarios();
+			for (CukeScenario cukeScenario : scens) {
+				List<GWTStatement> states = cukeScenario.getStatements();
+				for (GWTStatement gwtStatement : states) {
+					statementsList.add(gwtStatement);
 				}
 			}
-			GWTStatement[] statements = new GWTStatement[statementsList.size()];
-			for (int i = 0; i < statementsList.size(); i++) {
-				statements[i] = statementsList.get(i);
-			}
-
-			return statements;
-		} catch (Exception e) {
-			onFeatureParseException(e);
+		}
+		GWTStatement[] statements = new GWTStatement[statementsList.size()];
+		for (int i = 0; i < statementsList.size(); i++) {
+			statements[i] = statementsList.get(i);
 		}
 
-		return new GWTStatement[] {};
+		return statements;
+
 	}
 
 	@Override
@@ -100,6 +103,11 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 		// + s.getLineNumber();
 		// }
 		// view.showMessage(msg);
+	}
+
+	@Override
+	public void onRefreshed() {
+		view.refresh();
 	}
 
 }

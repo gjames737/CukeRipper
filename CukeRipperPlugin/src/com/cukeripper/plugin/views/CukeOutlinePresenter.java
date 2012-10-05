@@ -1,6 +1,8 @@
 package com.cukeripper.plugin.views;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
 import northwoods.cukeripper.utils.CukeFileReader;
@@ -33,6 +35,8 @@ public class CukeOutlinePresenter extends FeaturePresenter implements
 	// private static final long RESET_STOP_EVENTS_DELAY = 1000L;
 	private static final String NO_FILE_FOUND = "No file was found. Refresh!";
 
+	private static List<ICukeOutlinePresenterUpdateListener> cukeOutlinePresenterUpdateListener = new ArrayList<ICukeOutlinePresenterUpdateListener>();
+
 	// private static final String KEY_SELECTED_FEATURE =
 	// "cukeripper.keys.KEY_SELECTED_FEATURE";
 	// private static final String KEY_SELECTED_SCENARIO =
@@ -48,6 +52,11 @@ public class CukeOutlinePresenter extends FeaturePresenter implements
 	private CukeOutlineView view;
 
 	private boolean refreshing = false;
+
+	public interface ICukeOutlinePresenterUpdateListener {
+
+		public void onRefreshed();
+	}
 
 	// private String selectedFeature = "";
 	// private String selectedScenario = "";
@@ -65,6 +74,9 @@ public class CukeOutlinePresenter extends FeaturePresenter implements
 		setViewToStoppableState();
 		refresh(currentFileRootPath);
 		view.refresh();
+		for (ICukeOutlinePresenterUpdateListener listener : cukeOutlinePresenterUpdateListener) {
+			listener.onRefreshed();
+		}
 		refreshing = false;
 		long time = (System.currentTimeMillis() - startTime) / 1000L;
 		CukeConsole.println("Parse time: " + time + " secs", false);
@@ -400,5 +412,15 @@ public class CukeOutlinePresenter extends FeaturePresenter implements
 	// }
 	// return null;
 	// }
+
+	public static void addCukeOutlinePresenterUpdateListener(
+			ICukeOutlinePresenterUpdateListener listener) {
+		cukeOutlinePresenterUpdateListener.add(listener);
+	}
+
+	public static void removeCukeOutlinePresenterUpdateListener(
+			ICukeOutlinePresenterUpdateListener listener) {
+		cukeOutlinePresenterUpdateListener.remove(listener);
+	}
 
 }
