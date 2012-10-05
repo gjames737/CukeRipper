@@ -19,6 +19,9 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 
 	private FeatureWizardView view;
 	private String currentRootFilePath = "";
+	private CukeFeature[] features;
+	private CukeScenario[] scenarios;
+	private GWTStatement[] statements;
 
 	public FeatureWizardPresenter(FeatureWizardView featureWizard) {
 		this.view = featureWizard;
@@ -27,10 +30,10 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	}
 
 	public String[] getAllFeatureStrings() {
-		CukeFeature[] features = getAllFeatures();
+		features = getAllFeatures();
 		String[] strs = new String[features.length];
 		for (int i = 0; i < strs.length; i++) {
-			strs[i] = features[i].toString();
+			strs[i] = getItemForFeature(features[i]);
 		}
 		return strs;
 	}
@@ -50,10 +53,10 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	}
 
 	public String[] getAllScenarioStrings() {
-		CukeScenario[] scens = getAllScenarios();
-		String[] strs = new String[scens.length];
+		scenarios = getAllScenarios();
+		String[] strs = new String[scenarios.length];
 		for (int i = 0; i < strs.length; i++) {
-			strs[i] = scens[i].toString();
+			strs[i] = getItemForScenario(scenarios[i]);
 		}
 		return strs;
 	}
@@ -68,10 +71,10 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	}
 
 	public String[] getAllPossibleStatementStrings() {
-		GWTStatement[] statements = getAllPossibleStatements();
+		statements = getAllPossibleStatements();
 		String[] strs = new String[statements.length];
 		for (int i = 0; i < strs.length; i++) {
-			strs[i] = statements[i].getStatement();
+			strs[i] = getItemForStatement(statements[i]);
 		}
 
 		return strs;
@@ -129,6 +132,32 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	@Override
 	public void onRefreshed() {
 		view.refresh();
+	}
+
+	public void handleFeatureSelected() {
+		System.err.println("@@@@@@");
+		int featureIndex = view.getComboFeaturesSelectedIndex();
+		CukeFeature currentSelectedFeature = features[featureIndex];
+		List<CukeScenario> scenariosList = currentSelectedFeature
+				.getScenarios();
+		String[] scenarioStrings = new String[scenariosList.size()];
+		for (int i = 0; i < scenarioStrings.length; i++) {
+			scenarioStrings[i] = getItemForScenario(scenariosList.get(i));
+		}
+		view.updateScenariosDropdown(scenarioStrings);
+
+	}
+
+	private String getItemForScenario(CukeScenario scenario) {
+		return scenario.getName();
+	}
+
+	private String getItemForFeature(CukeFeature cukeFeature) {
+		return cukeFeature.toString();
+	}
+
+	private String getItemForStatement(GWTStatement statement) {
+		return statement.getStatement();
 	}
 
 }

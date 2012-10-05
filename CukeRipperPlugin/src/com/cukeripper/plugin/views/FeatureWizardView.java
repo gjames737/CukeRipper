@@ -6,6 +6,8 @@ import java.util.List;
 import northwoods.cukeripper.utils.CommonRips;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -151,7 +153,18 @@ public class FeatureWizardView extends ViewPart {
 
 		comboFeatures = new Combo(composite_scenario_drops, SWT.READ_ONLY);
 		comboFeatures.setBounds(61, 7, 249, 23);
+		comboFeatures.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				presenter.handleFeatureSelected();
+			}
 
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 		//
 		statementCombos.add(comboStatement0);
 		statementCombos.add(comboStatement1);
@@ -204,7 +217,15 @@ public class FeatureWizardView extends ViewPart {
 		comboFeatures.setItems(allPossibleFeaturesStrings);
 
 		String[] allPossibleScenarioStrings = presenter.getAllScenarioStrings();
-		comboScenarios.setItems(allPossibleScenarioStrings);
+		updateScenariosDropdown(allPossibleScenarioStrings);
+	}
+
+	public void updateScenariosDropdown(String[] items) {
+		comboScenarios.setItems(items);
+	}
+
+	public int getComboFeaturesSelectedIndex() {
+		return comboFeatures.getSelectionIndex();
 	}
 
 }
