@@ -55,13 +55,14 @@ public class CukeOutlineView extends ViewPart {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FormLayout());
 		FormData fd_composite = new FormData();
-		fd_composite.top = new FormAttachment(0, 5);
+		fd_composite.right = new FormAttachment(100, -10);
 		fd_composite.left = new FormAttachment(0, 5);
+		fd_composite.top = new FormAttachment(0, 5);
 		composite.setLayoutData(fd_composite);
 		//
 		txtRootFile = new Text(composite, SWT.BORDER);
 		FormData fd_txtRootFile = new FormData();
-		fd_txtRootFile.right = new FormAttachment(0, 977);
+		fd_txtRootFile.right = new FormAttachment(0, 740);
 		fd_txtRootFile.top = new FormAttachment(0, 3);
 		fd_txtRootFile.left = new FormAttachment(0, 195);
 		txtRootFile.setLayoutData(fd_txtRootFile);
@@ -93,7 +94,6 @@ public class CukeOutlineView extends ViewPart {
 				});
 		//
 		Composite composite_1 = new Composite(parent, SWT.NONE);
-		fd_composite.right = new FormAttachment(composite_1, 0, SWT.RIGHT);
 		FormData fd_composite_1 = new FormData();
 		fd_composite_1.right = new FormAttachment(100, -10);
 		fd_composite_1.left = new FormAttachment(0, 5);
@@ -143,7 +143,6 @@ public class CukeOutlineView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -173,10 +172,8 @@ public class CukeOutlineView extends ViewPart {
 				page = null;
 				fileStore = null;
 			} catch (PartInitException e) {
-				// Put your exception handler here if you wish to
 			}
 		} else {
-			// Do something if the file does not exist
 		}
 	}
 
@@ -195,15 +192,17 @@ public class CukeOutlineView extends ViewPart {
 			final SupportScreenTreeContentProvider supportScreensProvider = presenter
 					.getSupportScreensTreeContentProvider();
 
-			// Display.getDefault().syncExec(new Runnable() {
-			// @Override
-			// public void run() {
 			treeViewer_features.setContentProvider(provider);
 			treeViewer_SupportScreens
 					.setContentProvider(supportScreensProvider);
-			setToRefreshableState();
+
+			// GWTStatement statement = presenter.getSelectedStatement();
+			// if (statement != null) {
+			// StructuredSelection ssel = new StructuredSelection(statement);
+			// treeViewer_features.setSelection(ssel, true);
+			// treeViewer_features.refresh();
 			// }
-			// });
+			setToRefreshableState();
 		}
 	}
 

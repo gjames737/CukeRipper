@@ -32,29 +32,32 @@ import com.cukeripper.plugin.views.providers.content.FeatureTreeContentProvider;
 import com.cukeripper.plugin.views.providers.content.SupportScreenTreeContentProvider;
 
 public class CukeOutlinePresenter implements ICukeParsingListener {
-	private static final long RESET_STOP_EVENTS_DELAY = 1000L;
+	// private static final long RESET_STOP_EVENTS_DELAY = 1000L;
 	private static final String NO_FILE_FOUND = "No file was found. Refresh!";
 	private static final String KEY_ROOT_PATH_TO_CUKES = "cukeripper.keys.KEY_ROOT_PATH_TO_CUKES";
 	private static final String MY_PLUGIN_ID = "plugin.id.cukeripper.plugin.outline";
+	// private static final String KEY_SELECTED_FEATURE =
+	// "cukeripper.keys.KEY_SELECTED_FEATURE";
+	// private static final String KEY_SELECTED_SCENARIO =
+	// "cukeripper.keys.KEY_SELECTED_SCENARIO";
+	// private static final String KEY_SELECTED_STATEMENT =
+	// "cukeripper.keys.KEY_SELECTED_STATEMENT";
 	private CukeFileReader reader;
 	private FeatureFileParser featureParser;
+
 	private Action featureTreeDoubleClickAction;
 	private String currentFileRootPath;
 
 	private CukeOutlineView view;
 
-	// private Job job_handleRefreshEvent;
 	private boolean refreshing = false;
+
+	// private String selectedFeature = "";
+	// private String selectedScenario = "";
+	// private String selectedStatement = "";
 
 	public CukeOutlinePresenter(CukeOutlineView _view) {
 		this.view = _view;
-		// job_handleRefreshEvent = new Job("cukerefreshjob23425223r212") {
-		// @Override
-		// protected IStatus run(IProgressMonitor monitor) {
-		// runRefresh();
-		// return Status.OK_STATUS;
-		// }
-		// };
 		refresh(this.view.getCurrentFileRootPath());
 	}
 
@@ -128,17 +131,15 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	}
 
 	private void handleFeatureSingleClick(CukeFeature feature) {
-
-		// view.showMessage(msg + "  " + LoadedCukes.getScreens().size());
-
+		// selectedFeature = feature.toString();
 	}
 
-	private void handleScenarioSingleClick(CukeScenario obj) {
-
+	private void handleScenarioSingleClick(CukeScenario scenario) {
+		// selectedScenario = scenario.toString();
 	}
 
-	private void handleStatementSingleClick(GWTStatement obj) {
-
+	private void handleStatementSingleClick(GWTStatement statement) {
+		// selectedStatement = statement.toString();
 	}
 
 	private Object getCurrentFeatureTreeSelection() {
@@ -177,7 +178,6 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	private void handleStatementDoubleClick(GWTStatement statement) {
 
-		// TODO
 		File statementFile = findFileForStatement(statement);
 		statement.setStepFile(statementFile);
 
@@ -245,34 +245,18 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 			return;
 		} else {
 			setViewToStoppableState();
-			// if (job_handleRefreshEvent.getThread() != null) {
-			// if (job_handleRefreshEvent.getThread().getName().equals("main"))
-			// {
-			// throw new RuntimeException("cannot run on main thread");
-			// }
-			// }
-			// job_handleRefreshEvent.schedule();
+
 			runRefresh();
 		}
 
 	}
 
 	private void setViewToRefreshableState() {
-		// Display.getDefault().syncExec(new Runnable() {
-		// @Override
-		// public void run() {
 		view.setToRefreshableState();
-		// }
-		// });
 	}
 
 	private void setViewToStoppableState() {
-		// Display.getDefault().syncExec(new Runnable() {
-		// @Override
-		// public void run() {
 		view.setToStoppableState();
-		// }
-		// });
 	}
 
 	public void stopJobs() {
@@ -282,33 +266,6 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	}
 
 	private void resetStopAllEventsAfter() {
-
-		// Job job_resetStopAllEvents = new
-		// Job("job_resetStopAllEvents23432324") {
-		// @Override
-		// protected IStatus run(IProgressMonitor monitor) {
-		// while (refreshing) {
-		// System.err.println("~~~~~~~~");
-		// }
-		// Display.getDefault().syncExec(new Runnable() {
-		// @Override
-		// public void run() {
-		// handleRefreshEvent(true);
-		// }
-		// });
-		// try {
-		// Thread.sleep(RESET_STOP_EVENTS_DELAY);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// CukeFileReader.resetStopAllEvents();
-		// setViewToRefreshableState();
-		//
-		// return Status.OK_STATUS;
-		// }
-		// };
-		// job_resetStopAllEvents.schedule();
-
 		while (refreshing) {
 			// System.err.println("~~~~~~~~");
 		}
@@ -319,15 +276,23 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	}
 
 	void savePluginSettings() {
+
 		// saves plugin preferences at the workspace level
 		final Preferences prefs = InstanceScope.INSTANCE.getNode(MY_PLUGIN_ID);
-		// Display.getDefault().syncExec(new Runnable() {
-		// @Override
-		// public void run() {
 		prefs.put(KEY_ROOT_PATH_TO_CUKES, view.getCurrentFileRootPath());
-		// }
-		// });
 
+		// Object obj = getCurrentFeatureTreeSelection();
+		// if (obj instanceof CukeFeature) {
+		// selectedFeature = obj.toString();
+		// } else if (obj instanceof CukeScenario) {
+		// selectedScenario = obj.toString();
+		// } else if (obj instanceof GWTStatement) {
+		// selectedStatement = obj.toString();
+		// }
+		//
+		// prefs.put(KEY_SELECTED_FEATURE, selectedFeature);
+		// prefs.put(KEY_SELECTED_SCENARIO, selectedScenario);
+		// prefs.put(KEY_SELECTED_STATEMENT, selectedStatement);
 		try {
 			prefs.flush();
 		} catch (BackingStoreException e) {
@@ -338,6 +303,10 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	void loadPluginSettings() {
 		Preferences prefs = new InstanceScope().getNode(MY_PLUGIN_ID);
+
+		// selectedFeature = prefs.get(KEY_SELECTED_FEATURE, "");
+		// selectedScenario = prefs.get(KEY_SELECTED_SCENARIO, "");
+		// selectedStatement = prefs.get(KEY_SELECTED_STATEMENT, "");
 
 		// you might want to call prefs.sync() if you're worried about others
 		// changing your settings
@@ -367,12 +336,7 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 
 	@Override
 	public void onCukeFileReaderError(final Exception e) {
-		// Display.getDefault().syncExec(new Runnable() {
-		// @Override
-		// public void run() {
 		printStackTraceToMessage(e);
-		// }
-		// });
 	}
 
 	private void printStackTraceToMessage(Exception e) {
@@ -389,5 +353,50 @@ public class CukeOutlinePresenter implements ICukeParsingListener {
 	public void handleStopBtnEvent() {
 		stopJobs();
 	}
+
+	// public CukeFeature getSelectedFeature() {
+	// Object[] features = ((FeatureTreeContentProvider) view.getFeatureTree()
+	// .getContentProvider()).getElements(null);
+	// for (Object obj : features) {
+	// if (obj.toString().equals(selectedFeature)) {
+	// return (CukeFeature) obj;
+	// }
+	// }
+	// return null;
+	// }
+	//
+	// public CukeScenario getSelectedScenario() {
+	// Object[] features = ((FeatureTreeContentProvider) view.getFeatureTree()
+	// .getContentProvider()).getElements(null);
+	// for (Object obj : features) {
+	// CukeFeature thisFeature = (CukeFeature) obj;
+	// List<CukeScenario> theseScenarios = thisFeature.getScenarios();
+	// for (CukeScenario cukeScenario : theseScenarios) {
+	// if (cukeScenario.toString().equals(selectedScenario)) {
+	// return cukeScenario;
+	// }
+	// }
+	// }
+	// return null;
+	// }
+	//
+	// public GWTStatement getSelectedStatement() {
+	// Object[] features = ((FeatureTreeContentProvider) view.getFeatureTree()
+	// .getContentProvider()).getElements(null);
+	// for (Object obj : features) {
+	// CukeFeature thisFeature = (CukeFeature) obj;
+	// List<CukeScenario> theseScenarios = thisFeature.getScenarios();
+	// for (CukeScenario cukeScenario : theseScenarios) {
+	// List<GWTStatement> theseStatements = cukeScenario
+	// .getStatements();
+	// for (GWTStatement gwtStatement : theseStatements) {
+	// if (gwtStatement.toString().equals(selectedStatement)) {
+	// return gwtStatement;
+	// }
+	// }
+	// }
+	// }
+	// return null;
+	// }
 
 }
