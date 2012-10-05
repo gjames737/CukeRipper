@@ -1,4 +1,4 @@
-package com.cukeripper.plugin.views;
+package com.cukeripper.plugin.views.other;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.viewers.TreeViewer;

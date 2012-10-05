@@ -127,10 +127,10 @@ public class CukeOutlineView extends ViewPart {
 		Tree tree_supportScreens = treeViewer_SupportScreens.getTree();
 		fd_tree.right = new FormAttachment(tree_supportScreens, -6);
 		FormData fd_tree_supportScreens = new FormData();
+		fd_tree_supportScreens.left = new FormAttachment(0, 451);
 		fd_tree_supportScreens.top = new FormAttachment(0);
 		fd_tree_supportScreens.bottom = new FormAttachment(100);
-		fd_tree_supportScreens.right = new FormAttachment(0, 977);
-		fd_tree_supportScreens.left = new FormAttachment(0, 451);
+		fd_tree_supportScreens.right = new FormAttachment(0, 740);
 		tree_supportScreens.setLayoutData(fd_tree_supportScreens);
 		GridData gd_tree_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_tree_1.widthHint = 494;
