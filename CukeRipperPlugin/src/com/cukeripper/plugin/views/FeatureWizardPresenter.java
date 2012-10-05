@@ -1,6 +1,5 @@
 package com.cukeripper.plugin.views;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import northwoods.cukeripper.utils.CukeFeature;
@@ -27,6 +26,47 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 		CukeOutlinePresenter.addCukeOutlinePresenterUpdateListener(this);
 	}
 
+	public String[] getAllFeatureStrings() {
+		CukeFeature[] features = getAllFeatures();
+		String[] strs = new String[features.length];
+		for (int i = 0; i < strs.length; i++) {
+			strs[i] = features[i].toString();
+		}
+		return strs;
+	}
+
+	private CukeFeature[] getAllFeatures() {
+		FeatureBuilder featureBuilder = LoadedCukes.getFeatureBuilder();
+		if (featureBuilder == null)
+			return new CukeFeature[] {};
+
+		List<CukeFeature> featuresList = featureBuilder.getFeatures();
+		CukeFeature[] features = new CukeFeature[featuresList.size()];
+		for (int i = 0; i < features.length; i++) {
+			features[i] = featuresList.get(i);
+		}
+
+		return features;
+	}
+
+	public String[] getAllScenarioStrings() {
+		CukeScenario[] scens = getAllScenarios();
+		String[] strs = new String[scens.length];
+		for (int i = 0; i < strs.length; i++) {
+			strs[i] = scens[i].toString();
+		}
+		return strs;
+	}
+
+	private CukeScenario[] getAllScenarios() {
+		FeatureBuilder featureBuilder = LoadedCukes.getFeatureBuilder();
+		if (featureBuilder == null)
+			return new CukeScenario[] {};
+
+		return featureBuilder.listAllScenariosAsArray();
+
+	}
+
 	public String[] getAllPossibleStatementStrings() {
 		GWTStatement[] statements = getAllPossibleStatements();
 		String[] strs = new String[statements.length];
@@ -38,30 +78,11 @@ public class FeatureWizardPresenter extends FeaturePresenter implements
 	}
 
 	private GWTStatement[] getAllPossibleStatements() {
-
 		FeatureBuilder featureBuilder = LoadedCukes.getFeatureBuilder();
 		if (featureBuilder == null)
 			return new GWTStatement[] {};
 
-		List<CukeFeature> features = featureBuilder.getFeatures();
-		List<GWTStatement> statementsList = new ArrayList<GWTStatement>();
-
-		for (CukeFeature feature : features) {
-			List<CukeScenario> scens = feature.getScenarios();
-			for (CukeScenario cukeScenario : scens) {
-				List<GWTStatement> states = cukeScenario.getStatements();
-				for (GWTStatement gwtStatement : states) {
-					statementsList.add(gwtStatement);
-				}
-			}
-		}
-		GWTStatement[] statements = new GWTStatement[statementsList.size()];
-		for (int i = 0; i < statementsList.size(); i++) {
-			statements[i] = statementsList.get(i);
-		}
-
-		return statements;
-
+		return featureBuilder.listStatementsAsArray();
 	}
 
 	@Override

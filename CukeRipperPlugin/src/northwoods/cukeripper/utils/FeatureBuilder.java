@@ -37,4 +37,36 @@ public class FeatureBuilder {
 		features.add(parsedfeature);
 	}
 
+	public CukeScenario[] listAllScenariosAsArray() {
+		List<CukeScenario> scensList = listAllScenarios();
+		CukeScenario[] scens = new CukeScenario[scensList.size()];
+		for (int i = 0; i < scens.length; i++) {
+			scens[i] = scensList.get(i);
+		}
+		return scens;
+	}
+
+	public List<GWTStatement> listStatements() {
+		List<GWTStatement> statementList = new ArrayList<GWTStatement>();
+
+		for (CukeFeature feature : features) {
+			List<CukeScenario> scens = feature.getScenarios();
+			for (CukeScenario cukeScenario : scens) {
+				List<GWTStatement> states = cukeScenario.getStatements();
+				for (GWTStatement gwtStatement : states) {
+					statementList.add(gwtStatement);
+				}
+			}
+		}
+		return statementList;
+	}
+
+	public GWTStatement[] listStatementsAsArray() {
+		List<GWTStatement> statementList = listStatements();
+		GWTStatement[] statements = new GWTStatement[statementList.size()];
+		for (int i = 0; i < statementList.size(); i++) {
+			statements[i] = statementList.get(i);
+		}
+		return statements;
+	}
 }

@@ -17,13 +17,13 @@ import org.eclipse.ui.part.ViewPart;
 
 public class FeatureWizardView extends ViewPart {
 	private Text txtFeature;
-	private Text txtScenarioTitle;
 	private List<Combo> statementCombos;
 	private List<Combo> gwtCombos;
 	private Combo comboFeatures;
-	private String[] gwtItems = new String[] { CommonRips.GIVEN,
+	private String[] gwtItems = new String[] { "", CommonRips.GIVEN,
 			CommonRips.WHEN, CommonRips.THEN };
 	private FeatureWizardPresenter presenter;
+	private Combo comboScenarios;
 
 	public FeatureWizardView() {
 
@@ -165,24 +165,20 @@ public class FeatureWizardView extends ViewPart {
 		statementCombos.add(comboStatement9);
 		statementCombos.add(comboStatement10);
 		//
-		gwtCombos.add(comboStatement0);
-		gwtCombos.add(comboStatement1);
-		gwtCombos.add(comboStatement2);
-		gwtCombos.add(comboStatement3);
-		gwtCombos.add(comboStatement4);
-		gwtCombos.add(comboStatement5);
-		gwtCombos.add(comboStatement6);
-		gwtCombos.add(comboStatement7);
-		gwtCombos.add(comboStatement8);
-		gwtCombos.add(comboStatement9);
-		gwtCombos.add(comboStatement10);
-		//
-		for (Combo statCombo : statementCombos) {
-			statCombo.setItems(gwtItems);
-		}
+		gwtCombos.add(comboGWT0);
+		gwtCombos.add(comboGWT1);
+		gwtCombos.add(comboGWT2);
+		gwtCombos.add(comboGWT3);
+		gwtCombos.add(comboGWT4);
+		gwtCombos.add(comboGWT5);
+		gwtCombos.add(comboGWT6);
+		gwtCombos.add(comboGWT7);
+		gwtCombos.add(comboGWT8);
+		gwtCombos.add(comboGWT9);
+		gwtCombos.add(comboGWT10);
 
-		txtScenarioTitle = new Text(composite_scenario_drops, SWT.BORDER);
-		txtScenarioTitle.setBounds(61, 44, 249, 21);
+		comboScenarios = new Combo(composite_scenario_drops, SWT.NONE);
+		comboScenarios.setBounds(61, 42, 249, 23);
 		//
 
 		refresh();
@@ -197,10 +193,18 @@ public class FeatureWizardView extends ViewPart {
 	void refresh() {
 		String[] allPossibleStatementStrings = presenter
 				.getAllPossibleStatementStrings();
+		for (Combo gwtCombo : gwtCombos) {
+			gwtCombo.setItems(gwtItems);
+		}
 		for (Combo statCombo : statementCombos) {
 			statCombo.setItems(allPossibleStatementStrings);
 		}
 
+		String[] allPossibleFeaturesStrings = presenter.getAllFeatureStrings();
+		comboFeatures.setItems(allPossibleFeaturesStrings);
+
+		String[] allPossibleScenarioStrings = presenter.getAllScenarioStrings();
+		comboScenarios.setItems(allPossibleScenarioStrings);
 	}
 
 }
