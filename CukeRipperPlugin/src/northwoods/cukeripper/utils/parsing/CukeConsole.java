@@ -3,7 +3,7 @@ package northwoods.cukeripper.utils.parsing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.SWTException;
+//import org.eclipse.swt.SWTException;
 
 public class CukeConsole {
 
@@ -27,10 +27,10 @@ public class CukeConsole {
 			try {
 				if (!listener.isDisposed())
 					listener.onPrintLn(text, error);
-			} catch (SWTException e) {
-				// e.printStackTrace();
-				System.err
-						.println("An SWTException occured while trying to print to a cuke console listener");
+				// } catch (SWTException e) {
+				// // e.printStackTrace();
+				// System.err
+				// .println("An SWTException occured while trying to print to a cuke console listener");
 			} catch (Exception e) {
 				System.err
 						.println("An Exception occured while trying to print to a cuke console listener");
