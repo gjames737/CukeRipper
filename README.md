@@ -4,7 +4,7 @@ CukeRipper is an Elcipse Plug-in (3.6 and above) that parses Cucumber functional
 
 <h1>To Install:</h1>
 <ul>
-	<li>Download an update site folder "cuke ripper version 1.0.3"</li>
+	<li>Download an update site folder "CukeRipper\update_sites\cuke_ripper_feature_site"</li>
 	<li>It must extracted to a folder locally avaible to your machine.</li>
 	<li>Go to Help>Install New Software</li>
 	<li>Click Add</li>
