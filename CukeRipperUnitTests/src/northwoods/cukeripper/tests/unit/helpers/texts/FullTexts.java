@@ -11,6 +11,7 @@ import northwoods.cukeripper.utils.ScreenMethod;
 import northwoods.cukeripper.utils.StepAction;
 
 public class FullTexts {
+	public static final String FAKE_SCREENNAME = "\"fake_screen\"";
 	public static GWTStatement[] STEP_DEF_0_STATEMENTS;
 
 	public static CukeScenario[] FEATURE_0_SCENARIOS;
@@ -143,6 +144,7 @@ public class FullTexts {
 
 		g_statement_spanish.addStepAction(new StepAction(screen1.getName(), 0));
 		g_statement_spanish.addStepAction(new StepAction(screen1.getName(), 0));
+		g_statement_spanish.addStepAction(new StepAction(screen1.getName(), 0));
 
 		STEP_DEF_0_STATEMENTS = new GWTStatement[] { g_statement, w_statement,
 				t_statement, g_statement_spanish };
@@ -163,7 +165,9 @@ public class FullTexts {
 			+ "\n on(screen2).method0"
 			+ "\n end"
 			+ "Given /^The given statement spanish$/ do\n on(screen1) do |scrn|"
-			+ "  scrn.method0" + "  \n scrn.method0" + "       \nend     \nend";
+			+ "  scrn.method0" + "  \n scrn.method0"
+			+ "scrn.note_header.text.should have_foo_on(" + FAKE_SCREENNAME
+			+ ")" + "       \nend     \nend";
 
 	public static final String FEATURE_1 = "@wip   \n\n\n Feature:     foo zi bar"
 			+ "\n\nScenario: blah blah"

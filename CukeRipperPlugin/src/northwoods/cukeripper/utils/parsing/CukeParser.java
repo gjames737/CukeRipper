@@ -572,6 +572,7 @@ public class CukeParser {
 			for (int index : indicesOfOn) {
 				if (CukeFileReader.isAllEventsCanceled())
 					return new ArrayList<StepAction>();
+
 				int startScreenNameIndex = on_subStr.length() + index;
 				String screenNameIsInThisString = statementsParagraph
 						.substring(startScreenNameIndex);
@@ -582,10 +583,18 @@ public class CukeParser {
 				String screenName = statementsParagraph.substring(
 						startScreenNameIndex, endScreenNameIndex);
 
-				StepAction thisAction = new StepAction(screenName, -1);
+				int nextCharStart = endScreenNameIndex + 1;
+				int nextCharEnd = nextCharStart + 1;
+				if (statementsParagraph.length() > nextCharEnd) {
+					String nextChar = statementsParagraph.substring(
+							nextCharStart, nextCharEnd);
+					if (nextChar.equals(".")) {
 
-				allActionsForStep.add(thisAction);
+						StepAction thisAction = new StepAction(screenName, -1);
 
+						allActionsForStep.add(thisAction);
+					}
+				}
 			}
 
 			return allActionsForStep;

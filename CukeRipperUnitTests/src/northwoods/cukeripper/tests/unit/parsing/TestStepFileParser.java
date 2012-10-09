@@ -2,6 +2,7 @@ package northwoods.cukeripper.tests.unit.parsing;
 
 import static northwoods.cukeripper.tests.unit.helpers.texts.FullTexts.STEP_DEF_0_STATEMENTS;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -119,6 +120,21 @@ public class TestStepFileParser {
 						is(screenFiles[0].getName()));
 				assertThat(cukeScreen.toString(), is(cukeScreen.getName()
 						+ " [" + screenFiles[0].getName() + "]"));
+			}
+		}
+	}
+
+	@Test
+	public void itCreatesAListOfGWTStatementsAndAttachesScreenFilesSkippingBadScreens() {
+		intiTheGWTs();
+		for (int i = 0; i < LoadedCukes.getScreens().size(); i++) {
+			CukeScreen cukeScreen = LoadedCukes.getScreens().get(i);
+			String actualName = cukeScreen.getName();
+			assertThat(actualName, is(not(FullTexts.FAKE_SCREENNAME)));
+			if (!(actualName.equals("screen0") || actualName.equals("screen1")
+					|| actualName.equals("screen2") || actualName
+						.equals("screenname"))) {
+				fail();
 			}
 		}
 	}
