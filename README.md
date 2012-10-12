@@ -1,5 +1,5 @@
 <h1>About</h1>
-CukeRipper is an Elcipse Plug-in (3.6 and above) that parses Cucumber functional test files [features, screens, and step definitions] and displays useful views to access and edit those files.
+CukeRipper is an open source Eclipse Plug-in (3.6 and above) that parses Cucumber functional test files [features, screens, and step definitions] and displays useful views to access and edit those files.
 
 
 <h1>To Install:</h1>
@@ -16,3 +16,7 @@ CukeRipper is an Elcipse Plug-in (3.6 and above) that parses Cucumber functional
 	<li>Check the check box for Cuke Ripper</li>
 	<li>And follow the wizard to install</li>
 </ul>
+
+<h1>License</h1>
+Distributed under the open source license: Apache License, Version 2.0.
+http://www.apache.org/licenses/
