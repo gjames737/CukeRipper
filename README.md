@@ -10,7 +10,7 @@ CukeRipper is an open source Eclipse Plug-in (3.6 and above) that parses Cucumbe
 	<li>Click Add</li>
 	<li>Enter a name (e.g. Cuke Ripper)</li>
 	<li>Click local</li>
-	<li>Browse to the update site folder (e.g. E:\GitHub\CukeRipper\update_sites\cuke ripper version 1.0.3)</li>
+	<li>Browse to the update site folder (e.g. E:\GitHub\CukeRipper\update_sites\cuke ripper version X.X.X)</li>
 	<li>Click OK</li>
 	<li>Select the new site under "Work With"</li>
 	<li>Check the check box for Cuke Ripper</li>
